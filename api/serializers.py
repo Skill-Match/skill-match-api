@@ -47,7 +47,7 @@ class MatchSerializer(serializers.ModelSerializer):
         model = Match
         fields = ('id', 'creator', 'title', 'description', 'park', 'sport',
                   'skill_level', 'date', 'time', 'players')
-        read_only_fields = ('id',)
+        read_only_fields = ('id', 'creator')
 
 class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
