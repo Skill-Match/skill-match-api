@@ -1,9 +1,11 @@
+from api.exceptions import OneFeedbackAllowed
 from api.serializers import UserSerializer, ParkSerializer, MatchSerializer, \
     FeedbackSerializer
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from matchup.models import Park, Match, Feedback
 from rest_framework import generics
+from rest_framework.exceptions import PermissionDenied
 
 
 class ListUsers(generics.ListAPIView):
@@ -43,6 +45,9 @@ class CreateFeedbacks(generics.CreateAPIView):
         reviewer = self.request.user
         match_id = serializer.initial_data['match']
         match = Match.objects.get(pk=match_id)
+        existing_feedback = match.feedback_set.filter(reviewer=reviewer)
+        if existing_feedback:
+            raise OneFeedbackAllowed
         for person in match.players.all():
             if not person == reviewer:
                 player = person
