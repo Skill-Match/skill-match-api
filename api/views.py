@@ -17,6 +17,9 @@ class ListUsers(generics.ListAPIView):
 class CreateUser(generics.CreateAPIView):
     serializer_class = UserSerializer
 
+    def get_queryset(self):
+        return super().get_queryset()
+
 
 class ListCreateParks(generics.ListCreateAPIView):
     queryset = Park.objects.all()
