@@ -14,8 +14,11 @@ class Match(models.Model):
     sport = models.CharField(max_length=25)
     skill_level = models.IntegerField()
     date_time = models.DateTimeField()
-    players = models.ManyToManyField(User)
+    players = models.ManyToManyField(User, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
 
 
 
