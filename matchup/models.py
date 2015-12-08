@@ -13,7 +13,8 @@ class Match(models.Model):
     park = models.ForeignKey(Park)
     sport = models.CharField(max_length=25)
     skill_level = models.IntegerField()
-    date_time = models.DateTimeField()
+    date = models.DateField(null=True)
+    time = models.TimeField(null=True)
     players = models.ManyToManyField(User, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
