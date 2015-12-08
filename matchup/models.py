@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
@@ -10,15 +11,15 @@ class Park(models.Model):
 
 
 class Match(models.Model):
-    creator = models.ForeignKey(User, related_name='creator')
+    creator = models.ForeignKey(User)
     title = models.CharField(max_length=50, null=True, blank=True)
     description = models.TextField(max_length=1000, null=True, blank=True)
     park = models.ForeignKey(Park)
     sport = models.CharField(max_length=25)
-    skill_level = models.IntegerField()
+    skill_level = models.PositiveIntegerField()
     date = models.DateField(null=True)
     time = models.TimeField(null=True)
-    players = models.ManyToManyField(User, blank=True)
+    players = models.ManyToManyField(User, related_name='players', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -30,7 +31,6 @@ class Feedback(models.Model):
     reviewer = models.ForeignKey(User)
     player = models.ForeignKey(User, related_name='player')
     match = models.ForeignKey(Match)
-    park = models.ForeignKey(Park)
     skill = models.IntegerField()
     sportsmanship = models.IntegerField()
     availability = models.IntegerField()

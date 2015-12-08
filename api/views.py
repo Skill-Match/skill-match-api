@@ -39,6 +39,15 @@ class CreateFeedbacks(generics.CreateAPIView):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
 
+    def perform_create(self, serializer):
+        reviewer = self.request.user
+        match_id = serializer.initial_data['match']
+        match = Match.objects.get(pk=match_id)
+        for person in match.players.all():
+            if not person == reviewer:
+                player = person
+        serializer.save(player=player, reviewer=reviewer)
+
 
 class DetailFeedback(generics.RetrieveAPIView):
     queryset = Match.objects.all()
@@ -53,4 +62,3 @@ class DetailPark(generics.RetrieveAPIView):
 class DetailUpdateMatch(generics.RetrieveUpdateDestroyAPIView):
     queryset = Match.objects.all()
     serializer_class = MatchSerializer
-
