@@ -12,7 +12,6 @@ class Park(models.Model):
 
 class Match(models.Model):
     creator = models.ForeignKey(User)
-    title = models.CharField(max_length=50, null=True, blank=True)
     description = models.TextField(max_length=1000, null=True, blank=True)
     park = models.ForeignKey(Park)
     sport = models.CharField(max_length=25)
@@ -23,7 +22,7 @@ class Match(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.title
+        return "{}'s {} match".format(self.creator.username, self.sport)
 
 
 
