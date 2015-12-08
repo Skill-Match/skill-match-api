@@ -7,13 +7,13 @@ class Park(models.Model):
 
 
 class Match(models.Model):
-    creator = models.ForeignKey(User, related_name='creator')
+    creator = models.ForeignKey(User, related_name='creator', null=True)
     title = models.CharField(max_length=50, null=True, blank=True)
     description = models.TextField(max_length=1000, null=True, blank=True)
     park = models.ForeignKey(Park)
-    sport = models.CharField(max_length=25)
-    skill_level = models.IntegerField()
-    date_time = models.DateTimeField()
+    sport = models.CharField(max_length=25, null=True)
+    skill_level = models.IntegerField(null=True)
+    date_time = models.DateTimeField(null=True)
     players = models.ManyToManyField(User)
     created_at = models.DateTimeField(auto_now_add=True)
 
