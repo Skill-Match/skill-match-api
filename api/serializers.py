@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from matchup.models import Park, Match, Feedback
 from rest_framework import serializers
 from users.models import Profile
 
@@ -29,9 +30,26 @@ class UserSerializer(serializers.ModelSerializer):
         profile_data = validated_data.pop('profile')
         profile = Profile.objects.create(
             user=user,
-            first_name=profile_data.get('first_name'),
-            last_name=profile_data.get('last_name'),
             gender=profile_data.get('gender'),
             age=profile_data.get('age')
         )
         return user
+
+
+class ParkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Park
+        fields = ('id', 'name',)
+        read_only_fields = ('id',)
+
+class MatchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Match
+        fields = ('id', 'park', 'players')
+        read_only_fields = ('id',)
+
+class FeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feedback
+        fields = ('__all__')
+        read_only_fields = ('id')

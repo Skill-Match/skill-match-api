@@ -29,11 +29,10 @@ class Profile(models.Model):
     )
 
     user = models.OneToOneField(User)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
     gender = models.CharField(max_length=8, choices=GENDER_CHOICES,
                               default=MALE)
     age = models.CharField(max_length=8, choices=AGE_CHOICES)
 
     def __str__(self):
         return self.user.username
+
