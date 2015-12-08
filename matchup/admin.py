@@ -8,12 +8,12 @@ class ParkAdmin(admin.ModelAdmin):
 
 @admin.register(Match)
 class MatchAdmin(admin.ModelAdmin):
-    list_display = ('id', 'creator', 'title', 'description', 'park', 'sport',
+    list_display = ('id', 'title', 'description', 'park', 'sport',
                     'skill_level', 'date', 'time')
 
 @admin.register(Feedback)
 class FeedbackAdmin(admin.ModelAdmin):
-    list_display = ('id', 'reviewer', 'player', 'match', 'park', 'skill',
+    list_display = ('id', 'reviewer', 'player', 'match', 'skill',
                     'sportsmanship', 'availability')
 
 

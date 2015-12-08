@@ -42,6 +42,7 @@ class ParkSerializer(serializers.ModelSerializer):
         fields = ('id', 'name',)
         read_only_fields = ('id',)
 
+
 class MatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Match
@@ -52,5 +53,6 @@ class MatchSerializer(serializers.ModelSerializer):
 class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
-        fields = ('__all__')
-        read_only_fields = ('id')
+        fields = ('id', 'reviewer', 'player', 'match', 'skill',
+                  'sportsmanship', 'availability')
+        read_only_fields = ('id', 'reviewer', 'player',)
