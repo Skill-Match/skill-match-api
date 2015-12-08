@@ -50,6 +50,15 @@ class MatchSerializer(serializers.ModelSerializer):
                   'skill_level', 'date', 'time', 'players')
         read_only_fields = ('id', 'creator', 'players')
 
+    def create(self, validated_data):
+        match = super().create(validated_data)
+        creator = validated_data['creator']
+        match.players.add(creator)
+        match.save()
+        return match
+
+
+
 class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
