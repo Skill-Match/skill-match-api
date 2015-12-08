@@ -27,7 +27,7 @@ class ListCreateMatches(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         user = self.request.user
-        serializer.save(user=user)
+        serializer.save(creator=user)
 
 
 class ListFeedbacks(generics.ListAPIView):
