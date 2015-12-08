@@ -5,6 +5,9 @@ from django.db import models
 class Park(models.Model):
     name = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.name
+
 
 class Match(models.Model):
     creator = models.ForeignKey(User, related_name='creator')
@@ -33,3 +36,8 @@ class Feedback(models.Model):
     availability = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "{}'s review: {} skill: {}".format(self.reviewer.username,
+                                                  self.player.username,
+                                                  self.skill)
