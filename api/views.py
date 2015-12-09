@@ -79,6 +79,12 @@ class DetailUpdateMatch(generics.RetrieveUpdateDestroyAPIView):
     queryset = Match.objects.all()
     serializer_class = MatchSerializer
 
+    # def perform_update(self, serializer):
+    #     decline = self.request.query_params.get('decline', None)
+    #     if decline:
+    #         serializer.save(decline=decline)
+    #     else:
+    #         serializer.save()
 
 
 class UpdateMatch(generics.UpdateAPIView):
@@ -86,5 +92,12 @@ class UpdateMatch(generics.UpdateAPIView):
     serializer_class = ChallengerMatchSerializer
 
     def perform_update(self, serializer):
-        challenger = self.request.user
-        serializer.save(challenger=challenger)
+        decline = self.request.query_params.get('decline', None)
+        confirm = self.request.query_params.get('confirm', None)
+        requester = self.request.user
+        if decline:
+            serializer.save(decline=decline, requester=requester)
+        elif confirm:
+            serializer.save(confirm=confirm, requester=requester)
+        else:
+            serializer.save(challenger=requester)
