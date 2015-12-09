@@ -34,6 +34,14 @@ class ListCreateMatches(generics.ListCreateAPIView):
         user = self.request.user
         serializer.save(creator=user)
 
+    def get_queryset(self):
+        """Return list for user only"""
+        qs = super().get_queryset()
+        username = self.request.query_params.get('username', None)
+        if username:
+            qs = qs.filter(players__username=username)
+        return qs
+
 
 class ListFeedbacks(generics.ListAPIView):
     queryset = Feedback.objects.all()

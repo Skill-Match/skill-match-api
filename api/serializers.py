@@ -58,6 +58,7 @@ class MatchSerializer(serializers.ModelSerializer):
         return match
 
 
+
 class ChallengerMatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Match
