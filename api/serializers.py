@@ -58,6 +58,15 @@ class MatchSerializer(serializers.ModelSerializer):
         return match
 
 
+class ChallengerMatchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Match
+        fields = ('id', 'creator', 'description', 'park', 'sport',
+                  'skill_level', 'date', 'time', 'players')
+        read_only_fields = ('id', 'creator', 'description', 'park', 'sport',
+                            'skill_level', 'date', 'time',)
+
+
 
 class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
