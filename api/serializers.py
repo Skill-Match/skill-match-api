@@ -1,3 +1,4 @@
+from api.exceptions import OneFeedbackAllowed, TwoPlayersPerMatch
 from django.contrib.auth.models import User
 from matchup.models import Park, Match, Feedback
 from rest_framework import serializers
@@ -47,8 +48,10 @@ class MatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Match
         fields = ('id', 'creator', 'description', 'park', 'sport',
-                  'skill_level', 'date', 'time', 'players')
-        read_only_fields = ('id', 'creator', 'players')
+                  'skill_level', 'date', 'time', 'players',
+                  'is_open', 'is_completed')
+        read_only_fields = ('id', 'creator', 'players', 'is_open',
+                            'is_completed')
 
     def create(self, validated_data):
         match = super().create(validated_data)
@@ -58,15 +61,25 @@ class MatchSerializer(serializers.ModelSerializer):
         return match
 
 
-
 class ChallengerMatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Match
         fields = ('id', 'creator', 'description', 'park', 'sport',
-                  'skill_level', 'date', 'time', 'players')
+                  'skill_level', 'date', 'time', 'players',
+                  'is_open', 'is_completed')
         read_only_fields = ('id', 'creator', 'description', 'park', 'sport',
-                            'skill_level', 'date', 'time',)
+                            'skill_level', 'date', 'time', 'players',
+                            'is_open', 'is_completed')
 
+    def update(self, instance, validated_data):
+        match = super().update(instance, validated_data)
+        if match.players.count() == 2:
+            raise TwoPlayersPerMatch
+        challenger = validated_data['challenger']
+        match.players.add(challenger)
+        match.is_open = False
+        match.save()
+        return match
 
 
 class FeedbackSerializer(serializers.ModelSerializer):

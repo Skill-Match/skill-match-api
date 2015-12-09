@@ -9,7 +9,7 @@ class ParkAdmin(admin.ModelAdmin):
 @admin.register(Match)
 class MatchAdmin(admin.ModelAdmin):
     list_display = ('id', 'description', 'park', 'sport',
-                    'skill_level', 'date', 'time')
+                    'skill_level', 'date', 'time', 'is_open', 'is_completed')
 
 @admin.register(Feedback)
 class FeedbackAdmin(admin.ModelAdmin):
