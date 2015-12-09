@@ -7,3 +7,15 @@ class OneFeedbackAllowed(APIException):
 class TwoPlayersPerMatch(APIException):
     status_code = 403
     default_detail = 'There are already 2 players registered for this match'
+
+class SelfSignUp(APIException):
+    status_code = 403
+    default_detail = "You can't sign up for a match that you created"
+
+class NoPlayerToConfirmOrDecline(APIException):
+    status_code = 403
+    default_detail = 'There is no player to decline'
+
+class OnlyCreatorMayConfirmOrDecline(APIException):
+    status_code = 403
+    default_detail = 'Only the Match Creator may decline the matchup'

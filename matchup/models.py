@@ -21,6 +21,7 @@ class Match(models.Model):
     players = models.ManyToManyField(User, related_name='players', blank=True)
     is_open = models.NullBooleanField(null=True, default=True)
     is_completed = models.NullBooleanField(null=True, default=False)
+    is_confirmed = models.NullBooleanField(null=True, default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
