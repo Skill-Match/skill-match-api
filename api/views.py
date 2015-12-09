@@ -85,7 +85,6 @@ class UpdateMatch(generics.UpdateAPIView):
     queryset = Match.objects.all()
     serializer_class = ChallengerMatchSerializer
 
-    def put(self, request, *args, **kwargs):
-        return super().put(request, *args, **kwargs)
-
-
+    def perform_update(self, serializer):
+        challenger = self.request.user
+        serializer.save(challenger=challenger)
