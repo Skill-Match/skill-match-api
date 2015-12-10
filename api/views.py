@@ -12,6 +12,7 @@ from rest_framework.pagination import PageNumberPagination
 class SmallPagination(PageNumberPagination):
     page_size = 10
 
+
 class ListUsers(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -21,8 +22,8 @@ class ListUsers(generics.ListAPIView):
 class CreateUser(generics.CreateAPIView):
     serializer_class = UserSerializer
 
-    def get_queryset(self):
-        return super().get_queryset()
+class DetailUpdateUser(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = UserSerializer
 
 
 class ListCreateParks(generics.ListCreateAPIView):
