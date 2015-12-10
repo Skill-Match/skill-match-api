@@ -3,6 +3,7 @@ from api.exceptions import OneFeedbackAllowed, TwoPlayersPerMatch, SelfSignUp, \
 from django.contrib.auth.models import User
 from matchup.models import Park, Match, Feedback
 from rest_framework import serializers
+from rest_framework.relations import StringRelatedField
 from users.models import Profile
 
 
@@ -46,6 +47,8 @@ class ParkSerializer(serializers.ModelSerializer):
 
 
 class MatchSerializer(serializers.ModelSerializer):
+    creator = StringRelatedField()
+
     class Meta:
         model = Match
         fields = ('id', 'creator', 'description', 'park', 'sport',
