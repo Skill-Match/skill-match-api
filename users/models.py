@@ -38,9 +38,9 @@ class Profile(models.Model):
         total = 0
         if self.user.players.all():
             for match in self.user.players.all():
-                total += match.feedback_set.filter(player=self.user)[0].skill
-            if total > 0:
-                return total / self.user.players.count()
+                if match.feedback_set.all():
+                    total += match.feedback_set.filter(player=self.user)[0].skill
+            return total / self.user.players.count()
 
         return None
 
@@ -49,9 +49,9 @@ class Profile(models.Model):
         total = 0
         if self.user.players.all():
             for match in self.user.players.all():
-                total += match.feedback_set.filter(player=self.user)[0].sportsmanship
-            if total > 0:
-                return total / self.user.players.count()
+                if match.feedback_set.all():
+                    total += match.feedback_set.filter(player=self.user)[0].sportsmanship
+            return total / self.user.players.count()
 
         return None
 
