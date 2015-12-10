@@ -14,8 +14,9 @@ class SelfSignUp(APIException):
 
 class NoPlayerToConfirmOrDecline(APIException):
     status_code = 403
-    default_detail = 'There is no player to decline'
+    default_detail = 'There is no player to decline or confirm'
 
 class OnlyCreatorMayConfirmOrDecline(APIException):
     status_code = 403
-    default_detail = 'Only the Match Creator may decline the matchup'
+    default_detail = 'Only the Match Creator may confirm or decline the ' \
+                     'matchup'

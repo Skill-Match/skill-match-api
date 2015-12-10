@@ -79,7 +79,7 @@ class ChallengerMatchSerializer(serializers.ModelSerializer):
         model = Match
         fields = ('id', 'creator', 'description', 'park', 'sport',
                   'skill_level', 'date', 'time', 'players',
-                  'is_open', 'is_completed')
+                  'is_open', 'is_completed', 'is_confirmed')
         read_only_fields = ('id', 'creator', 'description', 'park', 'sport',
                             'skill_level', 'date', 'time', 'players',
                             'is_open', 'is_completed', 'is_confirmed')
