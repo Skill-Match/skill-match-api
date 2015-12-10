@@ -6,7 +6,11 @@ from django.shortcuts import render
 from matchup.models import Park, Match, Feedback
 from rest_framework import generics
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.pagination import PageNumberPagination
 
+
+class SmallPagination(PageNumberPagination):
+    page_size = 10
 
 class ListUsers(generics.ListAPIView):
     queryset = User.objects.all()
@@ -29,6 +33,7 @@ class ListCreateParks(generics.ListCreateAPIView):
 class ListCreateMatches(generics.ListCreateAPIView):
     queryset = Match.objects.all()
     serializer_class = MatchSerializer
+    pagination_class = SmallPagination
 
     def perform_create(self, serializer):
         user = self.request.user
@@ -78,13 +83,6 @@ class DetailPark(generics.RetrieveAPIView):
 class DetailUpdateMatch(generics.RetrieveUpdateDestroyAPIView):
     queryset = Match.objects.all()
     serializer_class = MatchSerializer
-
-    # def perform_update(self, serializer):
-    #     decline = self.request.query_params.get('decline', None)
-    #     if decline:
-    #         serializer.save(decline=decline)
-    #     else:
-    #         serializer.save()
 
 
 class UpdateMatch(generics.UpdateAPIView):

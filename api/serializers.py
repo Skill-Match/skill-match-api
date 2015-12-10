@@ -61,17 +61,17 @@ class MatchSerializer(serializers.ModelSerializer):
         match.save()
         return match
 
-    def update(self, instance, validated_data):
-        match = super().update(instance, validated_data)
-        decline = validated_data.get('decline', None)
-        if decline:
-            creator_username = match.creator.username
-            challenger = match.players.exclude(username=creator_username)[0]
-            match.players.remove(challenger)
-            match.is_open = True
-            match.save()
-
-        return match
+    # def update(self, instance, validated_data):
+    #     match = super().update(instance, validated_data)
+    #     decline = validated_data.get('decline', None)
+    #     if decline:
+    #         creator_username = match.creator.username
+    #         challenger = match.players.exclude(username=creator_username)[0]
+    #         match.players.remove(challenger)
+    #         match.is_open = True
+    #         match.save()
+    #
+    #     return match
 
 
 class ChallengerMatchSerializer(serializers.ModelSerializer):
