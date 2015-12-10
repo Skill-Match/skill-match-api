@@ -87,7 +87,7 @@ class DetailUpdateMatch(generics.RetrieveUpdateDestroyAPIView):
     #         serializer.save()
 
 
-class UpdateMatch(generics.UpdateAPIView):
+class UpdateMatch(generics.RetrieveUpdateAPIView):
     queryset = Match.objects.all()
     serializer_class = ChallengerMatchSerializer
 
