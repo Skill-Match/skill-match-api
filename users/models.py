@@ -36,22 +36,28 @@ class Profile(models.Model):
     @property
     def skill(self):
         total = 0
+        count = 0
         if self.user.players.all():
             for match in self.user.players.all():
-                if match.feedback_set.filter(player=self.user):
-                    total += match.feedback_set.filter(player=self.user)[0].skill
-            return round(total / self.user.players.count(), 2)
+                feedbacks = match.feedback_set.filter(player=self.user)
+                if feedbacks:
+                    total += feedbacks[0].skill
+                    count += 1
+            return round(total / count, 2)
 
         return None
 
     @property
     def sportsmanship(self):
         total = 0
+        count = 0
         if self.user.players.all():
             for match in self.user.players.all():
-                if match.feedback_set.filter(player=self.user):
-                    total += match.feedback_set.filter(player=self.user)[0].sportsmanship
-            return round(total / self.user.players.count(), 2)
+                feedbacks = match.feedback_set.filter(player=self.user)
+                if feedbacks:
+                    total += feedbacks[0].sportsmanship
+                    count += 1
+            return round(total / count, 2)
 
         return None
 
