@@ -12,7 +12,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Profile
-        exclude = ('user',)
+        fields = ('gender', 'age', 'skill', 'sportsmanship')
 
 
 class UserSerializer(serializers.ModelSerializer):
