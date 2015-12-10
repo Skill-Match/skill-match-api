@@ -18,7 +18,7 @@ class Command(BaseCommand):
 
         params = {"category_filter": "parks"}
         client = Client(auth)
-        r = client.search('89134', **params)
+        r = client.search('89148', **params)
         parks = r.businesses
 
         count = 0
