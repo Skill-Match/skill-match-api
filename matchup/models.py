@@ -24,10 +24,24 @@ class Park(models.Model):
 
 
 class Match(models.Model):
+    TENNIS = 'Tennis'
+    BASKETBALL = 'Basketball'
+    FOOTBALL = 'Football'
+    SOCCER = 'Soccer'
+    OTHER = 'Other'
+    SPORT_CHOICES = (
+        (TENNIS, 'Tennis'),
+        (BASKETBALL, 'Basketball'),
+        (FOOTBALL, 'Football'),
+        (SOCCER, 'Soccer'),
+        (OTHER, 'Other')
+    )
     creator = models.ForeignKey(User)
     description = models.TextField(max_length=1000, null=True, blank=True)
     park = models.ForeignKey(Park)
-    sport = models.CharField(max_length=25)
+    sport = models.CharField(max_length=25, null=True, blank=True,
+                             choices=SPORT_CHOICES, default=TENNIS)
+    other = models.CharField(max_length=25, null=True, blank=True)
     skill_level = models.PositiveIntegerField()
     date = models.DateField(null=True)
     time = models.TimeField(null=True)
@@ -44,11 +58,25 @@ class Match(models.Model):
 
 
 class Feedback(models.Model):
+    NO_SHOW = 'No Show'
+    ON_TIME = 'On Time'
+    LITTLE_LATE = 'Little bit late'
+    LATE = 'Late'
+    PUNCTUALITY_CHOICES = (
+        (NO_SHOW, 'No Show'),
+        (ON_TIME, 'On Time'),
+        (LITTLE_LATE, 'Little bit late'),
+        (LATE, 'Over 10 min late')
+    )
+
     reviewer = models.ForeignKey(User)
     player = models.ForeignKey(User, related_name='player')
     match = models.ForeignKey(Match)
     skill = models.IntegerField()
     sportsmanship = models.IntegerField()
+    punctuality = models.CharField(max_length=15, null=True,
+                                   choices=PUNCTUALITY_CHOICES,
+                                   default=ON_TIME)
     availability = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
@@ -58,6 +86,10 @@ class Feedback(models.Model):
                                                   self.player.username,
                                                   self.skill)
 
+class Skill(models.Model):
+    player = models.ForeignKey(User)
+    sport = models.CharField(max_length=40)
+    skill = models.FloatField()
 
 # class Court(models.Model):
 #     number = models.IntegerField()
