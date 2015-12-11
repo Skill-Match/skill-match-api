@@ -1,12 +1,19 @@
+import json
 from api.exceptions import OneFeedbackAllowed
 from api.serializers import UserSerializer, ParkSerializer, MatchSerializer,\
     FeedbackSerializer, ChallengerMatchSerializer
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from matchup.models import Park, Match, Feedback
+import oauth2
+import requests
 from rest_framework import generics
+from rest_framework.decorators import api_view
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
+from skill_match.settings import CONSUMER_KEY, CONSUMER_SECRET, TOKEN, \
+    TOKEN_SECRET
 
 
 class SmallPagination(PageNumberPagination):
@@ -101,3 +108,27 @@ class UpdateMatch(generics.UpdateAPIView):
             serializer.save(confirm=confirm, requester=requester)
         else:
             serializer.save(challenger=requester)
+
+@api_view()
+def hello_world(request):
+    url = 'http://api.yelp.com/v2/search/' + '?location=89148, NV &category_filter=parks'
+
+    consumer = oauth2.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
+    oauth_request = oauth2.Request(method="GET", url=url)
+
+    oauth_request.update(
+        {
+            'oauth_nonce': oauth2.generate_nonce(),
+            'oauth_timestamp': oauth2.generate_timestamp(),
+            'oauth_token': TOKEN,
+            'oauth_consumer_key': CONSUMER_KEY
+        }
+    )
+    token = oauth2.Token(TOKEN, TOKEN_SECRET)
+    oauth_request.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, token)
+    signed_url = oauth_request.to_url()
+    response = requests.get(signed_url)
+    content = response.json()
+    parks = content['businesses']
+    data = {"message": "hello"}
+    return Response(content)

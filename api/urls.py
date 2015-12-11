@@ -23,4 +23,5 @@ urlpatterns = [
         name='api_detail_feedback'),
     url(r'^feedbacks/create/$', CreateFeedbacks.as_view(),
         name='api_create_feeback'),
+    url(r'^yelp/$', 'api.views.hello_world')
 ]

@@ -47,11 +47,14 @@ class ParkSerializer(serializers.ModelSerializer):
 
 
 class MatchSerializer(serializers.ModelSerializer):
-    creator = StringRelatedField()
+    creator_name = serializers.SerializerMethodField()
+
+    def get_creator_name(self, obj):
+      return obj.creator.username
 
     class Meta:
         model = Match
-        fields = ('id', 'creator', 'description', 'park', 'sport',
+        fields = ('id', 'creator', 'creator_name', 'description', 'park', 'sport',
                   'skill_level', 'date', 'time', 'players',
                   'is_open', 'is_completed', 'is_confirmed')
         read_only_fields = ('id', 'creator', 'players', 'is_open',
