@@ -89,7 +89,7 @@ class Feedback(models.Model):
 class Skill(models.Model):
     player = models.ForeignKey(User)
     sport = models.CharField(max_length=40)
-    skill = models.FloatField()
+    skill = models.FloatField(null=True, blank=True)
 
 # class Court(models.Model):
 #     number = models.IntegerField()
