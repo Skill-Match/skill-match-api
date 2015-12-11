@@ -40,18 +40,38 @@ class Command(BaseCommand):
             park_name = park['name']
             park_exists = Park.objects.filter(name=park_name)
             if len(park_exists) == 0:
+                d_list = park['location']['display_address']
+                d1 = d_list[0]
+                d2 = d_list[1]
+                if len(d_list) > 2:
+                    d3 = d_list[2]
+                else:
+                    d3 = None
+                park_rating = park['rating']
+                park_mobile_url = park['mobile_url']
+                park_image_url = park['image_url']
                 park_id = park['id']
                 park_city = park['location']['city']
+                park_yelp_url = park['url']
                 park_postal_code = park['location']['postal_code']
                 park_latitude = park['location']['coordinate']['latitude']
                 park_longitude = park['location']['coordinate']['longitude']
+                park_state_code = park['location']['state_code']
                 Park.objects.create(
+                    rating=park_rating,
+                    mobile_url=park_mobile_url,
+                    image_url=park_image_url,
                     name=park_name,
                     yelp_id=park_id,
+                    url=park_yelp_url,
                     postal_code=park_postal_code,
                     city=park_city,
+                    display_address1=d1,
+                    display_address2=d2,
+                    display_address3=d3,
                     latitude=park_latitude,
-                    longitude=park_longitude
+                    longitude=park_longitude,
+                    state_code=park_state_code
                 )
                 count += 1
 

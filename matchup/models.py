@@ -5,10 +5,9 @@ from django.db import models
 
 class Park(models.Model):
     rating = models.FloatField(null=True, blank=True)
+    name = models.CharField(max_length=200, null=True, blank=True)
     yelp_id = models.CharField(null=True, blank=True, max_length=100)
     mobile_url = models.URLField(null=True, blank=True)
-    review_count = models.IntegerField(null=True, blank=True)
-    name = models.CharField(max_length=200, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
     image_url = models.URLField(null=True, blank=True)
     city = models.CharField(max_length=50, null=True, blank=True)

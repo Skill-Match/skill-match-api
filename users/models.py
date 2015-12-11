@@ -63,3 +63,18 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+    # @property
+    # def skill(self):
+    #     total = 0
+    #     count = 0
+    #     if self.user.players.all():
+    #         for match in self.user.players.all():
+    #             feedbacks = match.feedback_set.filter(player=self.user)
+    #             if feedbacks:
+    #                 total += feedbacks[0].skill
+    #                 count += 1
+    #         return round(total / count, 2)
+    #
+    #     return None
