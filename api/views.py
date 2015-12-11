@@ -130,5 +130,7 @@ def hello_world(request):
     response = requests.get(signed_url)
     content = response.json()
     parks = content['businesses']
+    a = parks[0]['id']
+    name = parks[0]['name']
     data = {"message": "hello"}
     return Response(content)

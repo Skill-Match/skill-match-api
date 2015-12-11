@@ -14,7 +14,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        url = 'http://api.yelp.com/v2/search/' + '?location=' + options['zip_code'][0] + ', NV &category_filter=parks'
+        url = 'http://api.yelp.com/v2/search/' + '?location=' + \
+              options['zip_code'][0] + ', NV &category_filter=parks'
 
         consumer = oauth2.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
         oauth_request = oauth2.Request(method="GET", url=url)
@@ -36,30 +37,21 @@ class Command(BaseCommand):
 
         count = 0
         for park in parks:
-            park_exists = Park.objects.filter(name=park.name)
+            park_name = park['name']
+            park_exists = Park.objects.filter(name=park_name)
             if len(park_exists) == 0:
-                d_list = park.location.display_address
-                d1 = d_list[0]
-                d2 = d_list[1]
-                if len(d_list) > 2:
-                    d3 = d_list[2]
-                else:
-                    d3 = None
+                park_id = park['id']
+                park_city = park['location']['city']
+                park_postal_code = park['location']['postal_code']
+                park_latitude = park['location']['coordinate']['latitude']
+                park_longitude = park['location']['coordinate']['longitude']
                 Park.objects.create(
-                    rating=park.rating.rating,
-                    mobile_url=park.mobile_url,
-                    review_count=park.review_count,
-                    name=park.name,
-                    url=park.url,
-                    image_url=park.image_url,
-                    city=park.location.city,
-                    display_address1=d1,
-                    display_address2=d2,
-                    display_address3=d3,
-                    postal_code=park.location.postal_code,
-                    latitude=park.location.coordinate.latitude,
-                    longitude=park.location.coordinate.longitude,
-                    state_code=park.location.state_code
+                    name=park_name,
+                    yelp_id=park_id,
+                    postal_code=park_postal_code,
+                    city=park_city,
+                    latitude=park_latitude,
+                    longitude=park_longitude
                 )
                 count += 1
 

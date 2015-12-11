@@ -5,6 +5,7 @@ from django.db import models
 
 class Park(models.Model):
     rating = models.FloatField(null=True, blank=True)
+    yelp_id = models.CharField(null=True, blank=True, max_length=100)
     mobile_url = models.URLField(null=True, blank=True)
     review_count = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, null=True, blank=True)
@@ -57,3 +58,9 @@ class Feedback(models.Model):
         return "{}'s review: {} skill: {}".format(self.reviewer.username,
                                                   self.player.username,
                                                   self.skill)
+
+
+# class Court(models.Model):
+#     number = models.IntegerField()
+#     park = models.ForeignKey(Park)
+#     availability = models.FloatField()
