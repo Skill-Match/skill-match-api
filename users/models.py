@@ -43,7 +43,7 @@ class Profile(models.Model):
                 if feedbacks:
                     total += feedbacks[0].skill
                     count += 1
-            return round(total / count, 2)
+                    return round(total / count, 2)
 
         return None
 
@@ -57,7 +57,7 @@ class Profile(models.Model):
                 if feedbacks:
                     total += feedbacks[0].sportsmanship
                     count += 1
-            return round(total / count, 2)
+                    return round(total / count, 2)
 
         return None
 
