@@ -19,8 +19,8 @@ class Park(models.Model):
     longitude = models.FloatField(null=True, blank=True)
     state_code = models.CharField(max_length=5, null=True, blank=True)
 
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
 
 class Match(models.Model):
@@ -51,8 +51,9 @@ class Match(models.Model):
     is_confirmed = models.NullBooleanField(null=True, default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # def __str__(self):
-    #     return "{}'s match, match #".format(self.creator.username)
+    def __str__(self):
+        return "{}'s {} match, match #{}".format(self.creator.username,
+                                                 self.sport, self.id)
 
 
 
@@ -80,10 +81,10 @@ class Feedback(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
-    # def __str__(self):
-    #     return "{}'s review: {} skill: {}".format(self.reviewer.username,
-    #                                               self.player.username,
-    #                                               self.skill)
+    def __str__(self):
+        return "{}'s review: {} skill: {}".format(self.reviewer.username,
+                                                  self.player.username,
+                                                  self.skill)
 
 class Skill(models.Model):
     player = models.ForeignKey(User)
