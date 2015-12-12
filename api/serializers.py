@@ -60,7 +60,7 @@ class CreateParkSerializer(serializers.ModelSerializer):
 
 class MatchSerializer(serializers.ModelSerializer):
     creator_name = serializers.SerializerMethodField()
-    time = serializers.TimeField(format="%I:%M %p")
+    # time = serializers.TimeField(format="%I:%M %p")
 
     def get_creator_name(self, obj):
       return obj.creator.username
