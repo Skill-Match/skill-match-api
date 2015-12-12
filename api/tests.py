@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from matchup.models import Match
+from matchup.models import Match, Park
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -41,7 +41,28 @@ class UserTests(APITestCase):
 
 class ParkTests(APITestCase):
     def setUp(self):
-        pass
+        self.user = User.objects.create_user(username='joe',
+                                             email='test@test.com',
+                                             password='password')
+        self.park = Park.objects.create(name='Test Park',
+                                        postal_code='89148')
+
+    def test_list_parks(self):
+        url = reverse('api_list_parks')
+        response = self.client.get(url, {}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 1)
+        response_park_list = response.data['results'][0]
+        self.assertEqual((response_park_list['name'], self.park.name))
+
+    def test_create_park(self):
+        url = reverse('api_create_park')
+        data = {'name': 'Test Park 2', 'postal_code': '89148'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Park.objects.count(), 2)
+        self.assertEqual(response.data['name'], 'Test Park 2')
+        self.assertEqual(response.data['postal_code'], '89148')
 
 class MatchTests(APITestCase):
     def setUp(self):
