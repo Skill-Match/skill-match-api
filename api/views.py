@@ -114,6 +114,7 @@ class UpdateMatch(generics.UpdateAPIView):
         else:
             serializer.save(challenger=requester)
 
+
 @api_view()
 def hello_world(request):
     url = 'http://api.yelp.com/v2/search/' + '?location=89148, NV &category_filter=parks'
