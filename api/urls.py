@@ -1,4 +1,4 @@
-from api.views import CreateUser, ListUsers, ListCreateMatches, ListCreateParks, \
+from api.views import CreateUser, ListUsers, ListCreateMatches, ListParks, \
     ListFeedbacks, CreateFeedbacks, DetailPark, DetailUpdateMatch, \
     DetailFeedback, UpdateMatch, DetailUpdateUser
 from django.conf.urls import url
@@ -16,7 +16,7 @@ urlpatterns = [
         name='api_detail_update_match'),
     url(r'^matches/(?P<pk>\d+)/signup/$', UpdateMatch.as_view(),
         name='api_update_match'),
-    url(r'^parks/$', ListCreateParks.as_view(), name='api_list_create_parks'),
+    url(r'^parks/$', ListParks.as_view(), name='api_list_parks'),
     url(r'^parks/(?P<pk>\d+)', DetailPark.as_view(), name='api_park_detail'),
     url(r'^feedbacks/$', ListFeedbacks.as_view(), name='api_list_feebacks'),
     url(r'^feedbacks/(?P<pk>\d+)', DetailFeedback.as_view(),

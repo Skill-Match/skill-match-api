@@ -29,12 +29,13 @@ class ListUsers(generics.ListAPIView):
 class CreateUser(generics.CreateAPIView):
     serializer_class = UserSerializer
 
+
 class DetailUpdateUser(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
-class ListCreateParks(generics.ListCreateAPIView):
+class ListParks(generics.ListAPIView):
     queryset = Park.objects.all()
     serializer_class = ParkSerializer
 
