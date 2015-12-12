@@ -19,8 +19,8 @@ class Park(models.Model):
     longitude = models.FloatField(null=True, blank=True)
     state_code = models.CharField(max_length=5, null=True, blank=True)
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return self.name
 
 
 class Match(models.Model):
