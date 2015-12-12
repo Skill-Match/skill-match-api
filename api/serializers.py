@@ -50,6 +50,14 @@ class ParkSerializer(serializers.ModelSerializer):
                             'display_address3', 'postal_code')
 
 
+class CreateParkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Park
+        fields = ('id', 'name', 'city', 'postal_code', 'display_address1',
+                  'display_address2', 'display_address3' )
+        read_only_fields = ('id',)
+
+
 class MatchSerializer(serializers.ModelSerializer):
     creator_name = serializers.SerializerMethodField()
     time = serializers.TimeField(format="%I:%M %p")

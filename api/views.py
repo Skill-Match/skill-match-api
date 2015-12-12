@@ -1,7 +1,7 @@
 import json
 from api.exceptions import OneFeedbackAllowed
 from api.serializers import UserSerializer, ParkSerializer, MatchSerializer,\
-    FeedbackSerializer, ChallengerMatchSerializer
+    FeedbackSerializer, ChallengerMatchSerializer, CreateParkSerializer
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from matchup.models import Park, Match, Feedback
@@ -38,6 +38,10 @@ class DetailUpdateUser(generics.RetrieveUpdateDestroyAPIView):
 class ListParks(generics.ListAPIView):
     queryset = Park.objects.all()
     serializer_class = ParkSerializer
+
+
+class CreatePark(generics.CreateAPIView):
+    serializer_class = CreateParkSerializer
 
 
 class ListCreateMatches(generics.ListCreateAPIView):
