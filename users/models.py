@@ -35,6 +35,7 @@ class Profile(models.Model):
 
     @property
     def skill(self):
+        """Return average skill over feedback set"""
         total = 0
         count = 0
         if self.user.players.all():
@@ -49,6 +50,7 @@ class Profile(models.Model):
 
     @property
     def sportsmanship(self):
+        """Return average sportsmanship level over matches"""
         total = 0
         count = 0
         if self.user.players.all():
