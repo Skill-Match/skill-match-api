@@ -71,10 +71,10 @@ class ListCreateMatches(generics.ListCreateAPIView):
         return qs
 
 
-class ListFeedbacks(generics.ListAPIView):
-    """Permissions: ADMIN only"""
-    queryset = Feedback.objects.all()
-    serializer_class = FeedbackSerializer
+# class ListFeedbacks(generics.ListAPIView):
+#     """Permissions: ADMIN only - NOT SURE IF I EVEN NEED THIS"""
+#     queryset = Feedback.objects.all()
+#     serializer_class = FeedbackSerializer
 
 
 class CreateFeedbacks(generics.CreateAPIView):
