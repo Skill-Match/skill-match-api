@@ -42,17 +42,6 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class ParkSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Park
-        fields = ('id', 'name', 'rating', 'url', 'city', 'state_code',
-                  'display_address1', 'display_address2', 'display_address3',
-                  'postal_code')
-        read_only_fields = ('id', 'name', 'rating', 'url', 'city', 'state_code',
-                            'display_address1', 'display_address2',
-                            'display_address3', 'postal_code')
-
-
 class CreateParkSerializer(serializers.ModelSerializer):
     """
         Extra Park Serializer for creation. This is so only logged in users can
@@ -89,19 +78,6 @@ class MatchSerializer(serializers.ModelSerializer):
         match.players.add(creator)
         match.save()
         return match
-
-    # *** CURRENTLY NOT BEING USED ***
-    # def update(self, instance, validated_data):
-    #     match = super().update(instance, validated_data)
-    #     decline = validated_data.get('decline', None)
-    #     if decline:
-    #         creator_username = match.creator.username
-    #         challenger = match.players.exclude(username=creator_username)[0]
-    #         match.players.remove(challenger)
-    #         match.is_open = True
-    #         match.save()
-    #
-    #     return match
 
 
 class ChallengerMatchSerializer(serializers.ModelSerializer):
@@ -162,6 +138,18 @@ class ChallengerMatchSerializer(serializers.ModelSerializer):
 
         return match
 
+
+class ParkSerializer(serializers.ModelSerializer):
+    match_set = MatchSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Park
+        fields = ('id', 'name', 'rating', 'url', 'city', 'state_code',
+                  'display_address1', 'display_address2', 'display_address3',
+                  'postal_code', 'match_set')
+        read_only_fields = ('id', 'name', 'rating', 'url', 'city', 'state_code',
+                            'display_address1', 'display_address2',
+                            'display_address3', 'postal_code')
 
 class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
