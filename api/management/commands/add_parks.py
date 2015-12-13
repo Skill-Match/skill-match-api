@@ -8,11 +8,22 @@ from skill_match.settings import CONSUMER_KEY, CONSUMER_SECRET, TOKEN, \
 
 
 class Command(BaseCommand):
+    """
+        Takes zip_code as an argument, pings yelp's api for the parks in that
+            area, and adds the data from those parks to the database as Park
+            Objects.
+    """
 
     def add_arguments(self, parser):
         parser.add_argument('zip_code', nargs='+', type=str)
 
     def handle(self, *args, **options):
+        """
+
+        :param args: zip_code ex. 89123
+        :param options:
+        :return: Writes out how many parks added to database
+        """
 
         url = 'http://api.yelp.com/v2/search/' + '?location=' + \
               options['zip_code'][0] + ', NV &category_filter=parks'
@@ -78,6 +89,7 @@ class Command(BaseCommand):
         self.stdout.write("{} Parks Added to Database".format(count))
 
 # class Command(BaseCommand):
+# **NOT NEEDED AT ALL** --> used for reference only
 #
 #     def handle(self, *args, **options):
 #

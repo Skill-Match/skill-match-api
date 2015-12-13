@@ -21,30 +21,39 @@ class SmallPagination(PageNumberPagination):
 
 
 class ListUsers(generics.ListAPIView):
+    """
+    Permissions:
+        ONLY ADMIN or show-users?
+    """
     queryset = User.objects.all()
     serializer_class = UserSerializer
     # permission_classes = (permissions.IsAdminUser, )
 
 
 class CreateUser(generics.CreateAPIView):
+    """Permissions: any"""
     serializer_class = UserSerializer
 
 
 class DetailUpdateUser(generics.RetrieveUpdateDestroyAPIView):
+    """Permissions: User only or ADMIN"""
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
 class ListParks(generics.ListAPIView):
+    """Permissions: all"""
     queryset = Park.objects.all()
     serializer_class = ParkSerializer
 
 
 class CreatePark(generics.CreateAPIView):
+    """Permissions: logged in user only"""
     serializer_class = CreateParkSerializer
 
 
 class ListCreateMatches(generics.ListCreateAPIView):
+    """Permissions: logged in user for create"""
     queryset = Match.objects.all()
     serializer_class = MatchSerializer
     pagination_class = SmallPagination
@@ -63,15 +72,21 @@ class ListCreateMatches(generics.ListCreateAPIView):
 
 
 class ListFeedbacks(generics.ListAPIView):
+    """Permissions: ADMIN only"""
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
 
 
 class CreateFeedbacks(generics.CreateAPIView):
+    """Logged in user only, *** must be player in the match also ***"""
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
 
     def perform_create(self, serializer):
+        """Grab match_id from form. Find Match object with match_id. Use Match
+            object to find player and reviewer from the match. (Reviewer =
+            logged in user.
+        """
         reviewer = self.request.user
         match_id = serializer.initial_data['match']
         match = Match.objects.get(pk=match_id)
@@ -85,25 +100,37 @@ class CreateFeedbacks(generics.CreateAPIView):
 
 
 class DetailFeedback(generics.RetrieveAPIView):
+    """
+    Permissions: ADMIN or user only.
+    """
     queryset = Match.objects.all()
     serializer_class = FeedbackSerializer
 
 
 class DetailPark(generics.RetrieveAPIView):
+    """ Permissions: all
+    """
     queryset = Park.objects.all()
     serializer_class = ParkSerializer
 
 
 class DetailUpdateMatch(generics.RetrieveUpdateDestroyAPIView):
+    """Permissions: all, for update--match creator only"""
     queryset = Match.objects.all()
     serializer_class = MatchSerializer
 
 
 class UpdateMatch(generics.UpdateAPIView):
+    """Permissions:  """
     queryset = Match.objects.all()
     serializer_class = ChallengerMatchSerializer
 
     def perform_update(self, serializer):
+        """find query parameters.
+            'decline' or 'confirm' match
+            **if no query parameter, this endpoint will sign up the
+                requested user**
+        """
         decline = self.request.query_params.get('decline', None)
         confirm = self.request.query_params.get('confirm', None)
         requester = self.request.user
@@ -117,6 +144,12 @@ class UpdateMatch(generics.UpdateAPIView):
 
 @api_view()
 def hello_world(request):
+    """
+    Not being used in the scope of the project at the moment. But it works. It
+        fetches data from yelp api and sends it through this project api.
+    :param request:
+    :return:
+    """
     url = 'http://api.yelp.com/v2/search/' + '?location=89148, NV &category_filter=parks'
 
     consumer = oauth2.Consumer(CONSUMER_KEY, CONSUMER_SECRET)

@@ -8,14 +8,14 @@ from users.models import Profile
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    """One to One with User
-    """
+
     class Meta:
         model = Profile
         fields = ('gender', 'age', 'skill', 'sportsmanship')
 
 
 class UserSerializer(serializers.ModelSerializer):
+
     profile = ProfileSerializer()
 
     class Meta:
@@ -25,6 +25,9 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', )
 
     def create(self, validated_data):
+        """Create Profile for User when registered
+
+        """
         user = User.objects.create_user(
             email=validated_data['email'],
             username=validated_data['username'],
@@ -51,6 +54,10 @@ class ParkSerializer(serializers.ModelSerializer):
 
 
 class CreateParkSerializer(serializers.ModelSerializer):
+    """
+        Extra Park Serializer for creation. This is so only logged in users can
+        create park objects. Is this necessary?
+    """
     class Meta:
         model = Park
         fields = ('id', 'name', 'city', 'postal_code', 'display_address1',
@@ -60,7 +67,7 @@ class CreateParkSerializer(serializers.ModelSerializer):
 
 class MatchSerializer(serializers.ModelSerializer):
     creator_name = serializers.SerializerMethodField()
-    # time = serializers.TimeField(format="%I:%M %p")
+    time = serializers.TimeField(format="%I:%M %p")
 
     def get_creator_name(self, obj):
       return obj.creator.username
@@ -74,12 +81,16 @@ class MatchSerializer(serializers.ModelSerializer):
                             'is_completed', 'is_confirmed')
 
     def create(self, validated_data):
+        """
+            Add player to match. Assign creator the request user.
+        """
         match = super().create(validated_data)
         creator = validated_data['creator']
         match.players.add(creator)
         match.save()
         return match
 
+    # *** CURRENTLY NOT BEING USED ***
     # def update(self, instance, validated_data):
     #     match = super().update(instance, validated_data)
     #     decline = validated_data.get('decline', None)
@@ -94,6 +105,9 @@ class MatchSerializer(serializers.ModelSerializer):
 
 
 class ChallengerMatchSerializer(serializers.ModelSerializer):
+    """
+        Separate Serializer for Updating Match.
+    """
     class Meta:
         model = Match
         fields = ('id', 'creator', 'description', 'park', 'sport',
@@ -104,6 +118,15 @@ class ChallengerMatchSerializer(serializers.ModelSerializer):
                             'is_open', 'is_completed', 'is_confirmed')
 
     def update(self, instance, validated_data):
+        """ Check data passed from UpdateMatch view.
+            If decline is there, decline match. (is_open=True)
+            If confirm is there, confirm match. (is_confirmed=True)
+            If challenger is there, add challenger to match.
+
+        :param instance:
+        :param validated_data: challenger, decline, or confirm
+        :return:
+        """
         match = super().update(instance, validated_data)
         requester = validated_data.get('requester', None)
         decline = validated_data.get('decline', None)
