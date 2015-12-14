@@ -135,12 +135,13 @@ class UpdateMatch(generics.UpdateAPIView):
         confirm = self.request.query_params.get('confirm', None)
         requester = self.request.user
         if decline:
-            serializer.save(decline=decline, requester=requester)
+            serializer.save(decline=decline, is_open=True, requester=requester)
+            x=5
+            y=10
         elif confirm:
             serializer.save(confirm=confirm, requester=requester)
         else:
             serializer.save(challenger=requester)
-
 
 @api_view()
 def hello_world(request):
