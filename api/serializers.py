@@ -93,6 +93,12 @@ class ChallengerMatchSerializer(serializers.ModelSerializer):
                             'skill_level', 'date', 'time', 'players',
                             'is_open', 'is_completed', 'is_confirmed')
 
+    def notify_decline(self):
+        pass
+
+    def notify_confirm(self):
+        pass
+
     def update(self, instance, validated_data):
         """ Check data passed from UpdateMatch view.
             If decline is there, decline match. (is_open=True)
