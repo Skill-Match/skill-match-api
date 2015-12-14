@@ -57,7 +57,7 @@ class CreateParkSerializer(serializers.ModelSerializer):
 class MatchSerializer(serializers.ModelSerializer):
     park_name = serializers.ReadOnlyField(source='park.name')
     creator_name = serializers.ReadOnlyField(source='creator.username')
-    players = serializers.StringRelatedField(many=True)
+    players = serializers.StringRelatedField(many=True, read_only=True)
     time = serializers.TimeField(format="%I:%M %p")
 
     class Meta:
