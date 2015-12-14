@@ -20,20 +20,21 @@ def create_user_token(sender, instance=None, created=False, **kwargs):
 def send_email(sender, instance=None, created=False, **kwargs):
 
     if created:
-        email = instance.creator.email
+        user_email = instance.creator.email
         park_name = instance.park.name
         sport = instance.sport
         date = instance.date.strftime("%A %B, %d")
         time = instance.time.strftime("%I:%M %p")
 
-        body_message = 'You have succesfully created a match. You want to ' \
-                       'play {} at {} on {} at {}'.format(sport, park_name,
+        body_message = "You have succesfully created a match. You want to " \
+                       "play {} at {} on {} at {}. We'll let you know if " \
+                       "someone joins your match!".format(sport, park_name,
                                                           date, time)
 
         sg = sendgrid.SendGridClient(SENDGRID_KEY)
 
         message = sendgrid.Mail()
-        message.add_to('<palfredo119@hotmail.com>')
+        message.add_to(user_email)
         message.set_subject(
             'Hi from SkillMatch!'
         )
