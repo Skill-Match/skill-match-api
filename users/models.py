@@ -13,6 +13,7 @@ class Profile(models.Model):
     FOURTIES = "40's"
     FIFTIES = "50's"
     SIXTY = "60+"
+
     GENDER_CHOICES = (
         (MALE, 'Man'),
         (FEMALE, 'Woman'),
@@ -32,6 +33,7 @@ class Profile(models.Model):
     gender = models.CharField(max_length=8, choices=GENDER_CHOICES,
                               default=MALE)
     age = models.CharField(max_length=8, choices=AGE_CHOICES)
+    pic_url = models.CharField(max_length=200, null=True, blank=True)
 
     @property
     def skill(self):
