@@ -6,6 +6,8 @@ from api.serializers import UserSerializer, ParkSerializer, MatchSerializer,\
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from matchup.models import Park, Match, Feedback
+from api.notifications import join_match_notify, confirm_match_notify, \
+    decline_match_notify
 import oauth2
 import requests
 from rest_framework import generics
@@ -121,6 +123,7 @@ class DetailUpdateMatch(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MatchSerializer
 
 
+
 class JoinMatch(generics.UpdateAPIView):
     queryset = Match.objects.all()
     serializer_class = ChallengerMatchSerializer
@@ -135,7 +138,9 @@ class JoinMatch(generics.UpdateAPIView):
             raise SelfSignUp
 
         players = [creator, challenger]
-        serializer.save(players=players, is_open=False)
+        match = serializer.save(players=players, is_open=False)
+        join_match_notify(match)
+
 
 class DeclineMatch(generics.UpdateAPIView):
     queryset = Match.objects.all()
@@ -143,12 +148,14 @@ class DeclineMatch(generics.UpdateAPIView):
 
     def perform_update(self, serializer):
         decliner = self.request.user
+        challenger = serializer.instance.players.exclude(id=decliner.id)[0]
         if not decliner == serializer.instance.creator:
             raise OnlyCreatorMayConfirmOrDecline
         if serializer.instance.players.count() == 1:
             raise NoPlayerToConfirmOrDecline
 
-        serializer.save(players=[decliner,], is_open=True)
+        match = serializer.save(players=[decliner,], is_open=True)
+        decline_match_notify(match, challenger)
 
 
 class ConfirmMatch(generics.UpdateAPIView):
@@ -162,7 +169,8 @@ class ConfirmMatch(generics.UpdateAPIView):
         if serializer.instance.players.count() == 1:
             raise NoPlayerToConfirmOrDecline
 
-        serializer.save(is_confirmed=True)
+        match = serializer.save(is_confirmed=True)
+        confirm_match_notify(match)
 
 
 @api_view()
