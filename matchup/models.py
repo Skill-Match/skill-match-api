@@ -134,6 +134,10 @@ class Skill(models.Model):
     player = models.ForeignKey(User)
     sport = models.CharField(max_length=40)
     skill = models.FloatField(null=True, blank=True)
+    sportsmanship = models.FloatField(null=True, blank=True)
+    num_feedbacks = models.IntegerField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateField(auto_now=True, null=True)
 
 # class Tennis(models.Model):
 #     """
