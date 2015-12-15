@@ -2,7 +2,8 @@ import json
 from api.exceptions import OneFeedbackAllowed, TwoPlayersPerMatch, SelfSignUp, \
     OnlyCreatorMayConfirmOrDecline, NoPlayerToConfirmOrDecline
 from api.serializers import UserSerializer, ParkSerializer, MatchSerializer,\
-    FeedbackSerializer, ChallengerMatchSerializer, CreateParkSerializer
+    FeedbackSerializer, ChallengerMatchSerializer, CreateParkSerializer, \
+    ProfileSerializer
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from matchup.models import Park, Match, Feedback
@@ -17,6 +18,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from skill_match.settings import CONSUMER_KEY, CONSUMER_SECRET, TOKEN, \
     TOKEN_SECRET
+from users.models import Profile
 
 
 class SmallPagination(PageNumberPagination):

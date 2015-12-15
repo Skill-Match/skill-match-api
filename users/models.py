@@ -36,49 +36,17 @@ class Profile(models.Model):
     pic_url = models.CharField(max_length=200, null=True, blank=True)
 
     @property
-    def skill(self):
-        """Return average skill over feedback set"""
-        total = 0
-        count = 0
-        if self.user.players.all():
-            for match in self.user.players.all():
-                feedbacks = match.feedback_set.filter(player=self.user)
-                if feedbacks:
-                    total += feedbacks[0].skill
-                    count += 1
-                    return round(total / count, 2)
-
-        return None
-
-    @property
     def sportsmanship(self):
         """Return average sportsmanship level over matches"""
         total = 0
         count = 0
-        if self.user.players.all():
-            for match in self.user.players.all():
-                feedbacks = match.feedback_set.filter(player=self.user)
-                if feedbacks:
-                    total += feedbacks[0].sportsmanship
-                    count += 1
-                    return round(total / count, 2)
+        if self.user.skill_set.all():
+            for skill in self.user.skill_set.all():
+                total += skill.sportsmanship
+                count += 1
+            return total / count
 
         return None
 
     def __str__(self):
         return self.user.username
-
-
-    # @property
-    # def skill(self):
-    #     total = 0
-    #     count = 0
-    #     if self.user.players.all():
-    #         for match in self.user.players.all():
-    #             feedbacks = match.feedback_set.filter(player=self.user)
-    #             if feedbacks:
-    #                 total += feedbacks[0].skill
-    #                 count += 1
-    #         return round(total / count, 2)
-    #
-    #     return None
