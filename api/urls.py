@@ -2,7 +2,7 @@ from api import views as api_views
 from api.views import CreateUser, ListUsers, ListCreateMatches, ListParks, \
     CreateFeedbacks, DetailPark, DetailUpdateMatch, \
     DetailUpdateFeedback, UpdateMatch, DetailUpdateUser, CreatePark, \
-    ListFeedbacks
+    ListFeedbacks, JoinMatch, DeclineMatch, ConfirmMatch
 from django.conf.urls import url, patterns
 from rest_framework.authtoken import views
 
@@ -18,6 +18,12 @@ urlpatterns = (
         name='api_detail_update_match'),
     url(r'^matches/(?P<pk>\d+)/signup/$', UpdateMatch.as_view(),
         name='api_update_match'),
+    url(r'^matches/(?P<pk>\d+)/join/$', JoinMatch.as_view(),
+        name='api_join_match'),
+    url(r'^matches/(?P<pk>\d+)/confirm/$', ConfirmMatch.as_view(),
+        name='api_confirm_match'),
+    url(r'^matches/(?P<pk>\d+)/decline/$', DeclineMatch.as_view(),
+        name='api_decline_match'),
     url(r'^parks/$', ListParks.as_view(), name='api_list_parks'),
     url(r'^parks/create/$', CreatePark.as_view(), name='api_create_park'),
     url(r'^parks/(?P<pk>\d+)', DetailPark.as_view(), name='api_park_detail'),

@@ -1,5 +1,6 @@
 import json
-from api.exceptions import OneFeedbackAllowed
+from api.exceptions import OneFeedbackAllowed, TwoPlayersPerMatch, SelfSignUp, \
+    OnlyCreatorMayConfirmOrDecline, NoPlayerToConfirmOrDecline
 from api.serializers import UserSerializer, ParkSerializer, MatchSerializer,\
     FeedbackSerializer, ChallengerMatchSerializer, CreateParkSerializer
 from django.contrib.auth.models import User
@@ -135,13 +136,56 @@ class UpdateMatch(generics.UpdateAPIView):
         confirm = self.request.query_params.get('confirm', None)
         requester = self.request.user
         if decline:
-            serializer.save(decline=decline, is_open=True, requester=requester)
-            x=5
-            y=10
+            serializer.save(decline=decline, is_open=True, requester=requester,)
         elif confirm:
             serializer.save(confirm=confirm, requester=requester)
         else:
             serializer.save(challenger=requester)
+
+
+class JoinMatch(generics.UpdateAPIView):
+    queryset = Match.objects.all()
+    serializer_class = ChallengerMatchSerializer
+
+    def perform_update(self, serializer):
+        challenger=self.request.user
+        creator = serializer.instance.creator
+        player_count = serializer.instance.players.count()
+        if player_count > 1:
+             raise TwoPlayersPerMatch
+        if challenger == creator:
+            raise SelfSignUp
+
+        players = [creator, challenger]
+        serializer.save(players=players, is_open=False)
+
+class DeclineMatch(generics.UpdateAPIView):
+    queryset = Match.objects.all()
+    serializer_class = ChallengerMatchSerializer
+
+    def perform_update(self, serializer):
+        decliner = self.request.user
+        if not decliner == serializer.instance.creator:
+            raise OnlyCreatorMayConfirmOrDecline
+        if serializer.instance.players.count() == 1:
+            raise NoPlayerToConfirmOrDecline
+
+        serializer.save(players=[decliner,], is_open=True)
+
+
+class ConfirmMatch(generics.UpdateAPIView):
+    queryset = Match.objects.all()
+    serializer_class = ChallengerMatchSerializer
+
+    def perform_update(self, serializer):
+        confirmer = self.request.user
+        if not confirmer == serializer.instance.creator:
+            raise OnlyCreatorMayConfirmOrDecline
+        if serializer.instance.players.count() == 1:
+            raise NoPlayerToConfirmOrDecline
+
+        serializer.save(is_confirmed=True)
+
 
 @api_view()
 def hello_world(request):
