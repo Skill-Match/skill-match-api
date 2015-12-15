@@ -1,25 +1,36 @@
 from django.contrib.auth.models import User
-from matchup.models import Park, Match, Feedback
+from matchup.models import Park, Match, Feedback, Skill
 from rest_framework import serializers
 from rest_framework.relations import StringRelatedField
 from users.models import Profile
+
+
+class SkillSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Skill
+        fields = ('sport', 'skill', 'num_feedbacks')
+        read_only_fields = ('sport', 'skill', 'num_feedbacks')
+
 
 
 class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('gender', 'age', 'pic_url', 'skill', 'sportsmanship')
-        read_only_fields = ('pic_url', 'skill', 'sportsmanship')
+        fields = ('user', 'gender', 'age', 'pic_url', 'sportsmanship',)
+        read_only_fields = ('pic_url', 'sportsmanship')
 
 
 class UserSerializer(serializers.ModelSerializer):
 
     profile = ProfileSerializer()
 
+    skill_set = SkillSerializer(many=True, read_only=True)
+
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password', 'profile')
+        fields = ('id', 'username', 'email', 'password', 'profile', 'skill_set')
         extra_kwargs = {'password': {'write_only': True}}
         read_only_fields = ('id', )
 
@@ -92,7 +103,6 @@ class ChallengerMatchSerializer(serializers.ModelSerializer):
                             'is_open', 'is_completed', 'is_confirmed')
 
 
-
 class ParkSerializer(serializers.ModelSerializer):
     match_set = MatchSerializer(many=True, read_only=True)
 
@@ -104,6 +114,7 @@ class ParkSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'name', 'rating', 'url', 'city', 'state_code',
                             'display_address1', 'display_address2',
                             'display_address3', 'postal_code')
+
 
 class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
