@@ -18,7 +18,8 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('user', 'gender', 'age', 'pic_url', 'sportsmanship',)
+        fields = ('gender', 'age', 'phone_number', 'wants_texts',
+                  'pic_url', 'sportsmanship')
         read_only_fields = ('pic_url', 'sportsmanship')
 
 
@@ -32,7 +33,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'email', 'password', 'profile', 'skill_set')
         extra_kwargs = {'password': {'write_only': True}}
-        read_only_fields = ('id', )
+        read_only_fields = ('id',)
 
     def create(self, validated_data):
         """Create Profile for User when registered

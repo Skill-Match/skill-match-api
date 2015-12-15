@@ -1,4 +1,5 @@
 from datetime import timedelta, date, datetime
+from api.notifications import twenty_four_hour_notify
 from django.core.management import BaseCommand
 from matchup.models import Match
 
@@ -14,10 +15,12 @@ class Command(BaseCommand):
             .filter(time__lt=datetime.now() + day)\
             .filter(time__gt=datetime.now() + twenty3_hours)
 
+        count = 0
         for match in matches:
-            pass
+            twenty_four_hour_notify(match)
+            count += 1
 
-
+        self.stdout.write("{} Matches notified".format(count))
 
 
 # from datetime import timedelta, datetime
