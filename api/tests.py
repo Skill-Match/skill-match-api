@@ -121,7 +121,6 @@ class MatchTests(APITestCase):
         self.assertEqual(self.match.is_confirmed, True)
 
 
-
 class FeedbackTests(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='joe',
