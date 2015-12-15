@@ -1,5 +1,6 @@
 import sendgrid
-from skill_match.settings import SENDGRID_KEY
+from skill_match.settings import SENDGRID_KEY, TWILIO_SID, TWILIO_TOKEN
+from twilio.rest import TwilioRestClient
 
 
 def send_email(email, subject, html):
@@ -12,6 +13,14 @@ def send_email(email, subject, html):
     message.set_html(html)
     message.set_from(sender)
     status, msg = sg.send(message)
+
+
+def send_text(phone_number):
+    account = TWILIO_SID
+    token = TWILIO_TOKEN
+    client = TwilioRestClient(account, token)
+    message = client.messages.create(to="+5082693675", from_="+17025059053",
+                                 body="Hello there!")
 
 
 def join_match_notify(match):
