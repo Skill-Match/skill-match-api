@@ -121,28 +121,6 @@ class DetailUpdateMatch(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MatchSerializer
 
 
-class UpdateMatch(generics.UpdateAPIView):
-    """Permissions:  """
-    queryset = Match.objects.all()
-    serializer_class = ChallengerMatchSerializer
-
-    def perform_update(self, serializer):
-        """find query parameters.
-            'decline' or 'confirm' match
-            **if no query parameter, this endpoint will sign up the
-                requested user**
-        """
-        decline = self.request.query_params.get('decline', None)
-        confirm = self.request.query_params.get('confirm', None)
-        requester = self.request.user
-        if decline:
-            serializer.save(decline=decline, is_open=True, requester=requester,)
-        elif confirm:
-            serializer.save(confirm=confirm, requester=requester)
-        else:
-            serializer.save(challenger=requester)
-
-
 class JoinMatch(generics.UpdateAPIView):
     queryset = Match.objects.all()
     serializer_class = ChallengerMatchSerializer

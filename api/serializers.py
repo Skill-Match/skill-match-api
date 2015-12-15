@@ -1,5 +1,3 @@
-from api.exceptions import OneFeedbackAllowed, TwoPlayersPerMatch, SelfSignUp, \
-    NoPlayerToConfirmOrDecline, OnlyCreatorMayConfirmOrDecline
 from django.contrib.auth.models import User
 from matchup.models import Park, Match, Feedback
 from rest_framework import serializers
@@ -93,56 +91,6 @@ class ChallengerMatchSerializer(serializers.ModelSerializer):
                             'skill_level', 'date', 'time', 'players',
                             'is_open', 'is_completed', 'is_confirmed')
 
-    def notify_decline(self):
-        pass
-
-    def notify_confirm(self):
-        pass
-
-    def update(self, instance, validated_data):
-        """ Check data passed from UpdateMatch view.
-            If decline is there, decline match. (is_open=True)
-            If confirm is there, confirm match. (is_confirmed=True)
-            If challenger is there, add challenger to match.
-
-        :param instance:
-        :param validated_data: challenger, decline, or confirm
-        :return:
-        """
-        match = super().update(instance, validated_data)
-        requester = validated_data.get('requester', None)
-        decline = validated_data.get('decline', None)
-        confirm = validated_data.get('confirm', None)
-        challenger = validated_data.get('challenger', None)
-        if challenger:
-            if match.players.count() == 2:
-                raise TwoPlayersPerMatch
-            if challenger == match.creator:
-                raise SelfSignUp
-            match.players.add(challenger)
-            match.is_open = False
-            match.save()
-
-        elif confirm:
-            if not requester == match.creator:
-                raise OnlyCreatorMayConfirmOrDecline
-            if match.players.count() == 1:
-                raise NoPlayerToConfirmOrDecline
-            match.is_confirmed = True
-            match.save()
-
-        elif decline:
-            if not requester == match.creator:
-                raise OnlyCreatorMayConfirmOrDecline
-            if match.players.count() == 1:
-                raise NoPlayerToConfirmOrDecline
-            creator_username = match.creator.username
-            challenger = match.players.exclude(username=creator_username)[0]
-            match.players.remove(challenger)
-            match.is_open = True
-            match.save()
-
-        return match
 
 
 class ParkSerializer(serializers.ModelSerializer):
