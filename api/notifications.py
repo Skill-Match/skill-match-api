@@ -15,12 +15,12 @@ def send_email(email, subject, html):
     status, msg = sg.send(message)
 
 
-def send_text(phone_number):
+def send_text(phone_number, body):
     account = TWILIO_SID
     token = TWILIO_TOKEN
     client = TwilioRestClient(account, token)
-    message = client.messages.create(to="+5082693675", from_="+17025059053",
-                                 body="Hello there!")
+    message = client.messages.create(to=phone_number, from_="+17025059053",
+                                 body=body)
 
 
 def join_match_notify(match):
@@ -63,3 +63,12 @@ def decline_match_notify(match, challenger):
     subject = "Your match request has been declined."
 
     send_email(challenger_email, subject, body)
+
+
+def twenty_four_hour_notify(match):
+    for player in match.players.all():
+        if player.profile.wants_texts:
+            time = time = match.time.strftime("%I:%M %p")
+            body = "Reminder: Your {} match tomorrow is at {} at {}. Have a " \
+                   "good one!".format(match.sport, time, match.park.name)
+            send_text(player.profile.phone_number, body)

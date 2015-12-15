@@ -34,6 +34,8 @@ class Profile(models.Model):
                               default=MALE)
     age = models.CharField(max_length=8, choices=AGE_CHOICES)
     pic_url = models.CharField(max_length=200, null=True, blank=True)
+    wants_texts = models.NullBooleanField(default=True, null=True)
+    phone_number = models.CharField(null=True, blank=True, max_length=15)
 
     @property
     def sportsmanship(self):
