@@ -42,5 +42,3 @@ def send_email(sender, instance=None, created=False, **kwargs):
         message.set_text(body_message)
         message.set_from('SkillMatch <fredoflynn@gmail.com>')
         status, msg = sg.send(message)
-
-        debug = True
