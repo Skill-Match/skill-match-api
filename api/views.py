@@ -12,6 +12,7 @@ from api.notifications import join_match_notify, confirm_match_notify, \
 import oauth2
 import requests
 from rest_framework import generics
+from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.pagination import PageNumberPagination
@@ -173,6 +174,17 @@ class ConfirmMatch(generics.UpdateAPIView):
 
         match = serializer.save(is_confirmed=True)
         confirm_match_notify(match)
+
+
+@api_view(['GET'])
+def get_credentials(request):
+    if request.method == 'GET':
+        key = request.auth.key
+        token = Token.objects.get(key=key)
+        username = token.user.username
+        id = token.user.id
+
+        return Response({"username": username, "user_id": id})
 
 
 @api_view()
