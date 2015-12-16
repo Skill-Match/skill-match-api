@@ -23,20 +23,24 @@ def send_text(phone_number, body):
                                      body=body)
 
 
-def join_match_notify(match):
-    creator_email = match.creator.email
-    challenger = match.players.exclude(id=match.creator.id)[0]
+def join_match_notify(match, joiner):
+    creator = match.creator
+    challenger = joiner
     park = match.park.name
     sport = match.sport
     date = match.date.strftime("%A %B, %d")
     time = match.time.strftime("%I:%M %p")
 
     body = "{} has joined your {} match at {} on {} at {}. Please " \
-                      "go to the website to confirm or decline this match."\
-                      .format(challenger.username, sport, park, date, time)
-    subject = "Hey from SkillMatch"
+           "go to the website to confirm or decline this match."\
+           .format(challenger.username, sport, park, date, time)
 
-    send_email(creator_email, subject, body)
+    subject = "Someone joined your match!"
+
+    send_email(creator.email, subject, body)
+
+    if creator.profile.wants_texts:
+        send_text(creator.profile.phone_number, body)
 
 
 def confirm_match_notify(match):

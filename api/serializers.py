@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from matchup.models import Park, Match, Feedback, Skill
+from matchup.models import Park, Match, Feedback, Skill, Court
 from rest_framework import serializers
 from rest_framework.relations import StringRelatedField
 from users.models import Profile
@@ -122,3 +122,11 @@ class FeedbackSerializer(serializers.ModelSerializer):
         fields = ('id', 'reviewer', 'player', 'match', 'skill',
                   'sportsmanship', 'punctuality', 'availability')
         read_only_fields = ('id', 'reviewer', 'player',)
+
+
+class CourtSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Court
+        fields = ('id', 'park', 'num_courts')
+
+
