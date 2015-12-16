@@ -4,6 +4,7 @@ from django.test import TestCase
 from matchup.models import Match, Park, Feedback
 from rest_framework import status
 from rest_framework.test import APITestCase
+from users.models import Profile
 
 
 class UserTests(APITestCase):
@@ -24,12 +25,12 @@ class UserTests(APITestCase):
     def test_create_user(self):
         url = reverse('api_create_user')
         data = {'username': 'bob', 'email': 'email@email.com', 'password':
-                'pwd', 'profile': {'gender': 'Man', 'age': "20's"}}
+                'pwd', 'profile': {'gender': "Male", 'age': "20's"}}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(User.objects.count(), 2)
         self.assertEqual(response.data['username'], 'bob')
-        self.assertEqual(response.data['profile']['gender'], 'Man')
+        self.assertEqual(response.data['profile']['gender'], 'Male')
 
     def test_detail_update_user(self):
         url = reverse('api_detail_update_user', kwargs={'pk': self.user.id})
@@ -43,7 +44,7 @@ class ParkTests(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='joe',
                                              email='test@test.com',
-                                             password='password')
+                                             password='password',)
         self.park = Park.objects.create(name='Test Park',
                                         postal_code='89148')
 
@@ -82,8 +83,12 @@ class MatchTests(APITestCase):
                                           date='2015-12-22',
                                           time='18:23',
                                           )
-        self.match.players.add(self.user, self.user2)
+        self.match.players.add(self.user)
         self.match.save()
+        Profile.objects.create(user=self.user, gender='Male', age="20's",
+                               wants_texts=False, phone_number="5082693675")
+        Profile.objects.create(user=self.user2, gender='Male', age="30's",
+                               wants_texts=False)
 
     def test_list_matches(self):
         url = reverse('api_list_create_matches')
@@ -95,8 +100,9 @@ class MatchTests(APITestCase):
         self.assertEqual((response_matches_list['skill_level']), 80)
 
     def test_create_match(self):
+        self.client.force_authenticate(user=self.user)
         url = reverse('api_list_create_matches')
-        data = {'park': 1, 'sport': 'Tennis', 'skill_level': 35,
+        data = {'park': self.park.id, 'sport': 'Tennis', 'skill_level': 35,
                 'date': '2016-2-2', 'time': '12:00'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -104,22 +110,39 @@ class MatchTests(APITestCase):
         self.assertEqual(response.data['sport'], 'Tennis')
         self.assertEqual(response.data['skill_level'], 35)
 
-    def test_confirm_decline_signup_match(self):
-        url = reverse('api_update_match', kwargs={'pk': self.match.id})
-        self.client.force_authenticate(user=self.user)
-        response1 = self.client.put(url, {'decline': 'true'}, format='json')
-        self.assertEqual(response1.status_code, status.HTTP_200_OK)
-        self.assertEqual(self.match.is_open, True)
-        self.assertEqual(self.match.is_confirmed, False)
+    def test_join_confirm_match(self):
         self.client.force_authenticate(user=self.user2)
-        response2 = self.client.put(url, {}, format='json')
-        self.assertEqual(response2.status_code, status.HTTP_200_OK)
-        self.assertEqual(self.match.is_open, False)
-        response3 = self.client.put(url, {'confirm': 'true'}, format='json')
-        self.assertEqual(response3.status_code, status.HTTP_200_OK)
-        self.assertEqual(self.match.is_open, False)
-        self.assertEqual(self.match.is_confirmed, True)
+        url = reverse('api_join_match', kwargs={'pk': self.match.id})
+        response = self.client.put(url, {}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(self.match.players.count(), 2)
+        self.assertEqual(response.data['is_open'], False)
 
+        self.client.force_authenticate(user=self.user)
+        confirm_url = reverse('api_confirm_match', kwargs={'pk': self.match.id})
+        response = self.client.put(confirm_url, {}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['is_confirmed'], True)
+
+    def test_leave_match(self):
+        self.client.force_authenticate(user=self.user2)
+        self.match.players.add(self.user2)
+        self.match.save()
+        url = reverse('api_leave_match', kwargs={'pk': self.match.id})
+        response = self.client.put(url, {}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(self.match.players.count(), 1)
+        self.assertEqual(response.data['is_open'], True)
+
+    def test_decline_match(self):
+        self.client.force_authenticate(user=self.user)
+        self.match.players.add(self.user2)
+        self.match.save()
+        url = reverse('api_decline_match', kwargs={'pk': self.match.id})
+        response = self.client.put(url, {}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['is_confirmed'], False)
+        self.assertEqual(response.data['is_open'], True)
 
 class FeedbackTests(APITestCase):
     def setUp(self):
