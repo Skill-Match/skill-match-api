@@ -13,6 +13,7 @@ import oauth2
 import requests
 from rest_framework import generics
 from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.pagination import PageNumberPagination
@@ -20,6 +21,29 @@ from rest_framework.response import Response
 from skill_match.settings import CONSUMER_KEY, CONSUMER_SECRET, TOKEN, \
     TOKEN_SECRET
 from users.models import Profile
+from rest_framework import parsers, renderers
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+
+class ObtainAuthToken(APIView):
+    throttle_classes = ()
+    permission_classes = ()
+    parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
+    renderer_classes = (renderers.JSONRenderer,)
+    serializer_class = AuthTokenSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        username = token.user.username
+        user_id = token.user.id
+        return Response({'token': token.key, 'username':username,
+                         'user_id': user_id})
 
 
 class SmallPagination(PageNumberPagination):
