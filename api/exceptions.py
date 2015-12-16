@@ -22,3 +22,16 @@ class OnlyCreatorMayConfirmOrDecline(APIException):
     status_code = 403
     default_detail = 'Only the Match Creator may confirm or decline the ' \
                      'matchup'
+
+class AlreadyJoined(APIException):
+    status_code = 403
+    default_detail = "You already joined this match!"
+
+class AlreadyConfirmed(APIException):
+    status_code = 403
+    default_detail = "This match has already been confirmed. You CAN'T" \
+                     "leave this match without cancelling."
+
+class NotInMatch(APIException):
+    status_code = 403
+    default_detail = "You are not in this match"

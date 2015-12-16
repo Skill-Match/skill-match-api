@@ -1,6 +1,7 @@
 import json
 from api.exceptions import OneFeedbackAllowed, TwoPlayersPerMatch, SelfSignUp, \
-    OnlyCreatorMayConfirmOrDecline, NoPlayerToConfirmOrDecline
+    OnlyCreatorMayConfirmOrDecline, NoPlayerToConfirmOrDecline, AlreadyJoined, \
+    AlreadyConfirmed, NotInMatch
 from api.serializers import UserSerializer, ParkSerializer, MatchSerializer,\
     FeedbackSerializer, ChallengerMatchSerializer, CreateParkSerializer, \
     ProfileSerializer, CourtSerializer
@@ -8,7 +9,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render
 from matchup.models import Park, Match, Feedback, Court
 from api.notifications import join_match_notify, confirm_match_notify, \
-    decline_match_notify
+    decline_match_notify, leave_match_notify
 import oauth2
 import requests
 from rest_framework import generics
@@ -155,15 +156,21 @@ class JoinMatch(generics.UpdateAPIView):
     serializer_class = ChallengerMatchSerializer
 
     def perform_update(self, serializer):
-        joiner=self.request.user
+        joiner = self.request.user
         creator = serializer.instance.creator
+
         if joiner == creator:
             raise SelfSignUp
 
         sport = serializer.instance.sport
         players = serializer.instance.players.all()
         player_list = list(players)
+
+        if joiner in player_list:
+            raise AlreadyJoined
+
         player_list.append(joiner)
+
         if sport == 'Tennis':
             match = serializer.save(players=player_list, is_open=False)
             join_match_notify(match, joiner)
@@ -176,7 +183,25 @@ class LeaveMatch(generics.UpdateAPIView):
     serializer_class = ChallengerMatchSerializer
     
     def perform_update(self, serializer):
-        leaving = self.request.user
+        if serializer.instance.is_confirmed:
+            raise AlreadyConfirmed
+
+        leaver = self.request.user
+        sport = serializer.instance.sport
+        players = serializer.instance.players.all()
+        player_list = list(players)
+
+        if leaver not in player_list:
+            raise NotInMatch
+        else:
+            player_list.remove(leaver)
+
+            if sport == 'Tennis':
+                match = serializer.save(players=player_list, is_open=True)
+                leave_match_notify(match, leaver)
+            else:
+                serializer.save(players=player_list)
+
 
 class DeclineMatch(generics.UpdateAPIView):
     queryset = Match.objects.all()
