@@ -2,6 +2,18 @@ from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+TENNIS = 'Tennis'
+BASKETBALL = 'Basketball'
+FOOTBALL = 'Football'
+SOCCER = 'Soccer'
+OTHER = 'Other'
+SPORT_CHOICES = (
+    (TENNIS, 'Tennis'),
+    (BASKETBALL, 'Basketball'),
+    (FOOTBALL, 'Football'),
+    (SOCCER, 'Soccer'),
+    (OTHER, 'Other')
+)
 
 class Park(models.Model):
     """
@@ -46,18 +58,6 @@ class Match(models.Model):
     2. players(User(s), m2m)
     3. park(Park)
     """
-    TENNIS = 'Tennis'
-    BASKETBALL = 'Basketball'
-    FOOTBALL = 'Football'
-    SOCCER = 'Soccer'
-    OTHER = 'Other'
-    SPORT_CHOICES = (
-        (TENNIS, 'Tennis'),
-        (BASKETBALL, 'Basketball'),
-        (FOOTBALL, 'Football'),
-        (SOCCER, 'Soccer'),
-        (OTHER, 'Other')
-    )
     creator = models.ForeignKey(User)
     description = models.TextField(max_length=1000, null=True, blank=True)
     park = models.ForeignKey(Park)
@@ -138,6 +138,13 @@ class Skill(models.Model):
     num_feedbacks = models.IntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateField(auto_now=True, null=True)
+
+
+class Court(models.Model):
+    park = models.ForeignKey(Park, null=True)
+    sport = models.CharField(max_length=25, null=True,
+                             choices=SPORT_CHOICES, default=TENNIS)
+    num_courts = models.IntegerField(null=True)
 
 # class Tennis(models.Model):
 #     """

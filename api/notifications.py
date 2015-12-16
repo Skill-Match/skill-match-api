@@ -20,7 +20,7 @@ def send_text(phone_number, body):
     token = TWILIO_TOKEN
     client = TwilioRestClient(account, token)
     message = client.messages.create(to=phone_number, from_="+17025059053",
-                                 body=body)
+                                     body=body)
 
 
 def join_match_notify(match):
@@ -31,12 +31,12 @@ def join_match_notify(match):
     date = match.date.strftime("%A %B, %d")
     time = match.time.strftime("%I:%M %p")
 
-    body_to_creator = "{} has joined your {} match at {} on {} at {}. Please " \
+    body = "{} has joined your {} match at {} on {} at {}. Please " \
                       "go to the website to confirm or decline this match."\
                       .format(challenger.username, sport, park, date, time)
     subject = "Hey from SkillMatch"
 
-    send_email(creator_email, subject, body_to_creator)
+    send_email(creator_email, subject, body)
 
 
 def confirm_match_notify(match):
