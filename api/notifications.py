@@ -31,8 +31,8 @@ def join_match_notify(match, joiner):
     date = match.date.strftime("%A %B, %d")
     time = match.time.strftime("%I:%M %p")
 
-    body = "{} has joined your {} match at {} on {} at {}. Please " \
-           "go to the website to confirm or decline this match."\
+    body = "Notification: {} has joined your {} match at {} on {} at {}. " \
+           "Please go to the website to confirm or decline this match."\
            .format(challenger.username, sport, park, date, time)
 
     subject = "Someone joined your match!"
@@ -42,6 +42,25 @@ def join_match_notify(match, joiner):
     if creator.profile.wants_texts:
         send_text(creator.profile.phone_number, body)
 
+
+def leave_match_notify(match, joiner):
+    creator = match.creator
+    challenger = joiner
+    park = match.park.name
+    sport = match.sport
+    date = match.date.strftime("%A %B, %d")
+    time = match.time.strftime("%I:%M %p")
+
+    body = "Notification: {} has left your {} match at {} on {} at {}. " \
+           "The match is now Open again."\
+           .format(challenger.username, sport, park, date, time)
+
+    subject = "Someone Left your match!"
+
+    send_email(creator.email, subject, body)
+
+    if creator.profile.wants_texts:
+        send_text(creator.profile.phone_number, body)
 
 def confirm_match_notify(match):
     challenger_email = match.players.exclude(id=match.creator.id)[0].email
