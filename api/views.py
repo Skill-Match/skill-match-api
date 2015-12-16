@@ -3,10 +3,10 @@ from api.exceptions import OneFeedbackAllowed, TwoPlayersPerMatch, SelfSignUp, \
     OnlyCreatorMayConfirmOrDecline, NoPlayerToConfirmOrDecline
 from api.serializers import UserSerializer, ParkSerializer, MatchSerializer,\
     FeedbackSerializer, ChallengerMatchSerializer, CreateParkSerializer, \
-    ProfileSerializer
+    ProfileSerializer, CourtSerializer
 from django.contrib.auth.models import User
 from django.shortcuts import render
-from matchup.models import Park, Match, Feedback
+from matchup.models import Park, Match, Feedback, Court
 from api.notifications import join_match_notify, confirm_match_notify, \
     decline_match_notify
 import oauth2
@@ -150,24 +150,33 @@ class DetailUpdateMatch(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MatchSerializer
 
 
-
 class JoinMatch(generics.UpdateAPIView):
     queryset = Match.objects.all()
     serializer_class = ChallengerMatchSerializer
 
     def perform_update(self, serializer):
-        challenger=self.request.user
+        joiner=self.request.user
         creator = serializer.instance.creator
-        player_count = serializer.instance.players.count()
-        if player_count > 1:
-             raise TwoPlayersPerMatch
-        if challenger == creator:
+        if joiner == creator:
             raise SelfSignUp
 
-        players = [creator, challenger]
-        match = serializer.save(players=players, is_open=False)
-        join_match_notify(match)
+        sport = serializer.instance.sport
+        players = serializer.instance.players.all()
+        player_list = list(players)
+        player_list.append(joiner)
+        if sport == 'Tennis':
+            match = serializer.save(players=player_list, is_open=False)
+            join_match_notify(match, joiner)
+        else:
+            serializer.save(players=player_list)
 
+
+class LeaveMatch(generics.UpdateAPIView):
+    queryset = Match.objects.all()
+    serializer_class = ChallengerMatchSerializer
+    
+    def perform_update(self, serializer):
+        leaving = self.request.user
 
 class DeclineMatch(generics.UpdateAPIView):
     queryset = Match.objects.all()
@@ -198,6 +207,11 @@ class ConfirmMatch(generics.UpdateAPIView):
 
         match = serializer.save(is_confirmed=True)
         confirm_match_notify(match)
+
+
+class ListCreateCourts(generics.ListCreateAPIView):
+    queryset = Court.objects.all()
+    serializer_class = CourtSerializer
 
 
 @api_view(['GET'])

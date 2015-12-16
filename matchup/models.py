@@ -45,8 +45,8 @@ class Park(models.Model):
 class Match(models.Model):
     """
     Process for Match:
-    1. User creates match with park, sport, date, time, skill level wanted.
-    2. Creation process adds user as creator and player on players many to many.
+    1. User create match with park, sport, date, time, skill level wanted.
+    2. Creation process add user as creator and player on players many to many.
     3. A different User signs up. Match is now closed (is_open=False)
     4. User may confirm or decline match. If user accepts it is confirmed.
         (is_confirmed=True). If user declines, it opens (is_open=True)
