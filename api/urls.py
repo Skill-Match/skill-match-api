@@ -33,7 +33,7 @@ urlpatterns = (
     url(r'^feedbacks/(?P<pk>\d+)', DetailUpdateFeedback.as_view(),
         name='api_detail_feedback'),
     url(r'^feedbacks/create/$', CreateFeedbacks.as_view(),
-        name='api_create_feeback'),
+        name='api_create_feedback'),
     url(r'^credentials/$', api_views.get_credentials),
     url(r'^yelp/$', api_views.hello_world)
 )
