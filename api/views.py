@@ -77,6 +77,7 @@ class ListParks(generics.ListAPIView):
     """Permissions: all"""
     queryset = Park.objects.all()
     serializer_class = ParkSerializer
+    pagination_class = SmallPagination
 
 
 class CreatePark(generics.CreateAPIView):
