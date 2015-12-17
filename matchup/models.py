@@ -111,7 +111,7 @@ class Feedback(models.Model):
     match = models.ForeignKey(Match)
     skill = models.IntegerField()
     sportsmanship = models.IntegerField()
-    court_ranking = models.IntegerField()
+    court_ranking = models.IntegerField(null=True)
     availability = models.IntegerField()
     is_succesful = models.BooleanField(default=False)
     punctuality = models.CharField(max_length=15,
