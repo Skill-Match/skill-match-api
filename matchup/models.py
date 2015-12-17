@@ -15,13 +15,14 @@ SPORT_CHOICES = (
     (OTHER, 'Other')
 )
 
+
 class Park(models.Model):
     """
     Currently borrowed from YELP API.
     Relationships: None
     """
     rating = models.FloatField(null=True, blank=True)
-    name = models.CharField(max_length=200, null=True, blank=True)
+    name = models.CharField(max_length=200)
     yelp_id = models.CharField(null=True, blank=True, max_length=100)
     mobile_url = models.URLField(null=True, blank=True)
     url = models.URLField(null=True, blank=True)
@@ -34,12 +35,10 @@ class Park(models.Model):
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     state_code = models.CharField(max_length=5, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        if self.name:
-            return self.name
-        else:
-            return "A park somewhere"
+        return self.name
 
 
 class Match(models.Model):
@@ -58,28 +57,28 @@ class Match(models.Model):
     2. players(User(s), m2m)
     3. park(Park)
     """
-    creator = models.ForeignKey(User)
+    creator = models.ForeignKey(User, related_name='created_matches')
     description = models.TextField(max_length=1000, null=True, blank=True)
     park = models.ForeignKey(Park)
-    sport = models.CharField(max_length=25, null=True, blank=True,
-                             choices=SPORT_CHOICES, default=TENNIS)
+    sport = models.CharField(max_length=25, choices=SPORT_CHOICES,
+                             default=TENNIS)
     other = models.CharField(max_length=25, null=True, blank=True)
     skill_level = models.PositiveIntegerField()
-    date = models.DateField(null=True)
-    time = models.TimeField(null=True)
-    players = models.ManyToManyField(User, related_name='players', blank=True)
+    date = models.DateField()
+    time = models.TimeField()
+    players = models.ManyToManyField(User, blank=True)
     img_url = models.CharField(max_length=255, null=True, blank=True)
-    is_open = models.NullBooleanField(null=True, default=True)
-    is_completed = models.NullBooleanField(null=True, default=False)
-    is_confirmed = models.NullBooleanField(null=True, default=False)
-    is_challenge = models.NullBooleanField(null=True, default=False)
-    challenge_declined = models.NullBooleanField(null=True, default=False)
+    is_open = models.BooleanField(default=True)
+    is_completed = models.BooleanField(default=False)
+    is_confirmed = models.BooleanField(default=False)
+    is_challenge = models.BooleanField(default=False)
+    challenge_declined = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         return "{}'s {} match, match #{}".format(self.creator.username,
                                                  self.sport, self.id)
-
 
 
 class Feedback(models.Model):
@@ -107,17 +106,19 @@ class Feedback(models.Model):
         (LATE, 'Over 10 min late')
     )
 
-    reviewer = models.ForeignKey(User)
-    player = models.ForeignKey(User, related_name='player')
+    reviewer = models.ForeignKey(User, related_name='reviewed_feedbacks')
+    player = models.ForeignKey(User)
     match = models.ForeignKey(Match)
     skill = models.IntegerField()
     sportsmanship = models.IntegerField()
-    punctuality = models.CharField(max_length=15, null=True,
+    court_ranking = models.IntegerField()
+    availability = models.IntegerField()
+    is_succesful = models.BooleanField(default=False)
+    punctuality = models.CharField(max_length=15,
                                    choices=PUNCTUALITY_CHOICES,
                                    default=ON_TIME)
-    availability = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
+    modified_at = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         return "{}'s review: {} skill: {}".format(self.reviewer.username,
@@ -128,8 +129,7 @@ class Feedback(models.Model):
 class Skill(models.Model):
     """
     Skill process:
-    1. Command calls for calculations on skill level for all players. Check
-        this one with Jeff.
+    1. Command calls for calculations on skill level for all players.
 
     Relationships:
     1. player(User)
@@ -139,48 +139,21 @@ class Skill(models.Model):
     skill = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
     sportsmanship = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
     num_feedbacks = models.IntegerField(null=True)
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True, null=True)
+
+    def __str__(self):
+        return "{}'s {} skill: {}".format(self.player.username, self.sport,
+                                          self.skill)
 
 
 class Court(models.Model):
-    park = models.ForeignKey(Park, null=True)
-    sport = models.CharField(max_length=25, null=True,
-                             choices=SPORT_CHOICES, default=TENNIS)
+    park = models.ForeignKey(Park)
+    sport = models.CharField(max_length=25, choices=SPORT_CHOICES)
+    other = models.CharField(max_length=25, null=True, blank=True)
     num_courts = models.IntegerField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
 
-# class Tennis(models.Model):
-#     """
-#     Tennis process:
-#     Two ways it can be updated.
-#     When match is confirmed and completed.
-#     When User updates it manually.
-#     Relationships:
-#     1. park(Park)
-#
-#     """
-#     SPORT_CHOICES = (
-#         (TENNIS, 'Tennis'),
-#         (BASKETBALL, 'Basketball'),
-#         (FOOTBALL, 'Football'),
-#         (SOCCER, 'Soccer'),
-#         (OTHER, 'Other')
-#     )
-#     park = models.ForeignKey(Park)
-#     num_courts = models.IntegerField(null=True, blank=True)
-#     ranking = models.FloatField(null=True, blank=True)
-#
-# class Basketball(models.Model):
-#     park = models.ForeignKey(Park)
-#     num_courts = models.IntegerField(null=True, blank=True)
-#     ranking = models.FloatField(null=True, blank=True)
-#
-# class Field(models.Model):
-#     park = models.ForeignKey(Park)
-#     ranking = models.FloatField(null=True, blank=True)
-#
-#
-# class Court(models.Model):
-#     number = models.IntegerField()
-#     park = models.ForeignKey(Park)
-#     availability = models.FloatField()
+    def __str__(self):
+        return "{} at {}".format(self.sport, self.park.name)

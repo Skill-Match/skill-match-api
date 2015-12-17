@@ -161,7 +161,7 @@ class CreateFeedbacks(generics.CreateAPIView):
         reviewer = self.request.user
         match_id = serializer.initial_data['match']
         match = Match.objects.get(pk=match_id)
-        existing_feedback = match.feedback_set.filter(reviewer=reviewer)
+        existing_feedback = match.reviewed_feedbacks.filter(reviewer=reviewer)
         if existing_feedback:
             raise OneFeedbackAllowed
         for person in match.players.all():
