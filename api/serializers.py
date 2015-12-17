@@ -70,7 +70,7 @@ class MatchSerializer(serializers.ModelSerializer):
     creator_name = serializers.ReadOnlyField(source='creator.username')
     time = serializers.TimeField(format="%I:%M %p")
     players = serializers.StringRelatedField(many=True, read_only=True)
-    date = serializers.DateTimeField(format="%A %b, %d")
+    date = serializers.DateField(format="%A %b, %d")
 
     class Meta:
         model = Match
