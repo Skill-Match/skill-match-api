@@ -76,7 +76,7 @@ class MatchSerializer(serializers.ModelSerializer):
                   'other', 'skill_level', 'date', 'time', 'players', 'img_url',
                   'is_open', 'is_completed', 'is_confirmed')
         read_only_fields = ('id', 'creator', 'players', 'is_open',
-                            'is_completed', 'is_confirmed')
+                            'is_completed', 'is_confirmed', 'img_url')
 
 
 class ChallengerMatchSerializer(serializers.ModelSerializer):
