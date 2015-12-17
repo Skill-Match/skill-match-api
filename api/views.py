@@ -91,7 +91,8 @@ class ListCreateMatches(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         user = self.request.user
-        serializer.save(creator=user)
+        players = [user,]
+        serializer.save(creator=user, players=players)
 
     def get_queryset(self):
         """Return list for user only"""
@@ -101,6 +102,16 @@ class ListCreateMatches(generics.ListCreateAPIView):
             qs = qs.filter(players__username=username)
         return qs
 
+
+class ChallengeCreateMatch(generics.CreateAPIView):
+    serializer_class = MatchSerializer
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        challenge_id = serializer.initial_data['challenge']
+        challenged = User.objects.get(pk=challenge_id)
+        players = [user, challenged]
+        serializer.save(creator=user, players=players, is_open=False)
 
 class ListFeedbacks(generics.ListAPIView):
     """Permissions: ADMIN only"""

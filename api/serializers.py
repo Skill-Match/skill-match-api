@@ -78,16 +78,6 @@ class MatchSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'creator', 'players', 'is_open',
                             'is_completed', 'is_confirmed')
 
-    def create(self, validated_data):
-        """
-            Add player to match. Assign creator the request user.
-        """
-        match = super().create(validated_data)
-        creator = validated_data['creator']
-        match.players.add(creator)
-        match.save()
-        return match
-
 
 class ChallengerMatchSerializer(serializers.ModelSerializer):
     """
