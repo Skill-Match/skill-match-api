@@ -96,15 +96,15 @@ class ListCreateMatches(generics.ListCreateAPIView):
         sport = serializer.initial_data['sport']
 
         if sport == 'Tennis':
-            img_url = "http://www.psal.org/images/Articles/2015/201510231102193621.jpg"
+            img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733cc2dc5cb4b9e2e1b062/1450392771257/?format=500w"
         elif sport == 'Basketball':
-            img_url = "http://hdwallpaperia.com/wp-content/uploads/2013/11/Basketball-on-Court-1024x640.jpg"
+            img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733c47e0327c81fa9a2a1f/1450392648388/?format=500w"
         elif sport == 'Football':
-            img_url = "http://bloximages.newyork1.vip.townnews.com/kmaland.com/content/tncms/assets/v3/editorial/3/b7/3b731d2e-5dc3-11e3-a15c-001a4bcf6878/52a09e0ea37c3.image.jpg"
+            img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733bf8e0327c81fa9a2787/1450392569419/?format=500w"
         elif sport == 'Soccer':
-            img_url = "http://www.cityofroseville.com/ImageRepository/Document?documentID=16585"
+            img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733cb3dc5cb4b9e2e1afce/1450392756140/?format=500w"
         elif sport == 'Other':
-            img_url = "http://www.mykemptvillenow.com/wp-content/uploads/2015/09/sports-balls.jpg"
+            img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733e05a128e6b1e54ff616/1450393093587/?format=500w"
 
         serializer.save(creator=user, players=players, img_url=img_url)
 
@@ -127,16 +127,17 @@ class ChallengeCreateMatch(generics.CreateAPIView):
         challenged = User.objects.get(pk=challenge_id)
         players = [user, challenged]
         sport = serializer.instance.sport
+
         if sport == 'Tennis':
-            img_url = "http://www.psal.org/images/Articles/2015/201510231102193621.jpg"
+            img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733cc2dc5cb4b9e2e1b062/1450392771257/?format=500w"
         elif sport == 'Basketball':
-            img_url = "http://hdwallpaperia.com/wp-content/uploads/2013/11/Basketball-on-Court-1024x640.jpg"
+            img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733c47e0327c81fa9a2a1f/1450392648388/?format=500w"
         elif sport == 'Football':
-            img_url = "http://bloximages.newyork1.vip.townnews.com/kmaland.com/content/tncms/assets/v3/editorial/3/b7/3b731d2e-5dc3-11e3-a15c-001a4bcf6878/52a09e0ea37c3.image.jpg"
+            img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733bf8e0327c81fa9a2787/1450392569419/?format=500w"
         elif sport == 'Soccer':
-            img_url = "http://www.cityofroseville.com/ImageRepository/Document?documentID=16585"
+            img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733cb3dc5cb4b9e2e1afce/1450392756140/?format=500w"
         elif sport == 'Other':
-            img_url = "http://www.mykemptvillenow.com/wp-content/uploads/2015/09/sports-balls.jpg"
+            img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733e05a128e6b1e54ff616/1450393093587/?format=500w"
 
         serializer.save(creator=user, players=players, is_open=False,
                         is_challenge=True)
