@@ -118,5 +118,3 @@ class CourtSerializer(serializers.ModelSerializer):
     class Meta:
         model = Court
         fields = ('id', 'park', 'num_courts')
-
-
