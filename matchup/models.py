@@ -72,6 +72,7 @@ class Match(models.Model):
     is_completed = models.NullBooleanField(null=True, default=False)
     is_confirmed = models.NullBooleanField(null=True, default=False)
     is_challenge = models.NullBooleanField(null=True, default=False)
+    challenge_declined = models.NullBooleanField(null=True, default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

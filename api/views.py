@@ -9,7 +9,8 @@ from django.contrib.auth.models import User
 from django.shortcuts import render
 from matchup.models import Park, Match, Feedback, Court
 from api.notifications import join_match_notify, confirm_match_notify, \
-    decline_match_notify, leave_match_notify
+    decline_match_notify, leave_match_notify, challenge_declined_notify, \
+    challenge_accepted_notify
 import oauth2
 import requests
 from rest_framework import generics
@@ -112,7 +113,8 @@ class ChallengeCreateMatch(generics.CreateAPIView):
         challenge_id = serializer.initial_data['challenge']
         challenged = User.objects.get(pk=challenge_id)
         players = [user, challenged]
-        serializer.save(creator=user, players=players, is_open=False)
+        serializer.save(creator=user, players=players, is_open=False,
+                        is_challenge=True)
 
 class ListFeedbacks(generics.ListAPIView):
     """Permissions: ADMIN only"""
@@ -220,15 +222,22 @@ class DeclineMatch(generics.UpdateAPIView):
     serializer_class = ChallengerMatchSerializer
 
     def perform_update(self, serializer):
-        decliner = self.request.user
-        challenger = serializer.instance.players.exclude(id=decliner.id)[0]
-        if not decliner == serializer.instance.creator:
-            raise OnlyCreatorMayConfirmOrDecline
         if serializer.instance.players.count() == 1:
             raise NoPlayerToConfirmOrDecline
 
-        match = serializer.save(players=[decliner,], is_open=True)
-        decline_match_notify(match, challenger)
+        decliner = self.request.user
+        challenger = serializer.instance.players.exclude(id=decliner.id)[0]
+
+        if serializer.instance.is_challenge == True:
+            if challenger == serializer.instance.creator:
+                match = serializer.save(challenge_declined=True)
+                challenge_declined_notify(match, challenger)
+        else:
+            if not decliner == serializer.instance.creator:
+                raise OnlyCreatorMayConfirmOrDecline
+
+            match = serializer.save(players=[decliner,], is_open=True)
+            decline_match_notify(match, challenger)
 
 
 class ConfirmMatch(generics.UpdateAPIView):
@@ -236,14 +245,20 @@ class ConfirmMatch(generics.UpdateAPIView):
     serializer_class = ChallengerMatchSerializer
 
     def perform_update(self, serializer):
-        confirmer = self.request.user
-        if not confirmer == serializer.instance.creator:
-            raise OnlyCreatorMayConfirmOrDecline
         if serializer.instance.players.count() == 1:
             raise NoPlayerToConfirmOrDecline
 
-        match = serializer.save(is_confirmed=True)
-        confirm_match_notify(match)
+        confirmer = self.request.user
+        
+        if serializer.instance.is_challenge:
+            match = serializer.save(is_confirmed=True)
+            challenge_accepted_notify(match)
+        else:
+            if not confirmer == serializer.instance.creator:
+                raise OnlyCreatorMayConfirmOrDecline
+
+            match = serializer.save(is_confirmed=True)
+            confirm_match_notify(match)
 
 
 class ListCreateCourts(generics.ListCreateAPIView):

@@ -95,3 +95,10 @@ def twenty_four_hour_notify(match):
             body = "Reminder: Your {} match tomorrow is at {} at {}. Have a " \
                    "good one!".format(match.sport, time, match.park.name)
             send_text(player.profile.phone_number, body)
+
+
+def challenge_declined_notify(match, challenger):
+    pass
+
+def challenge_accepted_notify(match):
+    pass
