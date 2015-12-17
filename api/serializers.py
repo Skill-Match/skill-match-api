@@ -73,7 +73,7 @@ class MatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Match
         fields = ('id', 'creator', 'creator_name', 'description', 'park', 'park_name', 'sport',
-                  'other', 'skill_level', 'date', 'time', 'players',
+                  'other', 'skill_level', 'date', 'time', 'players', 'img_url',
                   'is_open', 'is_completed', 'is_confirmed')
         read_only_fields = ('id', 'creator', 'players', 'is_open',
                             'is_completed', 'is_confirmed')

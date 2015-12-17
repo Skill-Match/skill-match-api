@@ -93,7 +93,20 @@ class ListCreateMatches(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         user = self.request.user
         players = [user,]
-        serializer.save(creator=user, players=players)
+        sport = serializer.initial_data['sport']
+
+        if sport == 'Tennis':
+            img_url = "http://www.psal.org/images/Articles/2015/201510231102193621.jpg"
+        elif sport == 'Basketball':
+            img_url = "http://hdwallpaperia.com/wp-content/uploads/2013/11/Basketball-on-Court-1024x640.jpg"
+        elif sport == 'Football':
+            img_url = "http://bloximages.newyork1.vip.townnews.com/kmaland.com/content/tncms/assets/v3/editorial/3/b7/3b731d2e-5dc3-11e3-a15c-001a4bcf6878/52a09e0ea37c3.image.jpg"
+        elif sport == 'Soccer':
+            img_url = "http://www.cityofroseville.com/ImageRepository/Document?documentID=16585"
+        elif sport == 'Other':
+            img_url = "http://www.mykemptvillenow.com/wp-content/uploads/2015/09/sports-balls.jpg"
+
+        serializer.save(creator=user, players=players, img_url=img_url)
 
 
     def get_queryset(self):
@@ -113,8 +126,21 @@ class ChallengeCreateMatch(generics.CreateAPIView):
         challenge_id = serializer.initial_data['challenge']
         challenged = User.objects.get(pk=challenge_id)
         players = [user, challenged]
+        sport = serializer.instance.sport
+        if sport == 'Tennis':
+            img_url = "http://www.psal.org/images/Articles/2015/201510231102193621.jpg"
+        elif sport == 'Basketball':
+            img_url = "http://hdwallpaperia.com/wp-content/uploads/2013/11/Basketball-on-Court-1024x640.jpg"
+        elif sport == 'Football':
+            img_url = "http://bloximages.newyork1.vip.townnews.com/kmaland.com/content/tncms/assets/v3/editorial/3/b7/3b731d2e-5dc3-11e3-a15c-001a4bcf6878/52a09e0ea37c3.image.jpg"
+        elif sport == 'Soccer':
+            img_url = "http://www.cityofroseville.com/ImageRepository/Document?documentID=16585"
+        elif sport == 'Other':
+            img_url = "http://www.mykemptvillenow.com/wp-content/uploads/2015/09/sports-balls.jpg"
+
         serializer.save(creator=user, players=players, is_open=False,
                         is_challenge=True)
+
 
 class ListFeedbacks(generics.ListAPIView):
     """Permissions: ADMIN only"""
@@ -249,7 +275,7 @@ class ConfirmMatch(generics.UpdateAPIView):
             raise NoPlayerToConfirmOrDecline
 
         confirmer = self.request.user
-        
+
         if serializer.instance.is_challenge:
             match = serializer.save(is_confirmed=True)
             challenge_accepted_notify(match)

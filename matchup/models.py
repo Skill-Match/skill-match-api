@@ -68,6 +68,7 @@ class Match(models.Model):
     date = models.DateField(null=True)
     time = models.TimeField(null=True)
     players = models.ManyToManyField(User, related_name='players', blank=True)
+    img_url = models.CharField(max_length=255, null=True, blank=True)
     is_open = models.NullBooleanField(null=True, default=True)
     is_completed = models.NullBooleanField(null=True, default=False)
     is_confirmed = models.NullBooleanField(null=True, default=False)
