@@ -94,6 +94,7 @@ class ListCreateMatches(generics.ListCreateAPIView):
         players = [user,]
         serializer.save(creator=user, players=players)
 
+
     def get_queryset(self):
         """Return list for user only"""
         qs = super().get_queryset()
