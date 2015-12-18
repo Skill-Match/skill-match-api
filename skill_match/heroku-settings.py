@@ -21,3 +21,14 @@ STATIC_URL = '/static/'
 STATICFILES_DIR = (
     os.path.join(BASE_DIR, 'static')
 )
+
+CONSUMER_KEY = os.environ['CONSUMER_KEY']
+CONSUMER_SECRET = os.environ['CONSUMER_SECRET']
+TOKEN = os.environ['TOKEN']
+TOKEN_SECRET = os.environ['TOKEN_SECRET']
+
+SENDGRID_KEY = os.environ['SENDGRID_KEY']
+
+TWILIO_SID = os.environ['TWILIO_SID']
+TWILIO_TOKEN = os.environ['TWILIO_TOKEN']
+
