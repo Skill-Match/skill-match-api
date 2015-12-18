@@ -87,7 +87,7 @@ class CreatePark(generics.CreateAPIView):
 
 class ListCreateMatches(generics.ListCreateAPIView):
     """Permissions: logged in user for create"""
-    queryset = Match.objects.all().filter(is_open=True)
+    queryset = Match.objects.all()
     serializer_class = MatchSerializer
     pagination_class = SmallPagination
 
