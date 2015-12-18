@@ -113,17 +113,11 @@ class ListCreateMatches(generics.ListCreateAPIView):
         """Return Pledges for user only"""
         qs = super().get_queryset()
         home = self.request.query_params.get('home', None)
-        if home:
-            qs = qs.filter(is_open=True).order_by('date')
-        return qs
-
-
-    def get_queryset(self):
-        """Return list for user only"""
-        qs = super().get_queryset()
         username = self.request.query_params.get('username', None)
         if username:
             qs = qs.filter(players__username=username)
+        if home:
+            qs = qs.filter(is_open=True).order_by('date')
         return qs
 
 
