@@ -87,7 +87,7 @@ class CreatePark(generics.CreateAPIView):
 
 class ListCreateMatches(generics.ListCreateAPIView):
     """Permissions: logged in user for create"""
-    queryset = Match.objects.all().order_by("date")
+    queryset = Match.objects.all().filter(is_open=True)
     serializer_class = MatchSerializer
     pagination_class = SmallPagination
 
@@ -108,6 +108,14 @@ class ListCreateMatches(generics.ListCreateAPIView):
             img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733e05a128e6b1e54ff616/1450393093587/?format=500w"
 
         serializer.save(creator=user, players=players, img_url=img_url)
+
+    def get_queryset(self):
+        """Return Pledges for user only"""
+        qs = super().get_queryset()
+        home = self.request.query_params.get('home', None)
+        if home:
+            qs = qs.filter(is_open=True).order_by('date')
+        return qs
 
 
     def get_queryset(self):
