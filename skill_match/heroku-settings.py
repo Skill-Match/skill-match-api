@@ -31,4 +31,3 @@ SENDGRID_KEY = os.environ['SENDGRID_KEY']
 
 # TWILIO_SID = os.environ['TWILIO_SID']
 # TWILIO_TOKEN = os.environ['TWILIO_TOKEN']
-
