@@ -115,7 +115,7 @@ class ListCreateMatches(generics.ListCreateAPIView):
         home = self.request.query_params.get('home', None)
         username = self.request.query_params.get('username', None)
         if username:
-            qs = qs.filter(players__username=username)
+            qs = qs.filter(players__username=username).order_by('-date')
         if home:
             qs = qs.filter(is_open=True).order_by('date')
         return qs
