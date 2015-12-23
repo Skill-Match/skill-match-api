@@ -129,7 +129,7 @@ class ChallengeCreateMatch(generics.CreateAPIView):
         challenge_id = serializer.initial_data['challenge']
         challenged = User.objects.get(pk=challenge_id)
         players = [user, challenged]
-        sport = serializer.instance.sport
+        sport = serializer.initial_data['sport']
 
         if sport == 'Tennis':
             img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733cc2dc5cb4b9e2e1b062/1450392771257/?format=500w"
