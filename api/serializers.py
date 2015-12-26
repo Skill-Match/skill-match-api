@@ -99,15 +99,21 @@ class ChallengerMatchSerializer(serializers.ModelSerializer):
                             'skill_level', 'date', 'time', 'players',
                             'is_open', 'is_completed', 'is_confirmed')
 
+class CourtSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Court
+        fields = ('id', 'park', 'sport', 'other', 'num_courts')
+
 
 class ParkSerializer(serializers.ModelSerializer):
     match_set = MatchSerializer(many=True, read_only=True)
+    court_set = CourtSerializer(many=True, read_only=True)
 
     class Meta:
         model = Park
         fields = ('id', 'name', 'rating', 'url', 'image_url', 'city', 'state_code',
                   'display_address1', 'display_address2', 'display_address3',
-                  'postal_code', 'match_set',)
+                  'postal_code', 'match_set', 'court_set')
         read_only_fields = ('id', 'name', 'rating', 'url', 'image_url', 'city', 'state_code',
                             'display_address1', 'display_address2',
                             'display_address3', 'postal_code')
@@ -119,9 +125,3 @@ class FeedbackSerializer(serializers.ModelSerializer):
         fields = ('id', 'reviewer', 'player', 'match', 'skill',
                   'sportsmanship', 'punctuality', 'availability')
         read_only_fields = ('id', 'reviewer', 'player',)
-
-
-class CourtSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Court
-        fields = ('id', 'park', 'sport', 'other', 'num_courts')
