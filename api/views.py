@@ -112,8 +112,11 @@ class ListCreateMatches(generics.ListCreateAPIView):
     def get_queryset(self):
         """Return Pledges for user only"""
         qs = super().get_queryset()
+        sport = self.request.query_params.get('sport', None).title()
         home = self.request.query_params.get('home', None)
         username = self.request.query_params.get('username', None)
+        if sport:
+            qs = qs.filter(sport=sport)
         if username:
             qs = qs.filter(players__username=username).order_by('-date')
         if home:
@@ -128,6 +131,8 @@ class ChallengeCreateMatch(generics.CreateAPIView):
         user = self.request.user
         challenge_id = serializer.initial_data['challenge']
         challenged = User.objects.get(pk=challenge_id)
+        if challenged == user:
+            raise SelfSignUp
         players = [user, challenged]
         sport = serializer.initial_data['sport']
 
@@ -231,20 +236,23 @@ class LeaveMatch(generics.UpdateAPIView):
             raise AlreadyConfirmed
 
         leaver = self.request.user
+        if leaver == serializer.instance.creator:
+            raise SelfSignUp
+
         sport = serializer.instance.sport
         players = serializer.instance.players.all()
         player_list = list(players)
 
         if leaver not in player_list:
             raise NotInMatch
-        else:
-            player_list.remove(leaver)
 
-            if sport == 'Tennis':
-                match = serializer.save(players=player_list, is_open=True)
-                leave_match_notify(match, leaver)
-            else:
-                serializer.save(players=player_list)
+        player_list.remove(leaver)
+
+        if sport == 'Tennis':
+            match = serializer.save(players=player_list, is_open=True)
+            leave_match_notify(match, leaver)
+        else:
+            serializer.save(players=player_list)
 
 
 class DeclineMatch(generics.UpdateAPIView):
