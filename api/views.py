@@ -112,10 +112,11 @@ class ListCreateMatches(generics.ListCreateAPIView):
     def get_queryset(self):
         """Return Pledges for user only"""
         qs = super().get_queryset()
-        sport = self.request.query_params.get('sport', None).title()
+        sport = self.request.query_params.get('sport', None)
         home = self.request.query_params.get('home', None)
         username = self.request.query_params.get('username', None)
         if sport:
+            sport = sport.title()
             qs = qs.filter(sport=sport)
         if username:
             qs = qs.filter(players__username=username).order_by('-date')
