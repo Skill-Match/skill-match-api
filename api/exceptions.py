@@ -35,3 +35,7 @@ class AlreadyConfirmed(APIException):
 class NotInMatch(APIException):
     status_code = 403
     default_detail = "You are not in this match"
+
+class CourtAlreadyExists(APIException):
+    status_code = 403
+    default_detail = "This Court Already Exists."

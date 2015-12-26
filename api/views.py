@@ -1,7 +1,7 @@
 import json
 from api.exceptions import OneFeedbackAllowed, TwoPlayersPerMatch, SelfSignUp, \
     OnlyCreatorMayConfirmOrDecline, NoPlayerToConfirmOrDecline, AlreadyJoined, \
-    AlreadyConfirmed, NotInMatch
+    AlreadyConfirmed, NotInMatch, CourtAlreadyExists
 from api.serializers import UserSerializer, ParkSerializer, MatchSerializer,\
     FeedbackSerializer, ChallengerMatchSerializer, CreateParkSerializer, \
     ProfileSerializer, CourtSerializer
@@ -311,6 +311,16 @@ class ConfirmMatch(generics.UpdateAPIView):
 class ListCreateCourts(generics.ListCreateAPIView):
     queryset = Court.objects.all()
     serializer_class = CourtSerializer
+
+    def perform_create(self, serializer):
+        park_id = serializer.initial_data['park']
+        sport = serializer.initial_data['sport']
+        park = Park.objects.get(pk=park_id)
+        already_exists = park.court_set.filter(sport=sport)
+        if already_exists:
+            raise CourtAlreadyExists
+
+        serializer.save()
 
 
 @api_view(['GET'])
