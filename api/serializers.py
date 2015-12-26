@@ -124,4 +124,4 @@ class FeedbackSerializer(serializers.ModelSerializer):
 class CourtSerializer(serializers.ModelSerializer):
     class Meta:
         model = Court
-        fields = ('id', 'park', 'num_courts')
+        fields = ('id', 'park', 'sport', 'other', 'num_courts')

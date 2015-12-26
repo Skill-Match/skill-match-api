@@ -171,13 +171,21 @@ class CreateFeedbacks(generics.CreateAPIView):
         reviewer = self.request.user
         match_id = serializer.initial_data['match']
         match = Match.objects.get(pk=match_id)
-        existing_feedback = match.feedback_set.filter(reviewer=reviewer)
-        if existing_feedback:
-            raise OneFeedbackAllowed
-        for person in match.players.all():
-            if not person == reviewer:
-                player = person
-        serializer.save(player=player, reviewer=reviewer)
+        player_id = serializer.initial_data.get('player', None)
+        if player_id:
+            player = User.objects.get(pk=player_id)
+            existing_feedback = match.feedback_set.filter(reviewer=reviewer, player=player)
+            if existing_feedback:
+                raise OneFeedbackAllowed
+            serializer.save(player=player, reviewer=reviewer)
+        else:
+            existing_feedback = match.feedback_set.filter(reviewer=reviewer)
+            if existing_feedback:
+                raise OneFeedbackAllowed
+            for person in match.players.all():
+                if not person == reviewer:
+                    player = person
+            serializer.save(player=player, reviewer=reviewer)
 
 
 class DetailUpdateFeedback(generics.RetrieveUpdateDestroyAPIView):
