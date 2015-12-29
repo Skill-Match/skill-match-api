@@ -18,52 +18,48 @@ def calculate_skills(skill_object, sport):
     skill_object.save()
 
 
+def new_calculate_skills(skill_object, sport):
+    player = skill_object.player
+    feedbacks = Feedback.objects.filter(match__sport=sport).\
+        filter(player=player)
+    skill_total = 0
+    sportsmanship_total = 0
+    total_weight = 0
+    count = 0
+    for feedback in feedbacks:
+        reviewer_cred = feedback.reviewer.skill_set.filter(sport=sport)
+        if reviewer_cred:
+            reviewer_cred = reviewer_cred[0]
+            xp = reviewer_cred.num_feedbacks
+            sportsmanship = reviewer_cred.sportsmanship
 
-    # def handle(self, *args, **options):
-    #     one_hour = timedelta(hours=1)
-    #     new_feedbacks = Feedback.objects.filter(created_at__gt=
-    #                                             (datetime.now() - one_hour))
-    #     num_updates = 0
-    #     for feedback in new_feedbacks:
-    #         player = feedback.player
-    #         sport = feedback.match.sport
-    #         feedback_count = Feedback.objects.filter(match__sport=sport).\
-    #             filter(player=player).count()
-    #         skill = Skill.objects.filter(player=player).filter(sport=sport)
-    #
-    #         #Update Skill every 3 matches to keep feedback anonymous
-    #         if feedback_count % 3 == 0:
-    #             if skill:
-    #                 skill = skill[0]
-    #                 feedbacks = Feedback.objects.filter(match__sport=sport).\
-    #                     filter(player=player)
-    #                 skill_total = 0
-    #                 sportsmanship_total = 0
-    #                 count = 0
-    #                 for feedback in feedbacks:
-    #                     skill_total += feedback.skill
-    #                     sportsmanship_total += feedback.sportsmanship
-    #                     count += 1
-    #                 skill.skill = skill_total / count
-    #                 skill.sportsmanship = sportsmanship_total / count
-    #                 skill.num_feedbacks = count
-    #                 skill.save()
-    #                 num_updates += 1
-    #             else:
-    #                 new_skill = Skill.objects.create(player=player, sport=sport)
-    #                 feedbacks = Feedback.objects.filter(match__sport=sport).\
-    #                     filter(player=player)
-    #                 skill_total = 0
-    #                 sportsmanship_total = 0
-    #                 count = 0
-    #                 for feedback in feedbacks:
-    #                     skill_total += feedback.skill
-    #                     sportsmanship_total += feedback.sportsmanship
-    #                     count += 1
-    #                 new_skill.skill = skill_total / count
-    #                 new_skill.sportsmanship = sportsmanship_total / count
-    #                 new_skill.num_feedbacks = count
-    #                 new_skill.save()
-    #                 num_updates += 1
-    #
-    #     self.stdout.write("{} Skills updated".format(num_updates))
+            weight = 0
+            if 0 <= xp <= 10:
+                weight = 5
+            elif 11 < xp < 20:
+                weight = 6
+            elif 21 < xp < 30:
+                weight = 7
+            elif 31 < xp < 40:
+                weight = 8
+            elif 41 < xp < 50:
+                weight = 9
+            else:
+                weight = 10
+
+            # sportsmakship weighted 3 times heavier than xp (xp gets 1-10)
+            # example weight calculation: sportsmanship of 85
+            # 85 * 3 --> 255.5 / 10 --> 25.5 , rounded down to 25
+            weight += int((sportsmanship * 3) / 10)
+
+            skill_total += (feedback.skill * weight)
+            sportsmanship_total += (feedback.sportsmanship * weight)
+            total_weight += weight
+            count += 1
+
+    skill_object.skill = skill_total / total_weight
+    skill_object.sportsmanship = sportsmanship_total / total_weight
+    skill_object.num_feedbacks = count
+    skill_object.save()
+
+

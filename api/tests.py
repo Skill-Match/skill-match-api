@@ -25,7 +25,8 @@ class UserTests(APITestCase):
     def test_create_user(self):
         url = reverse('api_create_user')
         data = {'username': 'bob', 'email': 'email@email.com', 'password':
-                'pwd', 'profile': {'gender': "Male", 'age': "20's"}}
+                'pwd', 'profile': {'gender': "Male", 'age': "20's",
+                                   'wants_texts': False}}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(User.objects.count(), 2)
@@ -47,6 +48,8 @@ class ParkTests(APITestCase):
                                              password='password',)
         self.park = Park.objects.create(name='Test Park',
                                         postal_code='89148')
+        Profile.objects.create(user=self.user, gender='Male', age="20's",
+                               wants_texts=False, phone_number="5082693675")
 
     def test_list_parks(self):
         url = reverse('api_list_parks')
@@ -177,3 +180,32 @@ class FeedbackTests(APITestCase):
         self.assertEqual(response.data['skill'], 50)
         self.assertEqual(response.data['punctuality'], 'On Time')
 
+    def test_create_feeback_player(self):
+        self.client.force_authenticate(user=self.user)
+        url = reverse('api_create_feedback')
+        data = {'match': 1, 'skill': 50, 'sportsmanship': 90,
+                'punctuality': 'On Time', 'availability': 5,
+                'player': self.user2.id}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Feedback.objects.count(), 1)
+        self.assertEqual(response.data['skill'], 50)
+        self.assertEqual(response.data['punctuality'], 'On Time')
+        self.assertEqual(response.data['player'], self.user2.id)
+
+class CourtTests(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='joe',
+                                             email='test@test.com',
+                                             password='password')
+        self.user2 = User.objects.create_user(username='bob',
+                                             email='test@test.com',
+                                             password='password')
+        self.park = Park.objects.create(name='Test Park',
+                                        postal_code='89148')
+
+    def test_create_court(self):
+        pass
+
+    def test_list_courts(self):
+        pass
