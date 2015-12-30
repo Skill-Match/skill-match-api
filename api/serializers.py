@@ -76,8 +76,8 @@ class MatchSerializer(serializers.ModelSerializer):
     park_name = serializers.ReadOnlyField(source='park.name')
     creator_name = serializers.ReadOnlyField(source='creator.username')
     time = serializers.TimeField(format="%I:%M %p")
-    players = serializers.StringRelatedField(many=True, read_only=True)
-    # players = UserSerializer(many=True, read_only=True)
+    # players = serializers.StringRelatedField(many=True, read_only=True)
+    players = UserSerializer(many=True, read_only=True)
     date = serializers.DateField(format="%A %b, %d")
     distance = serializers.DecimalField(source='distance.mi', max_digits=10, decimal_places=2, required=False, read_only=True)
 
@@ -95,8 +95,12 @@ class MatchSerializer(serializers.ModelSerializer):
                             'is_succesful')
 
     def create(self, validated_data):
-        x = 5
-        return super().create(validated_data)
+        x = super().create(validated_data)
+        creator = validated_data['creator']
+
+        x.players.add(creator)
+        x.save()
+        return x
 
 
 class ChallengerMatchSerializer(serializers.ModelSerializer):

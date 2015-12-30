@@ -124,10 +124,10 @@ class ListCreateMatches(generics.ListCreateAPIView):
             img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733bf8e0327c81fa9a2787/1450392569419/?format=500w"
         elif sport == 'Soccer':
             img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733cb3dc5cb4b9e2e1afce/1450392756140/?format=500w"
-        elif sport == 'Other':
+        else:
             img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733e05a128e6b1e54ff616/1450393093587/?format=500w"
 
-        serializer.save(creator=user, players=players, img_url=img_url)
+        serializer.save(creator=user, img_url=img_url)
 
     def get_queryset(self):
         """Return Pledges for user only"""
