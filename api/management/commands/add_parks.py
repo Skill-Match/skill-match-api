@@ -82,6 +82,7 @@ class Command(BaseCommand):
                     display_address3=d3,
                     latitude=park_latitude,
                     longitude=park_longitude,
+                    location='POINT(' + park_latitude + ' ' + park_longitude + ')',
                     state_code=park_state_code
                 )
                 count += 1

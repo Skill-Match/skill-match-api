@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     'django_extensions',
     'debug_toolbar',
     'rest_framework',
@@ -86,7 +87,7 @@ WSGI_APPLICATION = 'skill_match.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'skill_match',
         'USER': 'peterflynn',
         'PASSWORD': '',

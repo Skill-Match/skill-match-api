@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.db import models
+from django.contrib.gis.db import models
 
 TENNIS = 'Tennis'
 BASKETBALL = 'Basketball'
@@ -34,6 +34,7 @@ class Park(models.Model):
     postal_code = models.CharField(max_length=10, null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
+    location = models.PointField(null=True, blank=True)
     state_code = models.CharField(max_length=5, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -72,6 +73,7 @@ class Match(models.Model):
     is_completed = models.BooleanField(default=False)
     is_confirmed = models.BooleanField(default=False)
     is_challenge = models.BooleanField(default=False)
+    is_succesful = models.BooleanField(default=False)
     challenge_declined = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True, null=True)
@@ -138,6 +140,7 @@ class Skill(models.Model):
     sport = models.CharField(max_length=40)
     skill = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
     sportsmanship = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
+    punctuality = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
     num_feedbacks = models.IntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True, null=True)
@@ -152,6 +155,7 @@ class Court(models.Model):
     sport = models.CharField(max_length=25, choices=SPORT_CHOICES)
     other = models.CharField(max_length=25, null=True, blank=True)
     num_courts = models.IntegerField(null=True)
+    ranking = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
