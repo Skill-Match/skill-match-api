@@ -82,7 +82,9 @@ class ListParks(generics.ListAPIView):
     pagination_class = SmallPagination
 
     def get_queryset(self):
+        qs = super().get_queryset()
         latitude = self.request.query_params.get('lat', None)
+
         longitude = self.request.query_params.get('long', None)
 
         if latitude and longitude:
@@ -90,7 +92,7 @@ class ListParks(generics.ListAPIView):
         else:
             pnt = G('POINT(-115.13983 36.169941)', srid=4326)
 
-        by_distance = Park.objects.annotate(distance=Distance('location', pnt)).order_by('distance')
+        by_distance = qs.annotate(distance=Distance('location', pnt)).order_by('distance')[:20]
         return by_distance
 
 
@@ -129,6 +131,8 @@ class ListCreateMatches(generics.ListCreateAPIView):
         sport = self.request.query_params.get('sport', None)
         home = self.request.query_params.get('home', None)
         username = self.request.query_params.get('username', None)
+        latitude = self.request.query_params.get('lat', None)
+        longitude = self.request.query_params.get('long', None)
         if sport:
             sport = sport.title()
             qs = qs.filter(sport=sport)
@@ -136,7 +140,13 @@ class ListCreateMatches(generics.ListCreateAPIView):
             qs = qs.filter(players__username=username).order_by('-date')
         if home:
             qs = qs.filter(is_open=True).order_by('date')
-        return qs
+        if latitude and longitude:
+            pnt = G('POINT(' + str(longitude) + ' ' + str(latitude) + ')', srid=4326)
+        else:
+            pnt = G('POINT(-115.13983 36.169941)', srid=4326)
+
+        by_distance = qs.annotate(distance=Distance('park__location', pnt)).order_by('distance')[:20]
+        return by_distance
 
 
 class ChallengeCreateMatch(generics.CreateAPIView):
