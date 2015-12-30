@@ -25,7 +25,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
 
-    profile = ProfileSerializer()
+    profile = ProfileSerializer(read_only=True)
     skill_set = SkillSerializer(many=True, read_only=True)
 
     class Meta:
@@ -76,8 +76,8 @@ class MatchSerializer(serializers.ModelSerializer):
     park_name = serializers.ReadOnlyField(source='park.name')
     creator_name = serializers.ReadOnlyField(source='creator.username')
     time = serializers.TimeField(format="%I:%M %p")
-    # players = serializers.StringRelatedField(many=True, read_only=True)
-    players = UserSerializer(many=True, read_only=True)
+    players = serializers.StringRelatedField(many=True, read_only=True)
+    # players = UserSerializer(many=True, read_only=True)
     date = serializers.DateField(format="%A %b, %d")
     distance = serializers.DecimalField(source='distance.mi', max_digits=10, decimal_places=2, required=False, read_only=True)
 
@@ -93,6 +93,10 @@ class MatchSerializer(serializers.ModelSerializer):
                             'is_completed', 'is_confirmed', 'img_url',
                             'is_challenge', 'challenge_declined',
                             'is_succesful')
+
+    def create(self, validated_data):
+        x = 5
+        return super().create(validated_data)
 
 
 class ChallengerMatchSerializer(serializers.ModelSerializer):
