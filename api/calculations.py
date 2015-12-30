@@ -62,4 +62,5 @@ def new_calculate_skills(skill_object, sport):
     skill_object.num_feedbacks = count
     skill_object.save()
 
-
+# def calculate_punctuality(skill_object, sport):
+#     pass
