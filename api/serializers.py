@@ -76,7 +76,7 @@ class MatchSerializer(serializers.ModelSerializer):
     time = serializers.TimeField(format="%I:%M %p")
     players = serializers.StringRelatedField(many=True, read_only=True)
     date = serializers.DateField(format="%A %b, %d")
-    distance = serializers.DecimalField(source='distance.mi', max_digits=10, decimal_places=2)
+    distance = serializers.DecimalField(source='distance.mi', max_digits=10, decimal_places=2, required=False)
 
     class Meta:
         model = Match
@@ -85,7 +85,7 @@ class MatchSerializer(serializers.ModelSerializer):
                   'players', 'img_url', 'is_open', 'is_completed',
                   'is_confirmed', 'is_challenge', 'challenge_declined',
                   'is_succesful', 'distance')
-        
+
         read_only_fields = ('id', 'creator', 'players', 'is_open',
                             'is_completed', 'is_confirmed', 'img_url')
 

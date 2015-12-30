@@ -7,6 +7,7 @@ from api.serializers import UserSerializer, ParkSerializer, MatchSerializer,\
     ProfileSerializer, CourtSerializer
 from django.contrib.auth.models import User
 from django.shortcuts import render
+from geopy import Nominatim
 from matchup.models import Park, Match, Feedback, Court
 from api.notifications import join_match_notify, confirm_match_notify, \
     decline_match_notify, leave_match_notify, challenge_declined_notify, \
@@ -84,17 +85,20 @@ class ListParks(generics.ListAPIView):
     def get_queryset(self):
         qs = super().get_queryset()
         latitude = self.request.query_params.get('lat', None)
-
         longitude = self.request.query_params.get('long', None)
+        zip_code = self.request.query_params.get('zip', None)
 
         if latitude and longitude:
             pnt = G('POINT(' + str(longitude) + ' ' + str(latitude) + ')', srid=4326)
+        elif zip_code:
+            geolocator = Nominatim()
+            location = geolocator.geocode(zip_code)
+            pnt = G('POINT(' + str(location.longitude) + ' ' + str(location.latitude) + ')', srid=4326)
         else:
             pnt = G('POINT(-115.13983 36.169941)', srid=4326)
 
         by_distance = qs.annotate(distance=Distance('location', pnt)).order_by('distance')[:20]
         return by_distance
-
 
 class CreatePark(generics.CreateAPIView):
     """Permissions: logged in user only"""
@@ -133,6 +137,7 @@ class ListCreateMatches(generics.ListCreateAPIView):
         username = self.request.query_params.get('username', None)
         latitude = self.request.query_params.get('lat', None)
         longitude = self.request.query_params.get('long', None)
+        zip_code = self.request.query_params.get('zip', None)
         if sport:
             sport = sport.title()
             qs = qs.filter(sport=sport)
@@ -142,6 +147,10 @@ class ListCreateMatches(generics.ListCreateAPIView):
             qs = qs.filter(is_open=True).order_by('date')
         if latitude and longitude:
             pnt = G('POINT(' + str(longitude) + ' ' + str(latitude) + ')', srid=4326)
+        elif zip_code:
+            geolocator = Nominatim()
+            location = geolocator.geocode(zip_code)
+            pnt = G('POINT(' + str(location.longitude) + ' ' + str(location.latitude) + ')', srid=4326)
         else:
             pnt = G('POINT(-115.13983 36.169941)', srid=4326)
 
