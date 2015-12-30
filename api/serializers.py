@@ -13,7 +13,6 @@ class SkillSerializer(serializers.ModelSerializer):
         read_only_fields = ('sport', 'skill', 'num_feedbacks')
 
 
-
 class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -24,12 +23,9 @@ class ProfileSerializer(serializers.ModelSerializer):
         read_only_fields = ('pic_url', 'sportsmanship')
 
 
-
-
 class UserSerializer(serializers.ModelSerializer):
 
     profile = ProfileSerializer()
-
     skill_set = SkillSerializer(many=True, read_only=True)
 
     class Meta:
@@ -58,6 +54,12 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
+class AvatarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ('pic_url',)
+
+
 class CreateParkSerializer(serializers.ModelSerializer):
     """
         Extra Park Serializer for creation. This is so only logged in users can
@@ -74,7 +76,8 @@ class MatchSerializer(serializers.ModelSerializer):
     park_name = serializers.ReadOnlyField(source='park.name')
     creator_name = serializers.ReadOnlyField(source='creator.username')
     time = serializers.TimeField(format="%I:%M %p")
-    players = serializers.StringRelatedField(many=True, read_only=True)
+    # players = serializers.StringRelatedField(many=True, read_only=True)
+    players = UserSerializer(many=True, read_only=True)
     date = serializers.DateField(format="%A %b, %d")
     distance = serializers.DecimalField(source='distance.mi', max_digits=10, decimal_places=2, required=False, read_only=True)
 
