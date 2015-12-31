@@ -125,7 +125,7 @@ class CourtSerializer(serializers.ModelSerializer):
 class ParkSerializer(serializers.ModelSerializer):
     match_set = MatchSerializer(many=True, read_only=True)
     court_set = CourtSerializer(many=True, read_only=True)
-    distance = serializers.DecimalField(source='distance.mi', max_digits=10, decimal_places=2)
+    distance = serializers.DecimalField(source='distance.mi', max_digits=10, decimal_places=2, required=False, read_only=True)
 
     class Meta:
         model = Park
