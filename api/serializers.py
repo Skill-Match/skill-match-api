@@ -14,18 +14,18 @@ class SkillSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-
+    avatar = serializers.ImageField(required=False)
     class Meta:
         model = Profile
         fields = ('gender', 'age', 'phone_number', 'wants_texts',
-                  'pic_url', 'sportsmanship')
+                  'pic_url', 'sportsmanship', 'avatar')
 
         read_only_fields = ('pic_url', 'sportsmanship')
 
 
 class UserSerializer(serializers.ModelSerializer):
 
-    profile = ProfileSerializer(read_only=True)
+    profile = ProfileSerializer()
     skill_set = SkillSerializer(many=True, read_only=True)
 
     class Meta:
@@ -39,8 +39,8 @@ class UserSerializer(serializers.ModelSerializer):
 
         """
         user = User.objects.create_user(
-            email=validated_data['email'],
-            username=validated_data['username'],
+            email=validated_data['email'].lower(),
+            username=validated_data['username'].lower(),
             password=validated_data['password']
         )
         profile_data = validated_data.pop('profile')
@@ -49,8 +49,14 @@ class UserSerializer(serializers.ModelSerializer):
             gender=profile_data.get('gender'),
             age=profile_data.get('age'),
             phone_number=profile_data.get('phone_number'),
-            wants_texts=profile_data.get('wants_texts')
+            wants_texts=profile_data.get('wants_texts'),
         )
+
+        img_url = validated_data.get('image_url', None)
+        if img_url:
+            profile.pic_url = validated_data['image_url']
+            profile.save()
+
         return user
 
 

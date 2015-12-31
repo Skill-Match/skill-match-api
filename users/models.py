@@ -1,4 +1,6 @@
 from django.contrib.auth.models import User
+from cloudinary.models import CloudinaryField
+
 from django.db import models
 
 
@@ -33,6 +35,7 @@ class Profile(models.Model):
     gender = models.CharField(max_length=8, choices=GENDER_CHOICES,
                               default=MALE)
     age = models.CharField(max_length=8, choices=AGE_CHOICES)
+    avatar = CloudinaryField('image', null=True, blank=True)
     pic_url = models.CharField(max_length=200, null=True, blank=True)
     wants_texts = models.BooleanField(default=False)
     phone_number = models.CharField(null=True, blank=True, max_length=15)

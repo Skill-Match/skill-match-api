@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/1.9/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
-
+import cloudinary
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -163,3 +163,9 @@ SENDGRID_KEY="SG.yFj5vcI1TAGm9PYaTWZMaA.XhL8G3yEkx7hm3eQ1v2sX4IuQzPwI7OvkIXz3dxe
 
 TWILIO_SID="AC7abeb22b6d9775d7ccedb4dd79d780ec"
 TWILIO_TOKEN="1dfcc16a0490ce0cfa27d770bedf345d"
+
+cloudinary.config(
+  cloud_name = "skill-match",
+  api_key = "985923717251977",
+  api_secret = "41B79Ua7ppYqEx4iK-wafV53jAA"
+)

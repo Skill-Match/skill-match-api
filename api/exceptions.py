@@ -39,3 +39,11 @@ class NotInMatch(APIException):
 class CourtAlreadyExists(APIException):
     status_code = 403
     default_detail = "This Court Already Exists."
+
+class UserAlreadyExists(APIException):
+    status_code = 403
+    default_detail = "That username is taken. Please try again."
+
+class NonExistingPlayer(APIException):
+    status_code = 403
+    default_detail = "The player you are trying to rate does not exist."
