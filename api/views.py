@@ -1,7 +1,12 @@
 import json
+
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 from api.exceptions import OneFeedbackAllowed, TwoPlayersPerMatch, SelfSignUp, \
     OnlyCreatorMayConfirmOrDecline, NoPlayerToConfirmOrDecline, AlreadyJoined, \
-    AlreadyConfirmed, NotInMatch, CourtAlreadyExists
+    AlreadyConfirmed, NotInMatch, CourtAlreadyExists, UserAlreadyExists, \
+    NonExistingPlayer
 from api.serializers import UserSerializer, ParkSerializer, MatchSerializer,\
     FeedbackSerializer, ChallengerMatchSerializer, CreateParkSerializer, \
     ProfileSerializer, CourtSerializer
@@ -69,11 +74,29 @@ class CreateUser(generics.CreateAPIView):
     """Permissions: any"""
     serializer_class = UserSerializer
 
+    def perform_create(self, serializer):
+        if self.request.FILES:
+            image = cloudinary.uploader.upload(self.request.FILES['profile.avatar'])
+            image_url = image['url']
+            serializer.save(image_url=image_url)
+        else:
+            serializer.save()
 
 class DetailUpdateUser(generics.RetrieveUpdateDestroyAPIView):
     """Permissions: User only or ADMIN"""
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    def perform_update(self, serializer):
+        if self.request.FILES:
+            image = cloudinary.uploader.upload(self.request.FILES['profile.avatar'])
+            image_url = image['url']
+            username = serializer.initial_data['username']
+            profile = Profile.objects.get(user__username=username)
+            profile.pic_url = image_url
+            profile.save()
+        serializer.save()
+
 
 
 class ListParks(generics.ListAPIView):
@@ -113,7 +136,6 @@ class ListCreateMatches(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         user = self.request.user
-        players = [user,]
         sport = serializer.initial_data['sport']
 
         if sport == 'Tennis':
@@ -206,6 +228,12 @@ class CreateFeedbacks(generics.CreateAPIView):
         match = Match.objects.get(pk=match_id)
         player_id = serializer.initial_data.get('player', None)
         if player_id:
+
+            # this error is for Front End team
+            existing_user = User.objects.filter(id=player_id)
+            if not existing_user:
+                raise NonExistingPlayer
+
             player = User.objects.get(pk=player_id)
             existing_feedback = match.feedback_set.filter(reviewer=reviewer, player=player)
             if existing_feedback:
