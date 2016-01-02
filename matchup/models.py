@@ -46,7 +46,7 @@ class HendersonPark(models.Model):
     name = models.CharField(max_length=200)
     address = models.CharField(max_length=150, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
-    img_url = models.URLField(null=True, blank=True)
+    img_url = models.URLField(null=True, blank=True, max_length=350)
     string_id = models.CharField(max_length=60, null=True, blank=True)
 
 

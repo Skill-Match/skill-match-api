@@ -1,5 +1,6 @@
 from django.contrib import admin
-from matchup.models import Feedback, Match, Park, Skill
+from matchup.models import Feedback, Match, Park, Skill, HendersonPark, \
+    Ammenity
 
 
 @admin.register(Park)
@@ -23,6 +24,14 @@ class FeedbackAdmin(admin.ModelAdmin):
 class SkillAdmin(admin.ModelAdmin):
     list_display = ('id', 'player', 'sport', 'skill', 'sportsmanship',
                     'num_feedbacks')
+
+@admin.register(HendersonPark)
+class HendersonParkAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'url', 'img_url')
+
+@admin.register(Ammenity)
+class AmmenityAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
 
 
 # @admin.register(WishList)
