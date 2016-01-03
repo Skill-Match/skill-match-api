@@ -130,9 +130,13 @@ class ChallengerMatchSerializer(serializers.ModelSerializer):
                             'is_open', 'is_completed', 'is_confirmed')
 
 class CourtSerializer(serializers.ModelSerializer):
+    lat = serializers.CharField(max_length=50, required=False)
+    long = serializers.CharField(max_length=50, required=False)
+    park_name = serializers.ReadOnlyField(source='park.name')
+
     class Meta:
         model = Court
-        fields = ('id', 'park', 'sport', 'other', 'num_courts')
+        fields = ('id', 'park', 'park_name', 'sport', 'other', 'num_courts', 'lat', 'long')
 
 
 class ParkSerializer(serializers.ModelSerializer):
