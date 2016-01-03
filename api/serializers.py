@@ -130,13 +130,28 @@ class ChallengerMatchSerializer(serializers.ModelSerializer):
                             'is_open', 'is_completed', 'is_confirmed')
 
 class CourtSerializer(serializers.ModelSerializer):
-    lat = serializers.CharField(max_length=50, required=False)
-    long = serializers.CharField(max_length=50, required=False)
     park_name = serializers.ReadOnlyField(source='park.name')
 
     class Meta:
         model = Court
-        fields = ('id', 'park', 'park_name', 'sport', 'other', 'num_courts', 'lat', 'long')
+        fields = ('id', 'park', 'park_name', 'sport', 'other',
+                  'num_courts')
+        # extra_kwargs = {'location': {'write_only': True}}
+
+    def create(self, validated_data):
+        court = Court.objects.create(
+            park=validated_data['park'],
+            sport=validated_data['sport'],
+            other=validated_data['other'],
+            num_courts=validated_data['num_courts'],
+        )
+        lat = validated_data.get('lat', None)
+        long = validated_data.get('long', None)
+        if lat and long:
+            court.location = 'POINT(' + str(validated_data['long']) + ' ' + str(validated_data['lat']) + ')'
+            court.save()
+
+        return court
 
 
 class ParkSerializer(serializers.ModelSerializer):

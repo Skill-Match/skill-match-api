@@ -382,19 +382,29 @@ class ListCreateCourts(generics.ListCreateAPIView):
     queryset = Court.objects.all()
     serializer_class = CourtSerializer
 
-    # def perform_create(self, serializer):
-    #     park_id = serializer.initial_data['park']
-    #     sport = serializer.initial_data['sport']
-    #     park = Park.objects.get(pk=park_id)
-    #     already_exists = park.court_set.filter(sport=sport)
-    #     if already_exists:
-    #         raise CourtAlreadyExists
-    #
-    #     lat = serializer.initial_data.get('lat', None)
-    #     long = serializer.initial_data.get('long', None)
-    #     if lat and long:
-    #
-    #     serializer.save()
+    def perform_create(self, serializer):
+        park_id = serializer.initial_data['park']
+        sport = serializer.initial_data['sport']
+        park = Park.objects.get(pk=park_id)
+        already_exists = park.court_set.filter(sport=sport)
+        if already_exists:
+            raise CourtAlreadyExists
+
+        lat = serializer.initial_data.get('lat', None)
+        long = serializer.initial_data.get('long', None)
+        if lat and long:
+            serializer.save(lat=lat, long=long)
+        else:
+            serializer.save()
+
+        #         if latitude and longitude:
+        #     pnt = G('POINT(' + str(longitude) + ' ' + str(latitude) + ')', srid=4326)
+        # elif zip_code:
+        #     geolocator = Nominatim()
+        #     location = geolocator.geocode(zip_code)
+        #     pnt = G('POINT(' + str(location.longitude) + ' ' + str(location.latitude) + ')', srid=4326)
+        # else:
+        #     pnt = G('POINT(-115.13983 36.169941)', srid=4326)
 
 class DetailUpdateCourt(generics.RetrieveUpdateDestroyAPIView):
     queryset = Court.objects.all()
