@@ -172,7 +172,7 @@ class Skill(models.Model):
 
 
 class Court(models.Model):
-    park = models.ForeignKey(Park)
+    park = models.ForeignKey(Park, null=True, blank=True)
     sport = models.CharField(max_length=25, choices=SPORT_CHOICES)
     other = models.CharField(max_length=25, null=True, blank=True)
     num_courts = models.IntegerField(null=True)
