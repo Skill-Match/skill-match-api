@@ -36,7 +36,8 @@ class Profile(models.Model):
                               default=MALE)
     age = models.CharField(max_length=8, choices=AGE_CHOICES)
     avatar = CloudinaryField('image', null=True, blank=True)
-    pic_url = models.CharField(max_length=200, null=True, blank=True)
+    pic_url = models.URLField(max_length=300, null=True, blank=True)
+    small_pic_url = models.URLField(max_length=300, null=True, blank=True)
     wants_texts = models.BooleanField(default=False)
     phone_number = models.CharField(null=True, blank=True, max_length=15)
 
