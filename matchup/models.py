@@ -43,16 +43,20 @@ class Park(models.Model):
 
 
 class HendersonPark(models.Model):
+    park = models.OneToOneField(Park, null=True, blank=True)
     name = models.CharField(max_length=200)
     address = models.CharField(max_length=150, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
     img_url = models.URLField(null=True, blank=True, max_length=350)
     string_id = models.CharField(max_length=60, null=True, blank=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Ammenity(models.Model):
     name = models.CharField(max_length=125)
-    park = models.ManyToManyField(HendersonPark)
+    parks = models.ManyToManyField(HendersonPark)
     created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
