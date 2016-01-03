@@ -392,6 +392,10 @@ class ListCreateCourts(generics.ListCreateAPIView):
 
         serializer.save()
 
+class DetailUpdateCourt(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Court.objects.all()
+    serializer_class = CourtSerializer
+
 
 @api_view(['GET'])
 def get_credentials(request):
