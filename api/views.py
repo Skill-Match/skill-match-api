@@ -88,15 +88,24 @@ class DetailUpdateUser(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
 
     def perform_update(self, serializer):
+        user = serializer.instance
+        username = serializer.initial_data['username']
+        age = serializer.initial_data['profile.age']
+        gender = serializer.initial_data['profile.gender']
+        phone = serializer.initial_data['profile.phone_number']
+        texts = serializer.initial_data.get('profile.wants_texts', None)
+        profile = Profile.objects.get(user=user)
+        if texts:
+            profile.wants_texts = texts
+        profile.age = age
+        profile.gender = gender
+        profile.phone_number = phone
         if self.request.FILES:
             image = cloudinary.uploader.upload(self.request.FILES['profile.avatar'])
             image_url = image['url']
-            username = serializer.initial_data['username']
-            profile = Profile.objects.get(user__username=username)
             profile.pic_url = image_url
-            profile.save()
+        profile.save()
         serializer.save()
-
 
 
 class ListParks(generics.ListAPIView):

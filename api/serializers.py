@@ -32,7 +32,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'email', 'password', 'profile', 'skill_set')
         extra_kwargs = {'password': {'write_only': True}}
-        read_only_fields = ('id',)
+        read_only_fields = ('id', 'skill_set')
 
     def create(self, validated_data):
         """Create Profile for User when registered
@@ -57,6 +57,13 @@ class UserSerializer(serializers.ModelSerializer):
             profile.pic_url = validated_data['image_url']
             profile.save()
 
+        return user
+
+    def update(self, instance, validated_data):
+        user = instance
+        user.email = validated_data['email']
+        user.password = validated_data['password']
+        user.username = validated_data['username']
         return user
 
 
