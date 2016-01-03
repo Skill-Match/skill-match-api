@@ -60,7 +60,7 @@ class Command(BaseCommand):
                     d3 = None
                 park_rating = park['rating']
                 park_mobile_url = park['mobile_url']
-                park_image_url = park['image_url']
+                park_image_url = park.get('image_url', None)
                 park_id = park['id']
                 park_city = park['location']['city']
                 park_yelp_url = park['url']
@@ -68,10 +68,9 @@ class Command(BaseCommand):
                 park_latitude = park['location']['coordinate']['latitude']
                 park_longitude = park['location']['coordinate']['longitude']
                 park_state_code = park['location']['state_code']
-                Park.objects.create(
+                park = Park.objects.create(
                     rating=park_rating,
                     mobile_url=park_mobile_url,
-                    image_url=park_image_url,
                     name=park_name,
                     yelp_id=park_id,
                     url=park_yelp_url,
@@ -85,6 +84,9 @@ class Command(BaseCommand):
                     location='POINT(' + str(park_longitude) + ' ' + str(park_latitude) + ')',
                     state_code=park_state_code
                 )
+                if park_image_url:
+                    park.image_url=park_image_url
+                    park.save()
                 count += 1
 
         self.stdout.write("{} Parks Added to Database".format(count))

@@ -62,7 +62,7 @@ class Command(BaseCommand):
                             ammenity = ammenity_exists[0]
                         else:
                             ammenity = Ammenity.objects.create(name=ammenity_name)
-                        ammenity.park.add(this_park)
+                        ammenity.parks.add(this_park)
                         ammenity.save()
 
         self.stdout.write("{} Henderson Parks added to Database".format(count))
