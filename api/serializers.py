@@ -123,7 +123,8 @@ class CourtSerializer(serializers.ModelSerializer):
     class Meta:
         model = Court
         fields = ('id', 'park', 'park_name', 'sport', 'other',
-                  'num_courts')
+                  'num_courts', 'img_url')
+        read_only_fields = ('id', 'img_url', 'park_name')
         # extra_kwargs = {'location': {'write_only': True}}
 
     def create(self, validated_data):
@@ -132,6 +133,7 @@ class CourtSerializer(serializers.ModelSerializer):
             sport=validated_data['sport'],
             other=validated_data['other'],
             num_courts=validated_data['num_courts'],
+            img_url=validated_data['img_url']
         )
         lat = validated_data.get('lat', None)
         long = validated_data.get('long', None)
@@ -141,10 +143,15 @@ class CourtSerializer(serializers.ModelSerializer):
 
         return court
 
+class ImageCourtSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Court
+        fields = ('sport', 'img_url',)
+        read_only_fields = ('sport', 'img_url', )
 
 class ParkSerializer(serializers.ModelSerializer):
     match_set = MatchSerializer(many=True, read_only=True)
-    court_set = CourtSerializer(many=True, read_only=True)
+    court_set = ImageCourtSerializer(many=True, read_only=True)
     distance = serializers.DecimalField(source='distance.mi', max_digits=10, decimal_places=2, required=False, read_only=True)
 
     class Meta:

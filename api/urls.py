@@ -40,6 +40,5 @@ urlpatterns = (
         name='api_detail_feedback'),
     url(r'^feedbacks/create/$', CreateFeedbacks.as_view(),
         name='api_create_feedback'),
-    url(r'^credentials/$', api_views.get_credentials),
     url(r'^yelp/$', api_views.hello_world)
 )

@@ -166,9 +166,9 @@ class ListCreateMatches(generics.ListCreateAPIView):
         if sport == 'Tennis':
             img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803727/1451824644_tennis_jegpea.png"
         elif sport == 'Basketball':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803720/basketball-256_vcdbu9.png"
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451811954/basketball_lxzgmw.png"
         elif sport == 'Football':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803747/American-Football-256_wha0xa.png"
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451812093/American-Football_vbp5ww.png"
         elif sport == 'Soccer':
             img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803724/1451824570_soccer_mwvtwy.png"
         else:
@@ -236,9 +236,9 @@ class ChallengeCreateMatch(generics.CreateAPIView):
         if sport == 'Tennis':
             img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803727/1451824644_tennis_jegpea.png"
         elif sport == 'Basketball':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803720/basketball-256_vcdbu9.png"
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451811954/basketball_lxzgmw.png"
         elif sport == 'Football':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803747/American-Football-256_wha0xa.png"
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451812093/American-Football_vbp5ww.png"
         elif sport == 'Soccer':
             img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803724/1451824570_soccer_mwvtwy.png"
         else:
@@ -451,16 +451,28 @@ class ListCreateCourts(generics.ListCreateAPIView):
         park_id = serializer.initial_data['park']
         sport = serializer.initial_data['sport']
         park = Park.objects.get(pk=park_id)
-        already_exists = park.court_set.filter(sport=sport)
-        if already_exists:
-            raise CourtAlreadyExists
+        if not sport == 'Other':
+            already_exists = park.court_set.filter(sport=sport)
+            if already_exists:
+                raise CourtAlreadyExists
+
+        if sport == 'Tennis':
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803727/1451824644_tennis_jegpea.png"
+        elif sport == 'Basketball':
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451811954/basketball_lxzgmw.png"
+        elif sport == 'Football':
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451812093/American-Football_vbp5ww.png"
+        elif sport == 'Soccer':
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803724/1451824570_soccer_mwvtwy.png"
+        else:
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451804013/trophy_200_cnaras.jpg"
 
         lat = serializer.initial_data.get('lat', None)
         long = serializer.initial_data.get('long', None)
         if lat and long:
-            serializer.save(lat=lat, long=long)
+            serializer.save(lat=lat, long=long, img_url=img_url)
         else:
-            serializer.save()
+            serializer.save(img_url=img_url)
 
 
 class DetailUpdateCourt(generics.RetrieveUpdateDestroyAPIView):
