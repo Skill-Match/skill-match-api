@@ -171,6 +171,10 @@ class ListCreateMatches(generics.ListCreateAPIView):
             img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451812093/American-Football_vbp5ww.png"
         elif sport == 'Soccer':
             img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803724/1451824570_soccer_mwvtwy.png"
+        elif sport == 'Volleyball':
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803790/1451824851_volleyball_v2pu0m.png"
+        elif sport == 'Pickleball':
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803795/1451824990_table_tennis_uqv436.png"
         else:
             img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451804013/trophy_200_cnaras.jpg"
 
@@ -210,7 +214,7 @@ class ListCreateMatches(generics.ListCreateAPIView):
         else:
             pnt = G('POINT(-115.13983 36.169941)', srid=4326)
 
-        by_distance = qs.annotate(distance=Distance('park__location', pnt)).order_by('distance')[:20]
+        by_distance = qs.annotate(distance=Distance('park__location', pnt)).order_by('distance')[:30]
         return by_distance
 
 
@@ -241,6 +245,10 @@ class ChallengeCreateMatch(generics.CreateAPIView):
             img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451812093/American-Football_vbp5ww.png"
         elif sport == 'Soccer':
             img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803724/1451824570_soccer_mwvtwy.png"
+        elif sport == 'Volleyball':
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803790/1451824851_volleyball_v2pu0m.png"
+        elif sport == 'Pickleball':
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803795/1451824990_table_tennis_uqv436.png"
         else:
             img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451804013/trophy_200_cnaras.jpg"
 
@@ -464,6 +472,10 @@ class ListCreateCourts(generics.ListCreateAPIView):
             img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451812093/American-Football_vbp5ww.png"
         elif sport == 'Soccer':
             img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803724/1451824570_soccer_mwvtwy.png"
+        elif sport == 'Volleyball':
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803790/1451824851_volleyball_v2pu0m.png"
+        elif sport == 'Pickleball':
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803795/1451824990_table_tennis_uqv436.png"
         else:
             img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451804013/trophy_200_cnaras.jpg"
 

@@ -6,12 +6,16 @@ TENNIS = 'Tennis'
 BASKETBALL = 'Basketball'
 FOOTBALL = 'Football'
 SOCCER = 'Soccer'
+VOLLEYBALL = 'Volleyball'
+PICKLEBALL = 'Pickleball'
 OTHER = 'Other'
 SPORT_CHOICES = (
     (TENNIS, 'Tennis'),
     (BASKETBALL, 'Basketball'),
     (FOOTBALL, 'Football'),
     (SOCCER, 'Soccer'),
+    (VOLLEYBALL, 'Volleyball'),
+    (PICKLEBALL, 'Pickleball')
     (OTHER, 'Other')
 )
 
