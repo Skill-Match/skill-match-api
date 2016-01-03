@@ -3,7 +3,7 @@ from api.views import CreateUser, ListUsers, ListCreateMatches, ListParks, \
     CreateFeedbacks, DetailPark, DetailUpdateMatch, \
     DetailUpdateFeedback, DetailUpdateUser, CreatePark, \
     ListFeedbacks, JoinMatch, DeclineMatch, ConfirmMatch, ObtainAuthToken, \
-    ListCreateCourts, LeaveMatch, ChallengeCreateMatch
+    ListCreateCourts, LeaveMatch, ChallengeCreateMatch, DetailUpdateCourt
 
 from django.conf.urls import url, patterns
 from rest_framework.authtoken import views
@@ -32,6 +32,8 @@ urlpatterns = (
     url(r'^parks/create/$', CreatePark.as_view(), name='api_create_park'),
     url(r'^parks/(?P<pk>\d+)', DetailPark.as_view(), name='api_park_detail'),
     url(r'^courts/$', ListCreateCourts.as_view(), name='api_list_courts'),
+    url(r'^courts/(?P<pk>\d+)/$', DetailUpdateCourt.as_view(),
+        name='api_detail_update_court'),
     url(r'^feedbacks/$', ListFeedbacks.as_view(), name='api_list_feebacks'),
     url(r'^feedbacks/(?P<pk>\d+)', DetailUpdateFeedback.as_view(),
         name='api_detail_feedback'),
