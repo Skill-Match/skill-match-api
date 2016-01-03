@@ -8,7 +8,7 @@ from api.exceptions import OneFeedbackAllowed, TwoPlayersPerMatch, SelfSignUp, \
     AlreadyConfirmed, NotInMatch, CourtAlreadyExists, UserAlreadyExists, \
     NonExistingPlayer
 from api.serializers import UserSerializer, ParkSerializer, MatchSerializer,\
-    FeedbackSerializer, ChallengerMatchSerializer, CreateParkSerializer, \
+    FeedbackSerializer, ChallengerMatchSerializer, \
     ProfileSerializer, CourtSerializer
 from django.contrib.auth.models import User
 from django.shortcuts import render
@@ -39,6 +39,9 @@ from django.contrib.gis.db.models.functions import Distance
 
 
 class ObtainAuthToken(APIView):
+    """
+    Overwrite built in function to return username and user_id with token
+    """
     throttle_classes = ()
     permission_classes = ()
     parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
@@ -108,6 +111,11 @@ class DetailUpdateUser(generics.RetrieveUpdateDestroyAPIView):
         serializer.save()
 
 
+class DetailUpdateProfile(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+
+
 class ListParks(generics.ListAPIView):
     """Permissions: all"""
     queryset = Park.objects.all()
@@ -115,6 +123,13 @@ class ListParks(generics.ListAPIView):
     pagination_class = SmallPagination
 
     def get_queryset(self):
+        """
+        Querysets:
+        USER LOCATION
+        ZIP CODE
+
+        :return: Parks ordered by distance how far from user or zip code
+        """
         qs = super().get_queryset()
         latitude = self.request.query_params.get('lat', None)
         longitude = self.request.query_params.get('long', None)
@@ -132,36 +147,46 @@ class ListParks(generics.ListAPIView):
         by_distance = qs.annotate(distance=Distance('location', pnt)).order_by('distance')[:20]
         return by_distance
 
-class CreatePark(generics.CreateAPIView):
-    """Permissions: logged in user only"""
-    serializer_class = CreateParkSerializer
-
 
 class ListCreateMatches(generics.ListCreateAPIView):
-    """Permissions: logged in user for create"""
+    """Permissions: logged in user or admin"""
     queryset = Match.objects.all().order_by('-created_at')
     serializer_class = MatchSerializer
     pagination_class = SmallPagination
 
     def perform_create(self, serializer):
+        """
+        Add creator to serializer, add img_url to serializer based on sport.
+        :param serializer:
+        :return:
+        """
         user = self.request.user
         sport = serializer.initial_data['sport']
 
         if sport == 'Tennis':
-            img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733cc2dc5cb4b9e2e1b062/1450392771257/?format=500w"
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803727/1451824644_tennis_jegpea.png"
         elif sport == 'Basketball':
-            img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733c47e0327c81fa9a2a1f/1450392648388/?format=500w"
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803720/basketball-256_vcdbu9.png"
         elif sport == 'Football':
-            img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733bf8e0327c81fa9a2787/1450392569419/?format=500w"
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803747/American-Football-256_wha0xa.png"
         elif sport == 'Soccer':
-            img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733cb3dc5cb4b9e2e1afce/1450392756140/?format=500w"
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803724/1451824570_soccer_mwvtwy.png"
         else:
-            img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733e05a128e6b1e54ff616/1450393093587/?format=500w"
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451804013/trophy_200_cnaras.jpg"
 
         serializer.save(creator=user, img_url=img_url)
 
     def get_queryset(self):
-        """Return Pledges for user only"""
+        """Querysets:
+        LOCATION
+        SPORT
+        USERNAME
+        HOME - lose this
+        LATITUDE & LONGITUDE
+        ZIP CODE
+
+        If no location provided, it will default to Las Vegas, NV
+        """
         qs = super().get_queryset()
         sport = self.request.query_params.get('sport', None)
         home = self.request.query_params.get('home', None)
@@ -193,6 +218,13 @@ class ChallengeCreateMatch(generics.CreateAPIView):
     serializer_class = MatchSerializer
 
     def perform_create(self, serializer):
+        """
+        Adds player making request and finds challenged(User) by id. Adds both
+        players into list to serializer. Adds img_url based on sport, closes sport
+        and indicates it's a challenge with is_challenge=True
+        :param serializer:
+        :return:
+        """
         user = self.request.user
         challenge_id = serializer.initial_data['challenge']
         challenged = User.objects.get(pk=challenge_id)
@@ -202,24 +234,18 @@ class ChallengeCreateMatch(generics.CreateAPIView):
         sport = serializer.initial_data['sport']
 
         if sport == 'Tennis':
-            img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733cc2dc5cb4b9e2e1b062/1450392771257/?format=500w"
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803727/1451824644_tennis_jegpea.png"
         elif sport == 'Basketball':
-            img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733c47e0327c81fa9a2a1f/1450392648388/?format=500w"
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803720/basketball-256_vcdbu9.png"
         elif sport == 'Football':
-            img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733bf8e0327c81fa9a2787/1450392569419/?format=500w"
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803747/American-Football-256_wha0xa.png"
         elif sport == 'Soccer':
-            img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733cb3dc5cb4b9e2e1afce/1450392756140/?format=500w"
-        elif sport == 'Other':
-            img_url = "http://static1.squarespace.com/static/54484b66e4b084696e53f369/t/56733e05a128e6b1e54ff616/1450393093587/?format=500w"
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803724/1451824570_soccer_mwvtwy.png"
+        else:
+            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451804013/trophy_200_cnaras.jpg"
 
         serializer.save(creator=user, players=players, is_open=False,
-                        is_challenge=True)
-
-
-class ListFeedbacks(generics.ListAPIView):
-    """Permissions: ADMIN only"""
-    queryset = Feedback.objects.all()
-    serializer_class = FeedbackSerializer
+                        is_challenge=True, img_url=img_url)
 
 
 class CreateFeedbacks(generics.CreateAPIView):
@@ -228,9 +254,11 @@ class CreateFeedbacks(generics.CreateAPIView):
     serializer_class = FeedbackSerializer
 
     def perform_create(self, serializer):
-        """Grab match_id from form. Find Match object with match_id. Use Match
+        """If no player, Get match_id from serializer. Find Match object with match_id. Use Match
             object to find player and reviewer from the match. (Reviewer =
             logged in user.
+          If player, use player_id to find User to be reviewed
+          Error if they already provided Feedback for that player.
         """
         reviewer = self.request.user
         match_id = serializer.initial_data['match']
@@ -238,7 +266,7 @@ class CreateFeedbacks(generics.CreateAPIView):
         player_id = serializer.initial_data.get('player', None)
         if player_id:
 
-            # this error is for Front End team
+            # if id for player does not match a user , error
             existing_user = User.objects.filter(id=player_id)
             if not existing_user:
                 raise NonExistingPlayer
@@ -274,7 +302,7 @@ class DetailPark(generics.RetrieveAPIView):
 
 
 class DetailUpdateMatch(generics.RetrieveUpdateDestroyAPIView):
-    """Permissions: all, for update--match creator only"""
+    """Permissions: detail-all, update/destroy - match creator only"""
     queryset = Match.objects.all()
     serializer_class = MatchSerializer
 
@@ -284,13 +312,19 @@ class JoinMatch(generics.UpdateAPIView):
     serializer_class = ChallengerMatchSerializer
 
     def perform_update(self, serializer):
+        """
+        Gets all players from serializer and puts them in player_list. Add the
+        User making the request to the player_list.
+        If Sport is Tennis, close match and notify match creator using
+        join_match_notify() from notifications.
+        :param serializer:
+        :return:
+        """
         joiner = self.request.user
         creator = serializer.instance.creator
-
         if joiner == creator:
             raise SelfSignUp
 
-        sport = serializer.instance.sport
         players = serializer.instance.players.all()
         player_list = list(players)
 
@@ -298,6 +332,7 @@ class JoinMatch(generics.UpdateAPIView):
             raise AlreadyJoined
 
         player_list.append(joiner)
+        sport = serializer.instance.sport
 
         if sport == 'Tennis':
             match = serializer.save(players=player_list, is_open=False)
@@ -311,6 +346,17 @@ class LeaveMatch(generics.UpdateAPIView):
     serializer_class = ChallengerMatchSerializer
     
     def perform_update(self, serializer):
+        """
+        Users may leave a match if they get tired waiting for Match creator to
+        confirm.
+        If requesting user is in match, and the match is not confirmed already,
+        they are removed from player_list.
+        If sport is Tennis, match opens up again.
+        Match creator is notified that the user left match and match is
+        open again.
+        :param serializer:
+        :return:
+        """
         if serializer.instance.is_confirmed:
             raise AlreadyConfirmed
 
@@ -339,6 +385,13 @@ class DeclineMatch(generics.UpdateAPIView):
     serializer_class = ChallengerMatchSerializer
 
     def perform_update(self, serializer):
+        """
+        Remove User (challenger) from Match. Notify match challenger.
+        Match is opened again if not a challenge.
+
+        :param serializer:
+        :return:
+        """
         if serializer.instance.players.count() == 1:
             raise NoPlayerToConfirmOrDecline
 
@@ -362,6 +415,12 @@ class ConfirmMatch(generics.UpdateAPIView):
     serializer_class = ChallengerMatchSerializer
 
     def perform_update(self, serializer):
+        """
+        Confirm match. Only change here is is_confirmed=True. Needs refactor
+        with Match model
+        :param serializer:
+        :return:
+        """
         if serializer.instance.players.count() == 1:
             raise NoPlayerToConfirmOrDecline
 
@@ -383,6 +442,12 @@ class ListCreateCourts(generics.ListCreateAPIView):
     serializer_class = CourtSerializer
 
     def perform_create(self, serializer):
+        """
+        Check to see if the Sport already exists on the park.
+        If latitude and longitude are provided, pass them to the serializer.
+        :param serializer:
+        :return:
+        """
         park_id = serializer.initial_data['park']
         sport = serializer.initial_data['sport']
         park = Park.objects.get(pk=park_id)
@@ -397,36 +462,18 @@ class ListCreateCourts(generics.ListCreateAPIView):
         else:
             serializer.save()
 
-        #         if latitude and longitude:
-        #     pnt = G('POINT(' + str(longitude) + ' ' + str(latitude) + ')', srid=4326)
-        # elif zip_code:
-        #     geolocator = Nominatim()
-        #     location = geolocator.geocode(zip_code)
-        #     pnt = G('POINT(' + str(location.longitude) + ' ' + str(location.latitude) + ')', srid=4326)
-        # else:
-        #     pnt = G('POINT(-115.13983 36.169941)', srid=4326)
 
 class DetailUpdateCourt(generics.RetrieveUpdateDestroyAPIView):
     queryset = Court.objects.all()
     serializer_class = CourtSerializer
 
 
-@api_view(['GET'])
-def get_credentials(request):
-    if request.method == 'GET':
-        key = request.auth.key
-        token = Token.objects.get(key=key)
-        username = token.user.username
-        id = token.user.id
-
-        return Response({"username": username, "user_id": id})
-
-
 @api_view()
 def hello_world(request):
     """
-    Not being used in the scope of the project at the moment. But it works. It
+    Not being used in the scope of the project at the moment. It
         fetches data from yelp api and sends it through this project api.
+        It finds the top 20 parks in the area code of 89148 from Yelp.
     :param request:
     :return:
     """

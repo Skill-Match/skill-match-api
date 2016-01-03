@@ -27,10 +27,11 @@ class UserSerializer(serializers.ModelSerializer):
 
     profile = ProfileSerializer()
     skill_set = SkillSerializer(many=True, read_only=True)
+    profile_id = serializers.ReadOnlyField(source='profile.id')
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password', 'profile', 'skill_set')
+        fields = ('id', 'profile_id', 'username', 'email', 'password', 'profile', 'skill_set')
         extra_kwargs = {'password': {'write_only': True}}
         read_only_fields = ('id', 'skill_set')
 
@@ -73,23 +74,10 @@ class AvatarSerializer(serializers.ModelSerializer):
         fields = ('pic_url',)
 
 
-class CreateParkSerializer(serializers.ModelSerializer):
-    """
-        Extra Park Serializer for creation. This is so only logged in users can
-        create park objects. Is this necessary?
-    """
-    class Meta:
-        model = Park
-        fields = ('id', 'name', 'city', 'postal_code', 'display_address1',
-                  'display_address2', 'display_address3' )
-        read_only_fields = ('id',)
-
-
 class MatchSerializer(serializers.ModelSerializer):
     park_name = serializers.ReadOnlyField(source='park.name')
     creator_name = serializers.ReadOnlyField(source='creator.username')
     time = serializers.TimeField(format="%I:%M %p")
-    # players = serializers.StringRelatedField(many=True, read_only=True)
     players = UserSerializer(many=True, read_only=True)
     date = serializers.DateField(format="%A %b, %d")
     distance = serializers.DecimalField(source='distance.mi', max_digits=10, decimal_places=2, required=False, read_only=True)
