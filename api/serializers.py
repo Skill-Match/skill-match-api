@@ -158,7 +158,7 @@ class ParkSerializer(serializers.ModelSerializer):
         model = Park
         fields = ('id', 'name', 'rating', 'url', 'image_url', 'city', 'state_code',
                   'display_address1', 'display_address2', 'display_address3',
-                  'postal_code', 'match_set', 'court_set', 'distance')
+                  'postal_code', 'distance', 'court_set', 'match_set',)
         read_only_fields = ('id', 'name', 'rating', 'url', 'image_url', 'city', 'state_code',
                             'display_address1', 'display_address2',
                             'display_address3', 'postal_code')
