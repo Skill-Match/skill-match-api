@@ -69,6 +69,23 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
+class SimpleProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ('small_pic_url',)
+        read_only_fields = ('small_pic_url',)
+
+
+class SimpleUserSerializer(serializers.ModelSerializer):
+    skill_set = SkillSerializer(many=True, read_only=True)
+    small_img = serializers.ReadOnlyField(source='profile.small_pic_url')
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'small_img', 'skill_set')
+        read_only_fields = ('id', 'username', 'small_img', 'skill_set')
+
+
 class AvatarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
@@ -79,7 +96,7 @@ class MatchSerializer(serializers.ModelSerializer):
     park_name = serializers.ReadOnlyField(source='park.name')
     creator_name = serializers.ReadOnlyField(source='creator.username')
     time = serializers.TimeField(format="%I:%M %p")
-    players = UserSerializer(many=True, read_only=True)
+    players = SimpleUserSerializer(many=True, read_only=True)
     date = serializers.DateField(format="%A %b, %d")
     distance = serializers.DecimalField(source='distance.mi', max_digits=10, decimal_places=2, required=False, read_only=True)
 

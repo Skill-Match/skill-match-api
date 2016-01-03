@@ -36,8 +36,8 @@ class Profile(models.Model):
                               default=MALE)
     age = models.CharField(max_length=8, choices=AGE_CHOICES)
     avatar = CloudinaryField('image', null=True, blank=True)
-    pic_url = models.URLField(max_length=300, null=True, blank=True)
-    small_pic_url = models.URLField(max_length=300, null=True, blank=True)
+    pic_url = models.URLField(max_length=300, default='http://res.cloudinary.com/skill-match/image/upload/c_scale,w_200/v1451856958/Man_cqggt4.png')
+    small_pic_url = models.URLField(max_length=300, default='http://res.cloudinary.com/skill-match/image/upload/c_scale,w_50/v1451856958/Man_cqggt4.png')
     wants_texts = models.BooleanField(default=False)
     phone_number = models.CharField(null=True, blank=True, max_length=15)
 

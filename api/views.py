@@ -86,7 +86,12 @@ class CreateUser(generics.CreateAPIView):
             img_url = split_url[0] + split_url[1] + 'bo_1px_solid_rgb:747680,c_fill,g_face,h_200,r_4,w_200/' + split_url[2]
             serializer.save(image_url=img_url, small_img_url=small_img_url)
         else:
-            serializer.save()
+            if serializer.initial_data['profile.gender'] == 'Female':
+                img_url = 'http://res.cloudinary.com/skill-match/image/upload/c_scale,w_200/v1451856777/Woman_ibpgkk.png'
+                small_img_url = 'http://res.cloudinary.com/skill-match/image/upload/c_scale,w_50/v1451856777/Woman_ibpgkk.png'
+                serializer.save(image_url=img_url, small_img_url=small_img_url)
+            else:
+                serializer.save()
 
 class DetailUpdateUser(generics.RetrieveUpdateDestroyAPIView):
     """Permissions: User only or ADMIN"""

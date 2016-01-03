@@ -48,18 +48,5 @@ def send_email(sender, instance=None, created=False, **kwargs):
 
 @receiver(post_save, sender=Profile)
 def add_profile_image(sender, instance=None, created=False, **kwargs):
+
     pass
-
-
-# @receiver(post_save, sender=Parent)
-# def upload_picture_cloudinary(sender,instance=None, created=False, **kwargs):
-#     if created:
-#             if instance.profile_picture and (hasattr(instance.profile_picture, 'path')):
-#                 image = cloudinary.uploader.upload(instance.profile_picture.path)
-#                 if instance.profile_picture != "http://res.cloudinary.com/dpkceqvfi/image/upload/v1450429700/default_profile_ru96fo.png":
-#                     print("original url" + instance.picture_url)
-#                     instance.picture_url = image.get('url')
-#                     print("this is the new url" + instance.picture_url)
-#                     instance.save()
-#             else:
-#                 print("has no image")
