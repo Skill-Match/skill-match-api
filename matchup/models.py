@@ -15,7 +15,7 @@ SPORT_CHOICES = (
     (FOOTBALL, 'Football'),
     (SOCCER, 'Soccer'),
     (VOLLEYBALL, 'Volleyball'),
-    (PICKLEBALL, 'Pickleball')
+    (PICKLEBALL, 'Pickleball'),
     (OTHER, 'Other')
 )
 
