@@ -80,8 +80,11 @@ class CreateUser(generics.CreateAPIView):
     def perform_create(self, serializer):
         if self.request.FILES:
             image = cloudinary.uploader.upload(self.request.FILES['profile.avatar'])
-            image_url = image['url']
-            serializer.save(image_url=image_url)
+            initial_image_url = image['url']
+            split_url = initial_image_url.partition('upload/')
+            small_img_url = split_url[0] + split_url[1] + 'c_fill,g_face,h_050,r_23,w_050/' + split_url[2]
+            img_url = split_url[0] + split_url[1] + 'bo_1px_solid_rgb:747680,c_fill,g_face,h_200,r_4,w_200/' + split_url[2]
+            serializer.save(image_url=img_url, small_img_url=small_img_url)
         else:
             serializer.save()
 

@@ -18,9 +18,9 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ('gender', 'age', 'phone_number', 'wants_texts',
-                  'pic_url', 'sportsmanship', 'avatar')
+                  'pic_url', 'small_pic_url', 'sportsmanship', 'avatar')
 
-        read_only_fields = ('pic_url', 'sportsmanship')
+        read_only_fields = ('pic_url', 'small_pic_url', 'sportsmanship')
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -56,6 +56,7 @@ class UserSerializer(serializers.ModelSerializer):
         img_url = validated_data.get('image_url', None)
         if img_url:
             profile.pic_url = validated_data['image_url']
+            profile.small_pic_url = validated_data['small_img_url']
             profile.save()
 
         return user
