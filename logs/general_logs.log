@@ -499,3 +499,19 @@ Traceback (most recent call last):
   File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/utils/datastructures.py", line 85, in __getitem__
     raise MultiValueDictKeyError(repr(key))
 django.utils.datastructures.MultiValueDictKeyError: "'fudge'"
+DEBUG 2016-01-04 12:03:43,059 utils (0.002) 
+            SELECT c.relname, c.relkind
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('r', 'v')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid); args=None
+DEBUG 2016-01-04 12:03:43,066 utils (0.001) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+DEBUG 2016-01-04 12:04:07,820 utils (0.002) 
+            SELECT c.relname, c.relkind
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('r', 'v')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid); args=None
+DEBUG 2016-01-04 12:04:07,826 utils (0.001) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()

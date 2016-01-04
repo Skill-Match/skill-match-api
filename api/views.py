@@ -154,7 +154,6 @@ class ListCreateMatches(generics.ListCreateAPIView):
         :return:
         """
         user = self.request.user
-        x = serializer.initial_data['fudge']
         sport = serializer.initial_data['sport']
 
         if sport == 'Tennis':
@@ -518,10 +517,3 @@ def hello_world(request):
     name = parks[0]['name']
     data = {"message": "hello"}
     return Response(content)
-
-
-def myfunction():
-    logger.debug("this is a debug message!")
-
-def myotherfunction():
-    logger.error("this is an error message!!")
