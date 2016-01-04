@@ -53,9 +53,6 @@ def add_profile_image(sender, instance=None, created=False, **kwargs):
     """
     When created, if no avatar(picture) is uploaded, adds female default if
     female. Otherwise default in model is set to male.
-
-    Creates custom pic_url's for the profile using cloudinary when an avatar is
-    uploaded.
     """
     if created:
         if not instance.avatar and instance.gender == 'Female':
@@ -63,13 +60,20 @@ def add_profile_image(sender, instance=None, created=False, **kwargs):
             instance.small_pic_url = 'http://res.cloudinary.com/skill-match/image/upload/c_scale,w_50/v1451856777/Woman_ibpgkk.png'
             instance.save()
 
-    # slightly inefficient because it runs this code every time it is updated,
-    # even when avatar is unchanged
+@receiver(pre_save, sender=Profile)
+def check_and_add_profile_image(sender, instance=None, created=False, **kwargs):
+    """
+        Creates custom pic_url's for the profile using cloudinary when an avatar is
+        uploaded.
+        Ineffecient because it uploads an additional image to cloudinary so there
+        are 2 uploads. Just a workaround at the moment.
+    """
     if instance.avatar:
-        url = instance.avatar.url
-        split_url = url.partition('upload/')
-        small_img_url = split_url[0] + split_url[1] + 'c_fill,g_face,h_050,r_23,w_050/' + split_url[2]
-        img_url = split_url[0] + split_url[1] + 'bo_1px_solid_rgb:747680,c_fill,g_face,h_200,r_4,w_200/' + split_url[2]
-        instance.pic_url = img_url
-        instance.small_pic_url = small_img_url
-
+        profile = Profile.objects.get(pk=instance.id)
+        if not instance.avatar == profile.avatar:
+            image = cloudinary.uploader.upload(instance.avatar)
+            split_url = image['url'].partition('upload/')
+            small_img_url = split_url[0] + split_url[1] + 'c_fill,g_face,h_050,r_23,w_050/' + split_url[2]
+            img_url = split_url[0] + split_url[1] + 'bo_1px_solid_rgb:747680,c_fill,g_face,h_200,r_4,w_200/' + split_url[2]
+            instance.pic_url = img_url
+            instance.small_pic_url = small_img_url

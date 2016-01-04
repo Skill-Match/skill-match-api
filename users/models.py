@@ -1,3 +1,4 @@
+from cloudinary import CloudinaryImage
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 
@@ -40,6 +41,7 @@ class Profile(models.Model):
     small_pic_url = models.URLField(max_length=300, default='http://res.cloudinary.com/skill-match/image/upload/c_scale,w_50/v1451856958/Man_cqggt4.png')
     wants_texts = models.BooleanField(default=False)
     phone_number = models.CharField(null=True, blank=True, max_length=15)
+
 
     @property
     def sportsmanship(self):
