@@ -159,8 +159,8 @@ class CourtSerializer(serializers.ModelSerializer):
 class ImageCourtSerializer(serializers.ModelSerializer):
     class Meta:
         model = Court
-        fields = ('sport', 'img_url',)
-        read_only_fields = ('sport', 'img_url', )
+        fields = ('sport', 'img_url', 'small_sport_img')
+        read_only_fields = ('sport', 'img_url', 'small_sport_img')
 
 
 class ParkSerializer(serializers.ModelSerializer):

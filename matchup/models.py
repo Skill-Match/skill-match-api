@@ -180,7 +180,7 @@ class Court(models.Model):
     other = models.CharField(max_length=25, null=True, blank=True)
     num_courts = models.IntegerField(null=True, blank=True)
     #change img_url to null=False when refactor
-    img_url = models.URLField(null=True, blank=True)
+    img_url = models.URLField(default='http://res.cloudinary.com/skill-match/image/upload/v1451804013/trophy_200_cnaras.jpg')
     location = models.PointField(null=True, blank=True)
     ranking = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
