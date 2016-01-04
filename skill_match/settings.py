@@ -177,6 +177,11 @@ LOGGING = {
         }
     },
     'loggers': {
+        'django': {
+            'handlers': ['file', 'console', 'mailer'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
         'api': {
             'handlers': ['file', 'console', 'mailer'],
             'level': 'DEBUG',

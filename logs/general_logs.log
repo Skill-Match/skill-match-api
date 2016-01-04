@@ -10,3 +10,492 @@ DEBUG 2016-01-04 11:19:48,410 views this is a debug message!
 ERROR 2016-01-04 11:19:54,474 views this is an error message!!
 DEBUG 2016-01-04 11:24:57,433 views this is a debug message!
 DEBUG 2016-01-04 11:24:58,633 views this is a debug message!
+DEBUG 2016-01-04 11:58:55,044 utils (0.002) 
+            SELECT c.relname, c.relkind
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('r', 'v')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid); args=None
+DEBUG 2016-01-04 11:58:55,051 utils (0.001) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+DEBUG 2016-01-04 11:58:59,129 utils (0.001) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."expire_date" > '2016-01-04T19:58:59.119670+00:00'::timestamptz AND "django_session"."session_key" = 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd'); args=(datetime.datetime(2016, 1, 4, 19, 58, 59, 119670, tzinfo=<UTC>), 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd')
+DEBUG 2016-01-04 11:58:59,954 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" = 1; args=(1,)
+DEBUG 2016-01-04 11:59:00,743 base Exception while resolving variable 'is_popup' in template 'admin/index.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/context.py", line 77, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 885, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(type(current), bit):
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in "[{'False': False, 'None': None, 'True': True}, {'sql_queries': <function debug.<locals>.<lambda> at 0x11186c400>, 'user': <SimpleLazyObject: <User: peterflynn>>, 'perms': <django.contrib.auth.context_processors.PermWrapper object at 0x1118695c0>, 'request': <WSGIRequest: GET '/admin/'>, 'csrf_token': <SimpleLazyObject: 'NRnuDtMWgxwRZlvJtqEebw42x255KnTd'>, 'debug': True, 'DEFAULT_MESSAGE_LEVELS': {'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'DEBUG': 10, 'ERROR': 40}, 'messages': <django.contrib.messages.storage.fallback.FallbackStorage object at 0x110c28400>}, {}, {'LANGUAGE_BIDI': False, 'title': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ee81da0>, 'site_title': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ee81940>, 'site_url': '/', 'app_list': [{'app_url': '/admin/auth/', 'has_module_perms': True, 'models': [{'admin_url': '/admin/auth/group/', 'add_url': '/admin/auth/group/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Group', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b160>}, {'admin_url': '/admin/auth/user/', 'add_url': '/admin/auth/user/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'User', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1111f1240>}], 'app_label': 'auth', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ec37a90>}, {'app_url': '/admin/authtoken/', 'has_module_perms': True, 'models': [{'admin_url': '/admin/authtoken/token/', 'add_url': '/admin/authtoken/token/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Token', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1111f14e0>}], 'app_label': 'authtoken', 'name': 'Authtoken'}, {'app_url': '/admin/matchup/', 'has_module_perms': True, 'models': [{'admin_url': '/admin/matchup/ammenity/', 'add_url': '/admin/matchup/ammenity/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Ammenity', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b668>}, {'admin_url': '/admin/matchup/court/', 'add_url': '/admin/matchup/court/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Court', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b6d8>}, {'admin_url': '/admin/matchup/feedback/', 'add_url': '/admin/matchup/feedback/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Feedback', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117b8978>}, {'admin_url': '/admin/matchup/hendersonpark/', 'add_url': '/admin/matchup/hendersonpark/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'HendersonPark', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b630>}, {'admin_url': '/admin/matchup/match/', 'add_url': '/admin/matchup/match/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Match', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b5f8>}, {'admin_url': '/admin/matchup/park/', 'add_url': '/admin/matchup/park/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Park', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b5c0>}, {'admin_url': '/admin/matchup/skill/', 'add_url': '/admin/matchup/skill/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Skill', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b438>}], 'app_label': 'matchup', 'name': 'Matchup'}, {'app_url': '/admin/sites/', 'has_module_perms': True, 'models': [{'admin_url': '/admin/sites/site/', 'add_url': '/admin/sites/site/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Site', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1111f1d68>}], 'app_label': 'sites', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ec37278>}, {'app_url': '/admin/users/', 'has_module_perms': True, 'models': [{'admin_url': '/admin/users/profile/', 'add_url': '/admin/users/profile/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Profile', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b748>}], 'app_label': 'users', 'name': 'Users'}], 'site_header': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ee81898>, 'has_permission': True, 'LANGUAGE_CODE': 'en-us', 'available_apps': [{'app_url': '/admin/auth/', 'has_module_perms': True, 'models': [{'admin_url': '/admin/auth/group/', 'add_url': '/admin/auth/group/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Group', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b400>}, {'admin_url': '/admin/auth/user/', 'add_url': '/admin/auth/user/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'User', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b860>}], 'app_label': 'auth', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ec37a90>}, {'app_url': '/admin/authtoken/', 'has_module_perms': True, 'models': [{'admin_url': '/admin/authtoken/token/', 'add_url': '/admin/authtoken/token/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Token', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b908>}], 'app_label': 'authtoken', 'name': 'Authtoken'}, {'app_url': '/admin/matchup/', 'has_module_perms': True, 'models': [{'admin_url': '/admin/matchup/ammenity/', 'add_url': '/admin/matchup/ammenity/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Ammenity', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b550>}, {'admin_url': '/admin/matchup/court/', 'add_url': '/admin/matchup/court/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Court', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183ba58>}, {'admin_url': '/admin/matchup/feedback/', 'add_url': '/admin/matchup/feedback/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Feedback', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b940>}, {'admin_url': '/admin/matchup/hendersonpark/', 'add_url': '/admin/matchup/hendersonpark/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'HendersonPark', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b4e0>}, {'admin_url': '/admin/matchup/match/', 'add_url': '/admin/matchup/match/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Match', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b4a8>}, {'admin_url': '/admin/matchup/park/', 'add_url': '/admin/matchup/park/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Park', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b9e8>}, {'admin_url': '/admin/matchup/skill/', 'add_url': '/admin/matchup/skill/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Skill', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b780>}], 'app_label': 'matchup', 'name': 'Matchup'}, {'app_url': '/admin/sites/', 'has_module_perms': True, 'models': [{'admin_url': '/admin/sites/site/', 'add_url': '/admin/sites/site/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Site', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b7b8>}], 'app_label': 'sites', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ec37278>}, {'app_url': '/admin/users/', 'has_module_perms': True, 'models': [{'admin_url': '/admin/users/profile/', 'add_url': '/admin/users/profile/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Profile', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183bac8>}], 'app_label': 'users', 'name': 'Users'}]}]"
+DEBUG 2016-01-04 11:59:00,866 base Exception while resolving variable 'is_popup' in template 'admin/index.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/context.py", line 77, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 885, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(type(current), bit):
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in "[{'False': False, 'None': None, 'True': True}, {'sql_queries': <function debug.<locals>.<lambda> at 0x11186c400>, 'user': <SimpleLazyObject: <User: peterflynn>>, 'perms': <django.contrib.auth.context_processors.PermWrapper object at 0x1118695c0>, 'request': <WSGIRequest: GET '/admin/'>, 'csrf_token': <SimpleLazyObject: 'NRnuDtMWgxwRZlvJtqEebw42x255KnTd'>, 'debug': True, 'DEFAULT_MESSAGE_LEVELS': {'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'DEBUG': 10, 'ERROR': 40}, 'messages': <django.contrib.messages.storage.fallback.FallbackStorage object at 0x110c28400>}, {}, {'LANGUAGE_BIDI': False, 'title': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ee81da0>, 'site_title': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ee81940>, 'site_url': '/', 'app_list': [{'app_url': '/admin/auth/', 'has_module_perms': True, 'models': [{'admin_url': '/admin/auth/group/', 'add_url': '/admin/auth/group/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Group', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b160>}, {'admin_url': '/admin/auth/user/', 'add_url': '/admin/auth/user/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'User', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1111f1240>}], 'app_label': 'auth', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ec37a90>}, {'app_url': '/admin/authtoken/', 'has_module_perms': True, 'models': [{'admin_url': '/admin/authtoken/token/', 'add_url': '/admin/authtoken/token/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Token', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1111f14e0>}], 'app_label': 'authtoken', 'name': 'Authtoken'}, {'app_url': '/admin/matchup/', 'has_module_perms': True, 'models': [{'admin_url': '/admin/matchup/ammenity/', 'add_url': '/admin/matchup/ammenity/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Ammenity', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b668>}, {'admin_url': '/admin/matchup/court/', 'add_url': '/admin/matchup/court/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Court', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b6d8>}, {'admin_url': '/admin/matchup/feedback/', 'add_url': '/admin/matchup/feedback/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Feedback', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117b8978>}, {'admin_url': '/admin/matchup/hendersonpark/', 'add_url': '/admin/matchup/hendersonpark/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'HendersonPark', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b630>}, {'admin_url': '/admin/matchup/match/', 'add_url': '/admin/matchup/match/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Match', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b5f8>}, {'admin_url': '/admin/matchup/park/', 'add_url': '/admin/matchup/park/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Park', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b5c0>}, {'admin_url': '/admin/matchup/skill/', 'add_url': '/admin/matchup/skill/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Skill', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b438>}], 'app_label': 'matchup', 'name': 'Matchup'}, {'app_url': '/admin/sites/', 'has_module_perms': True, 'models': [{'admin_url': '/admin/sites/site/', 'add_url': '/admin/sites/site/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Site', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1111f1d68>}], 'app_label': 'sites', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ec37278>}, {'app_url': '/admin/users/', 'has_module_perms': True, 'models': [{'admin_url': '/admin/users/profile/', 'add_url': '/admin/users/profile/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Profile', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b748>}], 'app_label': 'users', 'name': 'Users'}], 'site_header': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ee81898>, 'has_permission': True, 'LANGUAGE_CODE': 'en-us', 'available_apps': [{'app_url': '/admin/auth/', 'has_module_perms': True, 'models': [{'admin_url': '/admin/auth/group/', 'add_url': '/admin/auth/group/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Group', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b400>}, {'admin_url': '/admin/auth/user/', 'add_url': '/admin/auth/user/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'User', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b860>}], 'app_label': 'auth', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ec37a90>}, {'app_url': '/admin/authtoken/', 'has_module_perms': True, 'models': [{'admin_url': '/admin/authtoken/token/', 'add_url': '/admin/authtoken/token/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Token', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b908>}], 'app_label': 'authtoken', 'name': 'Authtoken'}, {'app_url': '/admin/matchup/', 'has_module_perms': True, 'models': [{'admin_url': '/admin/matchup/ammenity/', 'add_url': '/admin/matchup/ammenity/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Ammenity', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b550>}, {'admin_url': '/admin/matchup/court/', 'add_url': '/admin/matchup/court/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Court', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183ba58>}, {'admin_url': '/admin/matchup/feedback/', 'add_url': '/admin/matchup/feedback/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Feedback', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b940>}, {'admin_url': '/admin/matchup/hendersonpark/', 'add_url': '/admin/matchup/hendersonpark/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'HendersonPark', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b4e0>}, {'admin_url': '/admin/matchup/match/', 'add_url': '/admin/matchup/match/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Match', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b4a8>}, {'admin_url': '/admin/matchup/park/', 'add_url': '/admin/matchup/park/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Park', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b9e8>}, {'admin_url': '/admin/matchup/skill/', 'add_url': '/admin/matchup/skill/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Skill', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b780>}], 'app_label': 'matchup', 'name': 'Matchup'}, {'app_url': '/admin/sites/', 'has_module_perms': True, 'models': [{'admin_url': '/admin/sites/site/', 'add_url': '/admin/sites/site/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Site', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183b7b8>}], 'app_label': 'sites', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ec37278>}, {'app_url': '/admin/users/', 'has_module_perms': True, 'models': [{'admin_url': '/admin/users/profile/', 'add_url': '/admin/users/profile/add/', 'perms': {'delete': True, 'add': True, 'change': True}, 'object_name': 'Profile', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11183bac8>}], 'app_label': 'users', 'name': 'Users'}]}]"
+DEBUG 2016-01-04 11:59:00,930 utils (0.004) SELECT "django_admin_log"."id", "django_admin_log"."action_time", "django_admin_log"."user_id", "django_admin_log"."content_type_id", "django_admin_log"."object_id", "django_admin_log"."object_repr", "django_admin_log"."action_flag", "django_admin_log"."change_message", "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined", "django_content_type"."id", "django_content_type"."app_label", "django_content_type"."model" FROM "django_admin_log" INNER JOIN "auth_user" ON ("django_admin_log"."user_id" = "auth_user"."id") LEFT OUTER JOIN "django_content_type" ON ("django_admin_log"."content_type_id" = "django_content_type"."id") WHERE "django_admin_log"."user_id" = 1 ORDER BY "django_admin_log"."action_time" DESC LIMIT 10; args=(1,)
+DEBUG 2016-01-04 11:59:02,523 utils (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."expire_date" > '2016-01-04T19:59:02.515573+00:00'::timestamptz AND "django_session"."session_key" = 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd'); args=(datetime.datetime(2016, 1, 4, 19, 59, 2, 515573, tzinfo=<UTC>), 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd')
+DEBUG 2016-01-04 11:59:02,573 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" = 1; args=(1,)
+DEBUG 2016-01-04 11:59:02,614 utils (0.001) SELECT "spatial_ref_sys"."srid", "spatial_ref_sys"."auth_name", "spatial_ref_sys"."auth_srid", "spatial_ref_sys"."srtext", "spatial_ref_sys"."proj4text" FROM "spatial_ref_sys" WHERE "spatial_ref_sys"."srid" = 4326; args=(4326,)
+DEBUG 2016-01-04 11:59:02,734 utils (0.063) SELECT COUNT(*) FROM (SELECT "matchup_match"."id" AS Col1, ST_Distance_Sphere("matchup_park"."location", ST_GeomFromEWKB('\x0101000020e6100000fb3f87f9f2c85cc0f19f6ea0c0154240'::bytea)) AS "distance" FROM "matchup_match" INNER JOIN "matchup_park" ON ("matchup_match"."park_id" = "matchup_park"."id") GROUP BY "matchup_match"."id", ST_Distance_Sphere("matchup_park"."location", ST_GeomFromEWKB('\x0101000020e6100000fb3f87f9f2c85cc0f19f6ea0c0154240'::bytea)) ORDER BY "distance" ASC LIMIT 30) subquery; args=(<django.contrib.gis.db.backends.postgis.adapter.PostGISAdapter object at 0x11183b5f8>, <django.contrib.gis.db.backends.postgis.adapter.PostGISAdapter object at 0x1118c2a58>)
+DEBUG 2016-01-04 11:59:02,767 utils (0.001) SELECT "matchup_match"."id", "matchup_match"."creator_id", "matchup_match"."description", "matchup_match"."park_id", "matchup_match"."sport", "matchup_match"."other", "matchup_match"."skill_level", "matchup_match"."date", "matchup_match"."time", "matchup_match"."img_url", "matchup_match"."is_open", "matchup_match"."is_completed", "matchup_match"."is_confirmed", "matchup_match"."is_challenge", "matchup_match"."is_succesful", "matchup_match"."challenge_declined", "matchup_match"."created_at", "matchup_match"."modified_at", ST_Distance_Sphere("matchup_park"."location", ST_GeomFromEWKB('\x0101000020e6100000fb3f87f9f2c85cc0f19f6ea0c0154240'::bytea)) AS "distance" FROM "matchup_match" INNER JOIN "matchup_park" ON ("matchup_match"."park_id" = "matchup_park"."id") ORDER BY "distance" ASC LIMIT 3; args=(<django.contrib.gis.db.backends.postgis.adapter.PostGISAdapter object at 0x111923a58>,)
+DEBUG 2016-01-04 11:59:02,803 utils (0.000) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" = 23; args=(23,)
+DEBUG 2016-01-04 11:59:02,852 utils (0.001) SELECT "matchup_park"."id", "matchup_park"."rating", "matchup_park"."rating_img_url", "matchup_park"."rating_img_url_small", "matchup_park"."name", "matchup_park"."yelp_id", "matchup_park"."mobile_url", "matchup_park"."url", "matchup_park"."image_url", "matchup_park"."city", "matchup_park"."display_address1", "matchup_park"."display_address2", "matchup_park"."display_address3", "matchup_park"."postal_code", "matchup_park"."location", "matchup_park"."state_code", "matchup_park"."created_on" FROM "matchup_park" WHERE "matchup_park"."id" = 99; args=(99,)
+DEBUG 2016-01-04 11:59:02,893 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" INNER JOIN "matchup_match_players" ON ("auth_user"."id" = "matchup_match_players"."user_id") WHERE "matchup_match_players"."match_id" = 12; args=(12,)
+DEBUG 2016-01-04 11:59:02,933 utils (0.001) SELECT "users_profile"."id", "users_profile"."user_id", "users_profile"."gender", "users_profile"."age", "users_profile"."avatar", "users_profile"."pic_url", "users_profile"."small_pic_url", "users_profile"."wants_texts", "users_profile"."phone_number" FROM "users_profile" WHERE "users_profile"."user_id" = 24; args=(24,)
+DEBUG 2016-01-04 11:59:02,986 utils (0.001) SELECT "matchup_skill"."id", "matchup_skill"."player_id", "matchup_skill"."sport", "matchup_skill"."skill", "matchup_skill"."sportsmanship", "matchup_skill"."punctuality", "matchup_skill"."num_feedbacks", "matchup_skill"."created_at", "matchup_skill"."updated_at" FROM "matchup_skill" WHERE "matchup_skill"."player_id" = 24; args=(24,)
+DEBUG 2016-01-04 11:59:03,029 utils (0.001) SELECT "users_profile"."id", "users_profile"."user_id", "users_profile"."gender", "users_profile"."age", "users_profile"."avatar", "users_profile"."pic_url", "users_profile"."small_pic_url", "users_profile"."wants_texts", "users_profile"."phone_number" FROM "users_profile" WHERE "users_profile"."user_id" = 23; args=(23,)
+DEBUG 2016-01-04 11:59:03,080 utils (0.002) SELECT "matchup_skill"."id", "matchup_skill"."player_id", "matchup_skill"."sport", "matchup_skill"."skill", "matchup_skill"."sportsmanship", "matchup_skill"."punctuality", "matchup_skill"."num_feedbacks", "matchup_skill"."created_at", "matchup_skill"."updated_at" FROM "matchup_skill" WHERE "matchup_skill"."player_id" = 23; args=(23,)
+DEBUG 2016-01-04 11:59:03,139 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" = 1; args=(1,)
+DEBUG 2016-01-04 11:59:03,181 utils (0.001) SELECT "matchup_park"."id", "matchup_park"."rating", "matchup_park"."rating_img_url", "matchup_park"."rating_img_url_small", "matchup_park"."name", "matchup_park"."yelp_id", "matchup_park"."mobile_url", "matchup_park"."url", "matchup_park"."image_url", "matchup_park"."city", "matchup_park"."display_address1", "matchup_park"."display_address2", "matchup_park"."display_address3", "matchup_park"."postal_code", "matchup_park"."location", "matchup_park"."state_code", "matchup_park"."created_on" FROM "matchup_park" WHERE "matchup_park"."id" = 92; args=(92,)
+DEBUG 2016-01-04 11:59:03,226 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" INNER JOIN "matchup_match_players" ON ("auth_user"."id" = "matchup_match_players"."user_id") WHERE "matchup_match_players"."match_id" = 13; args=(13,)
+DEBUG 2016-01-04 11:59:03,262 utils (0.001) SELECT "users_profile"."id", "users_profile"."user_id", "users_profile"."gender", "users_profile"."age", "users_profile"."avatar", "users_profile"."pic_url", "users_profile"."small_pic_url", "users_profile"."wants_texts", "users_profile"."phone_number" FROM "users_profile" WHERE "users_profile"."user_id" = 1; args=(1,)
+DEBUG 2016-01-04 11:59:03,305 utils (0.001) SELECT "matchup_skill"."id", "matchup_skill"."player_id", "matchup_skill"."sport", "matchup_skill"."skill", "matchup_skill"."sportsmanship", "matchup_skill"."punctuality", "matchup_skill"."num_feedbacks", "matchup_skill"."created_at", "matchup_skill"."updated_at" FROM "matchup_skill" WHERE "matchup_skill"."player_id" = 1; args=(1,)
+DEBUG 2016-01-04 11:59:03,345 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" = 1; args=(1,)
+DEBUG 2016-01-04 11:59:03,385 utils (0.001) SELECT "matchup_park"."id", "matchup_park"."rating", "matchup_park"."rating_img_url", "matchup_park"."rating_img_url_small", "matchup_park"."name", "matchup_park"."yelp_id", "matchup_park"."mobile_url", "matchup_park"."url", "matchup_park"."image_url", "matchup_park"."city", "matchup_park"."display_address1", "matchup_park"."display_address2", "matchup_park"."display_address3", "matchup_park"."postal_code", "matchup_park"."location", "matchup_park"."state_code", "matchup_park"."created_on" FROM "matchup_park" WHERE "matchup_park"."id" = 92; args=(92,)
+DEBUG 2016-01-04 11:59:03,424 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" INNER JOIN "matchup_match_players" ON ("auth_user"."id" = "matchup_match_players"."user_id") WHERE "matchup_match_players"."match_id" = 10; args=(10,)
+DEBUG 2016-01-04 11:59:03,459 utils (0.001) SELECT "users_profile"."id", "users_profile"."user_id", "users_profile"."gender", "users_profile"."age", "users_profile"."avatar", "users_profile"."pic_url", "users_profile"."small_pic_url", "users_profile"."wants_texts", "users_profile"."phone_number" FROM "users_profile" WHERE "users_profile"."user_id" = 1; args=(1,)
+DEBUG 2016-01-04 11:59:03,498 utils (0.001) SELECT "matchup_skill"."id", "matchup_skill"."player_id", "matchup_skill"."sport", "matchup_skill"."skill", "matchup_skill"."sportsmanship", "matchup_skill"."punctuality", "matchup_skill"."num_feedbacks", "matchup_skill"."created_at", "matchup_skill"."updated_at" FROM "matchup_skill" WHERE "matchup_skill"."player_id" = 1; args=(1,)
+DEBUG 2016-01-04 11:59:03,633 base Exception while resolving variable 'hide_label' in template 'rest_framework/horizontal/textarea.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+KeyError: 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'dict' object has no attribute 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [hide_label] in "{'input_type': 'text', 'renderer': <rest_framework.renderers.HTMLFormRenderer object at 0x113356828>, 'base_template': 'textarea.html', 'template_pack': 'rest_framework/horizontal'}"
+DEBUG 2016-01-04 11:59:03,635 base Exception while resolving variable 'placeholder' in template 'rest_framework/horizontal/textarea.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+KeyError: 'placeholder'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'dict' object has no attribute 'placeholder'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'placeholder'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [placeholder] in "{'input_type': 'text', 'renderer': <rest_framework.renderers.HTMLFormRenderer object at 0x113356828>, 'base_template': 'textarea.html', 'template_pack': 'rest_framework/horizontal'}"
+DEBUG 2016-01-04 11:59:03,637 base Exception while resolving variable 'rows' in template 'rest_framework/horizontal/textarea.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+KeyError: 'rows'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'dict' object has no attribute 'rows'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'rows'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [rows] in "{'input_type': 'text', 'renderer': <rest_framework.renderers.HTMLFormRenderer object at 0x113356828>, 'base_template': 'textarea.html', 'template_pack': 'rest_framework/horizontal'}"
+DEBUG 2016-01-04 11:59:03,653 base Exception while resolving variable 'hide_label' in template 'rest_framework/horizontal/select.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+KeyError: 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'dict' object has no attribute 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [hide_label] in "{'renderer': <rest_framework.renderers.HTMLFormRenderer object at 0x113356828>, 'base_template': 'select.html', 'template_pack': 'rest_framework/horizontal'}"
+DEBUG 2016-01-04 11:59:03,655 base Exception while resolving variable 'allow_blank' in template 'rest_framework/horizontal/select.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+TypeError: 'BoundField' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/rest_framework/utils/serializer_helpers.py", line 69, in __getattr__
+    return getattr(self._field, attr_name)
+AttributeError: 'PrimaryKeyRelatedField' object has no attribute 'allow_blank'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'allow_blank'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [allow_blank] in '<BoundField value= errors=None>'
+DEBUG 2016-01-04 11:59:03,662 utils (0.001) SELECT "matchup_park"."id", "matchup_park"."rating", "matchup_park"."rating_img_url", "matchup_park"."rating_img_url_small", "matchup_park"."name", "matchup_park"."yelp_id", "matchup_park"."mobile_url", "matchup_park"."url", "matchup_park"."image_url", "matchup_park"."city", "matchup_park"."display_address1", "matchup_park"."display_address2", "matchup_park"."display_address3", "matchup_park"."postal_code", "matchup_park"."location", "matchup_park"."state_code", "matchup_park"."created_on" FROM "matchup_park"; args=()
+DEBUG 2016-01-04 11:59:03,811 base Exception while resolving variable 'hide_label' in template 'rest_framework/horizontal/select.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+KeyError: 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'dict' object has no attribute 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [hide_label] in "{'renderer': <rest_framework.renderers.HTMLFormRenderer object at 0x113356828>, 'base_template': 'select.html', 'template_pack': 'rest_framework/horizontal'}"
+DEBUG 2016-01-04 11:59:03,836 base Exception while resolving variable 'hide_label' in template 'rest_framework/horizontal/input.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+KeyError: 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'dict' object has no attribute 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [hide_label] in "{'input_type': 'text', 'renderer': <rest_framework.renderers.HTMLFormRenderer object at 0x113356828>, 'base_template': 'input.html', 'template_pack': 'rest_framework/horizontal'}"
+DEBUG 2016-01-04 11:59:03,839 base Exception while resolving variable 'placeholder' in template 'rest_framework/horizontal/input.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+KeyError: 'placeholder'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'dict' object has no attribute 'placeholder'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'placeholder'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [placeholder] in "{'input_type': 'text', 'renderer': <rest_framework.renderers.HTMLFormRenderer object at 0x113356828>, 'base_template': 'input.html', 'template_pack': 'rest_framework/horizontal'}"
+DEBUG 2016-01-04 11:59:03,850 base Exception while resolving variable 'hide_label' in template 'rest_framework/horizontal/input.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+KeyError: 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'dict' object has no attribute 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [hide_label] in "{'input_type': 'number', 'renderer': <rest_framework.renderers.HTMLFormRenderer object at 0x113356828>, 'base_template': 'input.html', 'template_pack': 'rest_framework/horizontal'}"
+DEBUG 2016-01-04 11:59:03,854 base Exception while resolving variable 'placeholder' in template 'rest_framework/horizontal/input.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+KeyError: 'placeholder'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'dict' object has no attribute 'placeholder'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'placeholder'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [placeholder] in "{'input_type': 'number', 'renderer': <rest_framework.renderers.HTMLFormRenderer object at 0x113356828>, 'base_template': 'input.html', 'template_pack': 'rest_framework/horizontal'}"
+DEBUG 2016-01-04 11:59:03,868 base Exception while resolving variable 'hide_label' in template 'rest_framework/horizontal/input.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+KeyError: 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'dict' object has no attribute 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [hide_label] in "{'input_type': 'date', 'renderer': <rest_framework.renderers.HTMLFormRenderer object at 0x113356828>, 'base_template': 'input.html', 'template_pack': 'rest_framework/horizontal'}"
+DEBUG 2016-01-04 11:59:03,871 base Exception while resolving variable 'placeholder' in template 'rest_framework/horizontal/input.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+KeyError: 'placeholder'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'dict' object has no attribute 'placeholder'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'placeholder'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [placeholder] in "{'input_type': 'date', 'renderer': <rest_framework.renderers.HTMLFormRenderer object at 0x113356828>, 'base_template': 'input.html', 'template_pack': 'rest_framework/horizontal'}"
+DEBUG 2016-01-04 11:59:03,883 base Exception while resolving variable 'hide_label' in template 'rest_framework/horizontal/input.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+KeyError: 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'dict' object has no attribute 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'hide_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [hide_label] in "{'input_type': 'time', 'renderer': <rest_framework.renderers.HTMLFormRenderer object at 0x113356828>, 'base_template': 'input.html', 'template_pack': 'rest_framework/horizontal'}"
+DEBUG 2016-01-04 11:59:03,886 base Exception while resolving variable 'placeholder' in template 'rest_framework/horizontal/input.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+KeyError: 'placeholder'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'dict' object has no attribute 'placeholder'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'placeholder'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [placeholder] in "{'input_type': 'time', 'renderer': <rest_framework.renderers.HTMLFormRenderer object at 0x113356828>, 'base_template': 'input.html', 'template_pack': 'rest_framework/horizontal'}"
+DEBUG 2016-01-04 11:59:13,613 utils (0.004) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."expire_date" > '2016-01-04T19:59:13.602360+00:00'::timestamptz AND "django_session"."session_key" = 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd'); args=(datetime.datetime(2016, 1, 4, 19, 59, 13, 602360, tzinfo=<UTC>), 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd')
+DEBUG 2016-01-04 11:59:13,658 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" = 1; args=(1,)
+DEBUG 2016-01-04 11:59:13,719 utils (0.008) SELECT "matchup_park"."id", "matchup_park"."rating", "matchup_park"."rating_img_url", "matchup_park"."rating_img_url_small", "matchup_park"."name", "matchup_park"."yelp_id", "matchup_park"."mobile_url", "matchup_park"."url", "matchup_park"."image_url", "matchup_park"."city", "matchup_park"."display_address1", "matchup_park"."display_address2", "matchup_park"."display_address3", "matchup_park"."postal_code", "matchup_park"."location", "matchup_park"."state_code", "matchup_park"."created_on" FROM "matchup_park" WHERE "matchup_park"."id" = 92; args=(92,)
+ERROR 2016-01-04 11:59:17,693 base Internal Server Error: /api/matches/
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/utils/datastructures.py", line 83, in __getitem__
+    list_ = super(MultiValueDict, self).__getitem__(key)
+KeyError: 'fudge'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/core/handlers/base.py", line 149, in get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/core/handlers/base.py", line 147, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/views/generic/base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/rest_framework/views.py", line 466, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/rest_framework/views.py", line 463, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/rest_framework/generics.py", line 246, in post
+    return self.create(request, *args, **kwargs)
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/rest_framework/mixins.py", line 21, in create
+    self.perform_create(serializer)
+  File "/Users/peterflynn/sandbox/skill-match-api/api/views.py", line 157, in perform_create
+    x = serializer.initial_data['fudge']
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/utils/datastructures.py", line 85, in __getitem__
+    raise MultiValueDictKeyError(repr(key))
+django.utils.datastructures.MultiValueDictKeyError: "'fudge'"

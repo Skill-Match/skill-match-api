@@ -519,8 +519,6 @@ def hello_world(request):
     data = {"message": "hello"}
     return Response(content)
 
-import logging
-logger = logging.getLogger(__name__)
 
 def myfunction():
     logger.debug("this is a debug message!")
