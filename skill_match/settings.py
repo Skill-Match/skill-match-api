@@ -156,7 +156,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '%(levelname)s %(asctime)s %(modules)s %(messages)s'
+            'format': '%(levelname)s %(asctime)s %(module)s %(message)s'
         }
     },
     'handlers': {
@@ -177,7 +177,7 @@ LOGGING = {
         }
     },
     'loggers': {
-        'peteslist': {
+        'api': {
             'handlers': ['file', 'console', 'mailer'],
             'level': 'DEBUG',
             'propagate': True

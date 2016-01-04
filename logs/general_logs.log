@@ -1,0 +1,12 @@
+ERROR 2016-01-04 11:13:22,335 this is an error message!!
+ERROR 2016-01-04 11:13:25,228 this is an error message!!
+ERROR 2016-01-04 11:13:47,696 this is an error message!!
+ERROR 2016-01-04 11:13:50,304 this is an error message!!
+ERROR 2016-01-04 11:15:03,166 views this is an error message!!
+ERROR 2016-01-04 11:15:18,931 views this is an error message!!
+ERROR 2016-01-04 11:17:15,867 views this is an error message!!
+ERROR 2016-01-04 11:17:24,175 views this is an error message!!
+DEBUG 2016-01-04 11:19:48,410 views this is a debug message!
+ERROR 2016-01-04 11:19:54,474 views this is an error message!!
+DEBUG 2016-01-04 11:24:57,433 views this is a debug message!
+DEBUG 2016-01-04 11:24:58,633 views this is a debug message!
