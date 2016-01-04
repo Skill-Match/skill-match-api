@@ -26,6 +26,8 @@ class Park(models.Model):
     Relationships: None
     """
     rating = models.FloatField(null=True, blank=True)
+    rating_img_url = models.URLField(max_length=300, null=True, blank=True)
+    rating_img_url_small = models.URLField(max_length=300, null=True, blank=True)
     name = models.CharField(max_length=200)
     yelp_id = models.CharField(null=True, blank=True, max_length=100)
     mobile_url = models.URLField(null=True, blank=True)
@@ -36,8 +38,6 @@ class Park(models.Model):
     display_address2 = models.CharField(max_length=40, null=True, blank=True)
     display_address3 = models.CharField(max_length=40, null=True, blank=True)
     postal_code = models.CharField(max_length=10, null=True, blank=True)
-    latitude = models.FloatField(null=True, blank=True)
-    longitude = models.FloatField(null=True, blank=True)
     location = models.PointField(null=True, blank=True)
     state_code = models.CharField(max_length=5, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
