@@ -5,6 +5,16 @@ from rest_framework.relations import StringRelatedField
 from users.models import Profile
 
 
+# USER RELATED SERIALIZERS
+#
+#
+#
+#
+#
+#
+# USER RELATED SERIALIZERS
+
+
 class SkillSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -35,9 +45,7 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'skill_set')
 
     def create(self, validated_data):
-        """Create Profile for User when registered
-
-        """
+        """Overwrite to create profile during create process"""
         user = User.objects.create_user(
             email=validated_data['email'].lower(),
             username=validated_data['username'].lower(),
@@ -62,13 +70,6 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class SimpleProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = ('small_pic_url',)
-        read_only_fields = ('small_pic_url',)
-
-
 class SimpleUserSerializer(serializers.ModelSerializer):
     skill_set = SkillSerializer(many=True, read_only=True)
     small_img = serializers.ReadOnlyField(source='profile.small_pic_url')
@@ -78,11 +79,14 @@ class SimpleUserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'small_img', 'skill_set')
         read_only_fields = ('id', 'username', 'small_img', 'skill_set')
 
-
-class AvatarSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = ('pic_url',)
+# """
+# MATCH AND FEEDBACK RELATED SERIALIZERS
+#
+#
+#
+#
+#
+# """
 
 
 class MatchSerializer(serializers.ModelSerializer):
@@ -107,17 +111,21 @@ class MatchSerializer(serializers.ModelSerializer):
                             'is_succesful')
 
     def create(self, validated_data):
-        x = super().create(validated_data)
+        """
+        Creating User is passed and added to the players(ManyToMany) on Match
+        :param validated_data:
+        :return:
+        """
+        match = super().create(validated_data)
         creator = validated_data['creator']
-
-        x.players.add(creator)
-        x.save()
-        return x
+        match.players.add(creator)
+        match.save()
+        return match
 
 
 class ChallengerMatchSerializer(serializers.ModelSerializer):
     """
-        Separate Serializer for Updating Match.
+        Separate Serializer for Simple Match Updates
     """
     class Meta:
         model = Match
@@ -129,7 +137,27 @@ class ChallengerMatchSerializer(serializers.ModelSerializer):
                             'is_open', 'is_completed', 'is_confirmed')
 
 
+class FeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feedback
+        fields = ('id', 'reviewer', 'player', 'match', 'skill',
+                  'sportsmanship', 'punctuality', 'availability')
+        read_only_fields = ('id', 'reviewer', 'player',)
+
+# PARK AND COURT RELATED SERILAIZERS
+#
+#
+#
+#
+#
+#
+#
+
+
 class CourtSerializer(serializers.ModelSerializer):
+    """
+    COURT serialiers are locations where a certain Sport is being played
+    """
     park_name = serializers.ReadOnlyField(source='park.name')
 
     class Meta:
@@ -140,6 +168,11 @@ class CourtSerializer(serializers.ModelSerializer):
         # extra_kwargs = {'location': {'write_only': True}}
 
     def create(self, validated_data):
+        """
+        Overwrite create function in order to add POINTField
+        :param validated_data:
+        :return:
+        """
         court = Court.objects.create(
             park=validated_data['park'],
             sport=validated_data['sport'],
@@ -157,6 +190,7 @@ class CourtSerializer(serializers.ModelSerializer):
 
 
 class ImageCourtSerializer(serializers.ModelSerializer):
+    # Lighter Serializer for images
     class Meta:
         model = Court
         fields = ('sport', 'img_url', 'small_sport_img')
@@ -172,13 +206,14 @@ class ParkSerializer(serializers.ModelSerializer):
         model = Park
         fields = ('id', 'name', 'rating', 'url', 'image_url', 'city', 'state_code',
                   'display_address1', 'display_address2', 'display_address3',
-                  'postal_code', 'distance', 'court_set', 'match_set',)
+                  'postal_code', 'distance', 'match_set', 'latitude', 'longitude', 'court_set',)
         read_only_fields = ('id', 'name', 'rating', 'url', 'image_url', 'city', 'state_code',
                             'display_address1', 'display_address2',
                             'display_address3', 'postal_code')
 
 
 class ListParksSerializer(serializers.ModelSerializer):
+    # Separate Serializer to not include match_set
     court_set = ImageCourtSerializer(many=True, read_only=True)
     distance = serializers.DecimalField(source='distance.mi', max_digits=10, decimal_places=2, required=False, read_only=True)
 
@@ -186,15 +221,9 @@ class ListParksSerializer(serializers.ModelSerializer):
         model = Park
         fields = ('id', 'name', 'rating', 'url', 'image_url', 'city', 'state_code',
                   'display_address1', 'display_address2', 'display_address3',
-                  'postal_code', 'distance', 'court_set',)
+                  'postal_code', 'distance', 'latitude', 'longitude', 'court_set',)
         read_only_fields = ('id', 'name', 'rating', 'url', 'image_url', 'city', 'state_code',
                             'display_address1', 'display_address2',
                             'display_address3', 'postal_code')
 
 
-class FeedbackSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Feedback
-        fields = ('id', 'reviewer', 'player', 'match', 'skill',
-                  'sportsmanship', 'punctuality', 'availability')
-        read_only_fields = ('id', 'reviewer', 'player',)

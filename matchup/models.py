@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.gis.db import models
 
+#SPORT CHOICES for multiple models
 TENNIS = 'Tennis'
 BASKETBALL = 'Basketball'
 FOOTBALL = 'Football'
@@ -23,7 +23,7 @@ SPORT_CHOICES = (
 class Park(models.Model):
     """
     Currently borrowed from YELP API.
-    Relationships: None
+    Some are linked via OneToOne with HendersonParks
     """
     rating = models.FloatField(null=True, blank=True)
     rating_img_url = models.URLField(max_length=300, null=True, blank=True)
@@ -40,25 +40,42 @@ class Park(models.Model):
     postal_code = models.CharField(max_length=10, null=True, blank=True)
     location = models.PointField(null=True, blank=True)
     state_code = models.CharField(max_length=5, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
 
+    @property
+    def latitude(self):
+        latitude = self.location.coords[1]
+        return latitude
+
+    @property
+    def longitude(self):
+        longitude = self.location.coords[0]
+        return longitude
 
 class HendersonPark(models.Model):
+    """
+    Scraped with permission from Henderson Parks and Rec Website
+    """
     park = models.OneToOneField(Park, null=True, blank=True)
     name = models.CharField(max_length=200)
     address = models.CharField(max_length=150, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
     img_url = models.URLField(null=True, blank=True, max_length=350)
-    string_id = models.CharField(max_length=60, null=True, blank=True)
+    # created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
 
 
 class Ammenity(models.Model):
+    """
+    Also scraped from Henderson Parks and Rec.
+    ManyToMany Relationship with HendersonPark
+    Example ammenities: 'Open Grass Field', 'Lighted Tennis Courts'
+    """
     name = models.CharField(max_length=125)
     parks = models.ManyToManyField(HendersonPark)
     created_on = models.DateTimeField(auto_now_add=True)
