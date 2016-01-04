@@ -128,8 +128,9 @@ class ListParks(generics.ListAPIView):
             pnt = G('POINT(' + str(longitude) + ' ' + str(latitude) + ')', srid=4326)
         elif zip_code:
             geolocator = Nominatim()
-            location = geolocator.geocode(zip_code)
+            location = geolocator.geocode(zip_code + ' NV')
             pnt = G('POINT(' + str(location.longitude) + ' ' + str(location.latitude) + ')', srid=4326)
+            x = 5
         else:
             pnt = G('POINT(-115.13983 36.169941)', srid=4326)
 
@@ -198,7 +199,7 @@ class ListCreateMatches(generics.ListCreateAPIView):
             pnt = G('POINT(' + str(longitude) + ' ' + str(latitude) + ')', srid=4326)
         elif zip_code:
             geolocator = Nominatim()
-            location = geolocator.geocode(zip_code)
+            location = geolocator.geocode(zip_code + ' NV')
             pnt = G('POINT(' + str(location.longitude) + ' ' + str(location.latitude) + ')', srid=4326)
         else:
             pnt = G('POINT(-115.13983 36.169941)', srid=4326)
