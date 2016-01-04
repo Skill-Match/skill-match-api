@@ -9,7 +9,7 @@ from api.exceptions import OneFeedbackAllowed, TwoPlayersPerMatch, SelfSignUp, \
     NonExistingPlayer
 from api.serializers import UserSerializer, ParkSerializer, MatchSerializer,\
     FeedbackSerializer, ChallengerMatchSerializer, \
-    ProfileSerializer, CourtSerializer
+    ProfileSerializer, CourtSerializer, ListParksSerializer
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from geopy import Nominatim
@@ -108,7 +108,7 @@ class DetailUpdateProfile(generics.RetrieveUpdateDestroyAPIView):
 class ListParks(generics.ListAPIView):
     """Permissions: all"""
     queryset = Park.objects.all()
-    serializer_class = ParkSerializer
+    serializer_class = ListParksSerializer
     pagination_class = SmallPagination
 
     def get_queryset(self):

@@ -32,6 +32,10 @@ def new_calculate_skills(skill_object, sport):
             reviewer_cred = reviewer_cred[0]
             xp = reviewer_cred.num_feedbacks
             sportsmanship = reviewer_cred.sportsmanship
+            skill = reviewer_cred.skill_set.filter(sport=sport)
+            if skill:
+                skill = skill[0]
+
 
             weight = 0
             if 0 <= xp <= 10:
@@ -61,6 +65,3 @@ def new_calculate_skills(skill_object, sport):
     skill_object.sportsmanship = sportsmanship_total / total_weight
     skill_object.num_feedbacks = count
     skill_object.save()
-
-# def calculate_punctuality(skill_object, sport):
-#     pass

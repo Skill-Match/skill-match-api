@@ -93,7 +93,7 @@ class Match(models.Model):
     date = models.DateField()
     time = models.TimeField()
     players = models.ManyToManyField(User, blank=True)
-    img_url = models.CharField(max_length=255, null=True, blank=True)
+    img_url = models.URLField(max_length=200, default='http://res.cloudinary.com/skill-match/image/upload/v1451804013/trophy_200_cnaras.jpg')
     is_open = models.BooleanField(default=True)
     is_completed = models.BooleanField(default=False)
     is_confirmed = models.BooleanField(default=False)
@@ -106,7 +106,6 @@ class Match(models.Model):
     def __str__(self):
         return "{}'s {} match, match #{}".format(self.creator.username,
                                                  self.sport, self.id)
-
 
 class Feedback(models.Model):
     """
@@ -189,3 +188,9 @@ class Court(models.Model):
 
     def __str__(self):
         return "{} at {}".format(self.sport, self.park.name)
+
+    @property
+    def small_sport_img(self):
+        split_url = self.img_url.partition('upload/')
+        small_sport_img = split_url[0] + split_url[1] + 'c_fill,g_face,h_050,r_23,w_050/' + split_url[2]
+        return small_sport_img

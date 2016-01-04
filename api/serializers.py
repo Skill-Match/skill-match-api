@@ -128,14 +128,15 @@ class ChallengerMatchSerializer(serializers.ModelSerializer):
                             'skill_level', 'date', 'time', 'players',
                             'is_open', 'is_completed', 'is_confirmed')
 
+
 class CourtSerializer(serializers.ModelSerializer):
     park_name = serializers.ReadOnlyField(source='park.name')
 
     class Meta:
         model = Court
         fields = ('id', 'park', 'park_name', 'sport', 'other',
-                  'num_courts', 'img_url')
-        read_only_fields = ('id', 'img_url', 'park_name')
+                  'num_courts', 'img_url', 'small_sport_img')
+        read_only_fields = ('id', 'img_url', 'small_sport_img', 'park_name')
         # extra_kwargs = {'location': {'write_only': True}}
 
     def create(self, validated_data):
@@ -154,6 +155,7 @@ class CourtSerializer(serializers.ModelSerializer):
 
         return court
 
+
 class ImageCourtSerializer(serializers.ModelSerializer):
     class Meta:
         model = Court
@@ -171,6 +173,20 @@ class ParkSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'rating', 'url', 'image_url', 'city', 'state_code',
                   'display_address1', 'display_address2', 'display_address3',
                   'postal_code', 'distance', 'court_set', 'match_set',)
+        read_only_fields = ('id', 'name', 'rating', 'url', 'image_url', 'city', 'state_code',
+                            'display_address1', 'display_address2',
+                            'display_address3', 'postal_code')
+
+
+class ListParksSerializer(serializers.ModelSerializer):
+    court_set = ImageCourtSerializer(many=True, read_only=True)
+    distance = serializers.DecimalField(source='distance.mi', max_digits=10, decimal_places=2, required=False, read_only=True)
+
+    class Meta:
+        model = Park
+        fields = ('id', 'name', 'rating', 'url', 'image_url', 'city', 'state_code',
+                  'display_address1', 'display_address2', 'display_address3',
+                  'postal_code', 'distance', 'court_set',)
         read_only_fields = ('id', 'name', 'rating', 'url', 'image_url', 'city', 'state_code',
                             'display_address1', 'display_address2',
                             'display_address3', 'postal_code')
