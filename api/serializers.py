@@ -52,12 +52,6 @@ class UserSerializer(serializers.ModelSerializer):
             wants_texts=profile_data.get('wants_texts'),
         )
 
-        # img_url = validated_data.get('image_url', None)
-        # if img_url:
-        #     profile.pic_url = validated_data['image_url']
-        #     profile.small_pic_url = validated_data['small_img_url']
-        #     profile.save()
-
         return user
 
     def update(self, instance, validated_data):
