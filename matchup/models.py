@@ -18,7 +18,8 @@ SPORT_CHOICES = (
     (PICKLEBALL, 'Pickleball'),
     (OTHER, 'Other')
 )
-
+DEFAULT_IMG = 'http://res.cloudinary.com/skill-match/image/upload/' \
+              'v1451804013/trophy_200_cnaras.jpg'
 
 class Park(models.Model):
     """
@@ -89,9 +90,11 @@ class Match(models.Model):
     Process for Match:
     1. User create match with park, sport, date, time, skill level wanted.
     2. Creation process add user as creator and player on players many to many.
-    3. A different User signs up. Match is now closed (is_open=False)
-    4. User may confirm or decline match. If user accepts it is confirmed.
-        (is_confirmed=True). If user declines, it opens (is_open=True)
+    3. A different User signs up. If Tennis, Match is now closed
+        (is_open=False)
+    4. If tennis, User may confirm or decline match. If user accepts it is
+        confirmed. (is_confirmed=True). If user declines, it opens
+        (is_open=True)
     5. When date and time expire, a command will close "complete match",
         (is_completed=True)
 
@@ -99,6 +102,9 @@ class Match(models.Model):
     1. creator(User)
     2. players(User(s), m2m)
     3. park(Park)
+
+    Model needs cleanup to lose most booleans and instead have a choice flow
+    for match "status" like OPEN -> JOINED -> CONFIRMED -> COMPLETED
     """
     creator = models.ForeignKey(User, related_name='created_matches')
     description = models.TextField(max_length=1000, null=True, blank=True)
@@ -110,7 +116,7 @@ class Match(models.Model):
     date = models.DateField()
     time = models.TimeField()
     players = models.ManyToManyField(User, blank=True)
-    img_url = models.URLField(max_length=200, default='http://res.cloudinary.com/skill-match/image/upload/v1451804013/trophy_200_cnaras.jpg')
+    img_url = models.URLField(max_length=200, default=DEFAULT_IMG)
     is_open = models.BooleanField(default=True)
     is_completed = models.BooleanField(default=False)
     is_confirmed = models.BooleanField(default=False)
@@ -154,7 +160,6 @@ class Feedback(models.Model):
     match = models.ForeignKey(Match)
     skill = models.IntegerField()
     sportsmanship = models.IntegerField()
-    court_ranking = models.IntegerField(null=True, blank=True)
     availability = models.IntegerField()
     is_succesful = models.BooleanField(default=False)
     punctuality = models.CharField(max_length=15,
@@ -197,7 +202,7 @@ class Court(models.Model):
     other = models.CharField(max_length=25, null=True, blank=True)
     num_courts = models.IntegerField(null=True, blank=True)
     #change img_url to null=False when refactor
-    img_url = models.URLField(default='http://res.cloudinary.com/skill-match/image/upload/v1451804013/trophy_200_cnaras.jpg')
+    img_url = models.URLField(default=DEFAULT_IMG)
     location = models.PointField(null=True, blank=True)
     ranking = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -209,5 +214,6 @@ class Court(models.Model):
     @property
     def small_sport_img(self):
         split_url = self.img_url.partition('upload/')
-        small_sport_img = split_url[0] + split_url[1] + 'c_fill,g_face,h_050,r_23,w_050/' + split_url[2]
+        small_sport_img = split_url[0] + split_url[1] + \
+                          'c_fill,g_face,h_050,r_23,w_050/' + split_url[2]
         return small_sport_img
