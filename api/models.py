@@ -1,6 +1,8 @@
+import cloudinary
+import cloudinary.uploader
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from matchup.models import Match
 from rest_framework.authtoken.models import Token
@@ -48,5 +50,26 @@ def send_email(sender, instance=None, created=False, **kwargs):
 
 @receiver(post_save, sender=Profile)
 def add_profile_image(sender, instance=None, created=False, **kwargs):
+    """
+    When created, if no avatar(picture) is uploaded, adds female default if
+    female. Otherwise default in model is set to male.
 
-    pass
+    Creates custom pic_url's for the profile using cloudinary when an avatar is
+    uploaded.
+    """
+    if created:
+        if not instance.avatar and instance.gender == 'Female':
+            instance.pic_url = 'http://res.cloudinary.com/skill-match/image/upload/c_scale,w_200/v1451856777/Woman_ibpgkk.png'
+            instance.small_pic_url = 'http://res.cloudinary.com/skill-match/image/upload/c_scale,w_50/v1451856777/Woman_ibpgkk.png'
+            instance.save()
+
+    # slightly inefficient because it runs this code every time it is updated,
+    # even when avatar is unchanged
+    if instance.avatar:
+        url = instance.avatar.url
+        split_url = url.partition('upload/')
+        small_img_url = split_url[0] + split_url[1] + 'c_fill,g_face,h_050,r_23,w_050/' + split_url[2]
+        img_url = split_url[0] + split_url[1] + 'bo_1px_solid_rgb:747680,c_fill,g_face,h_200,r_4,w_200/' + split_url[2]
+        instance.pic_url = img_url
+        instance.small_pic_url = small_img_url
+

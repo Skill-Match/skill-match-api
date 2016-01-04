@@ -14,11 +14,10 @@ class SkillSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    avatar = serializers.ImageField(required=False)
     class Meta:
         model = Profile
         fields = ('gender', 'age', 'phone_number', 'wants_texts',
-                  'pic_url', 'small_pic_url', 'sportsmanship', 'avatar')
+                  'pic_url', 'small_pic_url', 'sportsmanship')
 
         read_only_fields = ('pic_url', 'small_pic_url', 'sportsmanship')
 
@@ -166,6 +165,7 @@ class ImageCourtSerializer(serializers.ModelSerializer):
         model = Court
         fields = ('sport', 'img_url',)
         read_only_fields = ('sport', 'img_url', )
+
 
 class ParkSerializer(serializers.ModelSerializer):
     match_set = MatchSerializer(many=True, read_only=True)
