@@ -12562,3 +12562,503 @@ DEBUG 2016-01-04 19:08:55,331 utils (0.001) SELECT "users_profile"."id", "users_
 DEBUG 2016-01-04 19:08:55,369 utils (0.000) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" = 1; args=(1,)
 DEBUG 2016-01-04 19:08:55,404 utils (0.000) SELECT (1) AS "a" FROM "auth_user" WHERE "auth_user"."id" = 1 LIMIT 1; args=(1,)
 DEBUG 2016-01-04 19:08:55,453 utils (0.000) SELECT (1) AS "a" FROM "users_profile" WHERE ("users_profile"."user_id" = 1 AND NOT ("users_profile"."id" = 19)) LIMIT 1; args=(1, 19)
+DEBUG 2016-01-04 19:14:27,756 utils (0.002) 
+            SELECT c.relname, c.relkind
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('r', 'v')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid); args=None
+DEBUG 2016-01-04 19:14:27,764 utils (0.001) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+DEBUG 2016-01-04 19:14:27,962 utils (0.003) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."expire_date" > '2016-01-05T03:14:27.950726+00:00'::timestamptz AND "django_session"."session_key" = 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd'); args=(datetime.datetime(2016, 1, 5, 3, 14, 27, 950726, tzinfo=<UTC>), 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd')
+DEBUG 2016-01-04 19:14:28,867 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" = 1; args=(1,)
+DEBUG 2016-01-04 19:14:29,743 base Exception while resolving variable 'is_popup' in template 'admin/index.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/context.py", line 77, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 885, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(type(current), bit):
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in "[{'None': None, 'False': False, 'True': True}, {'DEFAULT_MESSAGE_LEVELS': {'WARNING': 30, 'ERROR': 40, 'DEBUG': 10, 'SUCCESS': 25, 'INFO': 20}, 'messages': <django.contrib.messages.storage.fallback.FallbackStorage object at 0x11165a9b0>, 'user': <SimpleLazyObject: <User: peterflynn>>, 'debug': True, 'sql_queries': <function debug.<locals>.<lambda> at 0x1117fe2f0>, 'csrf_token': <SimpleLazyObject: 'NRnuDtMWgxwRZlvJtqEebw42x255KnTd'>, 'perms': <django.contrib.auth.context_processors.PermWrapper object at 0x1117f9978>, 'request': <WSGIRequest: GET '/admin/'>}, {}, {'app_list': [{'app_label': 'auth', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ebc6c50>, 'models': [{'add_url': '/admin/auth/group/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9908>, 'admin_url': '/admin/auth/group/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Group'}, {'add_url': '/admin/auth/user/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9748>, 'admin_url': '/admin/auth/user/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'User'}], 'app_url': '/admin/auth/', 'has_module_perms': True}, {'app_label': 'authtoken', 'name': 'Authtoken', 'models': [{'add_url': '/admin/authtoken/token/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c99b0>, 'admin_url': '/admin/authtoken/token/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Token'}], 'app_url': '/admin/authtoken/', 'has_module_perms': True}, {'app_label': 'matchup', 'name': 'Matchup', 'models': [{'add_url': '/admin/matchup/ammenity/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c98d0>, 'admin_url': '/admin/matchup/ammenity/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Ammenity'}, {'add_url': '/admin/matchup/court/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9a90>, 'admin_url': '/admin/matchup/court/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Court'}, {'add_url': '/admin/matchup/feedback/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9470>, 'admin_url': '/admin/matchup/feedback/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Feedback'}, {'add_url': '/admin/matchup/hendersonpark/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11165acc0>, 'admin_url': '/admin/matchup/hendersonpark/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'HendersonPark'}, {'add_url': '/admin/matchup/match/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x110bb9ac8>, 'admin_url': '/admin/matchup/match/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Match'}, {'add_url': '/admin/matchup/park/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x111670198>, 'admin_url': '/admin/matchup/park/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Park'}, {'add_url': '/admin/matchup/skill/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9b00>, 'admin_url': '/admin/matchup/skill/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Skill'}], 'app_url': '/admin/matchup/', 'has_module_perms': True}, {'app_label': 'sites', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ebc6438>, 'models': [{'add_url': '/admin/sites/site/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9940>, 'admin_url': '/admin/sites/site/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Site'}], 'app_url': '/admin/sites/', 'has_module_perms': True}, {'app_label': 'users', 'name': 'Users', 'models': [{'add_url': '/admin/users/profile/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11165ae48>, 'admin_url': '/admin/users/profile/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Profile'}], 'app_url': '/admin/users/', 'has_module_perms': True}], 'has_permission': True, 'LANGUAGE_BIDI': False, 'site_title': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ee0fb00>, 'title': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ee0ff98>, 'site_header': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ee0fa58>, 'LANGUAGE_CODE': 'en-us', 'site_url': '/', 'available_apps': [{'app_label': 'auth', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ebc6c50>, 'models': [{'add_url': '/admin/auth/group/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c97b8>, 'admin_url': '/admin/auth/group/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Group'}, {'add_url': '/admin/auth/user/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9828>, 'admin_url': '/admin/auth/user/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'User'}], 'app_url': '/admin/auth/', 'has_module_perms': True}, {'app_label': 'authtoken', 'name': 'Authtoken', 'models': [{'add_url': '/admin/authtoken/token/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9d68>, 'admin_url': '/admin/authtoken/token/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Token'}], 'app_url': '/admin/authtoken/', 'has_module_perms': True}, {'app_label': 'matchup', 'name': 'Matchup', 'models': [{'add_url': '/admin/matchup/ammenity/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9cc0>, 'admin_url': '/admin/matchup/ammenity/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Ammenity'}, {'add_url': '/admin/matchup/court/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9e10>, 'admin_url': '/admin/matchup/court/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Court'}, {'add_url': '/admin/matchup/feedback/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9710>, 'admin_url': '/admin/matchup/feedback/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Feedback'}, {'add_url': '/admin/matchup/hendersonpark/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9ba8>, 'admin_url': '/admin/matchup/hendersonpark/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'HendersonPark'}, {'add_url': '/admin/matchup/match/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9a58>, 'admin_url': '/admin/matchup/match/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Match'}, {'add_url': '/admin/matchup/park/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9c88>, 'admin_url': '/admin/matchup/park/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Park'}, {'add_url': '/admin/matchup/skill/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9e80>, 'admin_url': '/admin/matchup/skill/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Skill'}], 'app_url': '/admin/matchup/', 'has_module_perms': True}, {'app_label': 'sites', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ebc6438>, 'models': [{'add_url': '/admin/sites/site/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9cf8>, 'admin_url': '/admin/sites/site/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Site'}], 'app_url': '/admin/sites/', 'has_module_perms': True}, {'app_label': 'users', 'name': 'Users', 'models': [{'add_url': '/admin/users/profile/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9be0>, 'admin_url': '/admin/users/profile/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Profile'}], 'app_url': '/admin/users/', 'has_module_perms': True}]}]"
+DEBUG 2016-01-04 19:14:29,857 base Exception while resolving variable 'is_popup' in template 'admin/index.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/context.py", line 77, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 885, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(type(current), bit):
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in "[{'None': None, 'False': False, 'True': True}, {'DEFAULT_MESSAGE_LEVELS': {'WARNING': 30, 'ERROR': 40, 'DEBUG': 10, 'SUCCESS': 25, 'INFO': 20}, 'messages': <django.contrib.messages.storage.fallback.FallbackStorage object at 0x11165a9b0>, 'user': <SimpleLazyObject: <User: peterflynn>>, 'debug': True, 'sql_queries': <function debug.<locals>.<lambda> at 0x1117fe2f0>, 'csrf_token': <SimpleLazyObject: 'NRnuDtMWgxwRZlvJtqEebw42x255KnTd'>, 'perms': <django.contrib.auth.context_processors.PermWrapper object at 0x1117f9978>, 'request': <WSGIRequest: GET '/admin/'>}, {}, {'app_list': [{'app_label': 'auth', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ebc6c50>, 'models': [{'add_url': '/admin/auth/group/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9908>, 'admin_url': '/admin/auth/group/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Group'}, {'add_url': '/admin/auth/user/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9748>, 'admin_url': '/admin/auth/user/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'User'}], 'app_url': '/admin/auth/', 'has_module_perms': True}, {'app_label': 'authtoken', 'name': 'Authtoken', 'models': [{'add_url': '/admin/authtoken/token/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c99b0>, 'admin_url': '/admin/authtoken/token/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Token'}], 'app_url': '/admin/authtoken/', 'has_module_perms': True}, {'app_label': 'matchup', 'name': 'Matchup', 'models': [{'add_url': '/admin/matchup/ammenity/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c98d0>, 'admin_url': '/admin/matchup/ammenity/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Ammenity'}, {'add_url': '/admin/matchup/court/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9a90>, 'admin_url': '/admin/matchup/court/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Court'}, {'add_url': '/admin/matchup/feedback/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9470>, 'admin_url': '/admin/matchup/feedback/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Feedback'}, {'add_url': '/admin/matchup/hendersonpark/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11165acc0>, 'admin_url': '/admin/matchup/hendersonpark/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'HendersonPark'}, {'add_url': '/admin/matchup/match/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x110bb9ac8>, 'admin_url': '/admin/matchup/match/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Match'}, {'add_url': '/admin/matchup/park/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x111670198>, 'admin_url': '/admin/matchup/park/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Park'}, {'add_url': '/admin/matchup/skill/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9b00>, 'admin_url': '/admin/matchup/skill/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Skill'}], 'app_url': '/admin/matchup/', 'has_module_perms': True}, {'app_label': 'sites', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ebc6438>, 'models': [{'add_url': '/admin/sites/site/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9940>, 'admin_url': '/admin/sites/site/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Site'}], 'app_url': '/admin/sites/', 'has_module_perms': True}, {'app_label': 'users', 'name': 'Users', 'models': [{'add_url': '/admin/users/profile/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11165ae48>, 'admin_url': '/admin/users/profile/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Profile'}], 'app_url': '/admin/users/', 'has_module_perms': True}], 'has_permission': True, 'LANGUAGE_BIDI': False, 'site_title': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ee0fb00>, 'title': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ee0ff98>, 'site_header': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ee0fa58>, 'LANGUAGE_CODE': 'en-us', 'site_url': '/', 'available_apps': [{'app_label': 'auth', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ebc6c50>, 'models': [{'add_url': '/admin/auth/group/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c97b8>, 'admin_url': '/admin/auth/group/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Group'}, {'add_url': '/admin/auth/user/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9828>, 'admin_url': '/admin/auth/user/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'User'}], 'app_url': '/admin/auth/', 'has_module_perms': True}, {'app_label': 'authtoken', 'name': 'Authtoken', 'models': [{'add_url': '/admin/authtoken/token/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9d68>, 'admin_url': '/admin/authtoken/token/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Token'}], 'app_url': '/admin/authtoken/', 'has_module_perms': True}, {'app_label': 'matchup', 'name': 'Matchup', 'models': [{'add_url': '/admin/matchup/ammenity/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9cc0>, 'admin_url': '/admin/matchup/ammenity/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Ammenity'}, {'add_url': '/admin/matchup/court/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9e10>, 'admin_url': '/admin/matchup/court/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Court'}, {'add_url': '/admin/matchup/feedback/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9710>, 'admin_url': '/admin/matchup/feedback/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Feedback'}, {'add_url': '/admin/matchup/hendersonpark/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9ba8>, 'admin_url': '/admin/matchup/hendersonpark/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'HendersonPark'}, {'add_url': '/admin/matchup/match/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9a58>, 'admin_url': '/admin/matchup/match/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Match'}, {'add_url': '/admin/matchup/park/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9c88>, 'admin_url': '/admin/matchup/park/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Park'}, {'add_url': '/admin/matchup/skill/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9e80>, 'admin_url': '/admin/matchup/skill/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Skill'}], 'app_url': '/admin/matchup/', 'has_module_perms': True}, {'app_label': 'sites', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ebc6438>, 'models': [{'add_url': '/admin/sites/site/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9cf8>, 'admin_url': '/admin/sites/site/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Site'}], 'app_url': '/admin/sites/', 'has_module_perms': True}, {'app_label': 'users', 'name': 'Users', 'models': [{'add_url': '/admin/users/profile/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1117c9be0>, 'admin_url': '/admin/users/profile/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Profile'}], 'app_url': '/admin/users/', 'has_module_perms': True}]}]"
+DEBUG 2016-01-04 19:14:29,914 utils (0.003) SELECT "django_admin_log"."id", "django_admin_log"."action_time", "django_admin_log"."user_id", "django_admin_log"."content_type_id", "django_admin_log"."object_id", "django_admin_log"."object_repr", "django_admin_log"."action_flag", "django_admin_log"."change_message", "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined", "django_content_type"."id", "django_content_type"."app_label", "django_content_type"."model" FROM "django_admin_log" INNER JOIN "auth_user" ON ("django_admin_log"."user_id" = "auth_user"."id") LEFT OUTER JOIN "django_content_type" ON ("django_admin_log"."content_type_id" = "django_content_type"."id") WHERE "django_admin_log"."user_id" = 1 ORDER BY "django_admin_log"."action_time" DESC LIMIT 10; args=(1,)
+DEBUG 2016-01-04 19:14:30,285 utils (0.005) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."expire_date" > '2016-01-05T03:14:30.269153+00:00'::timestamptz AND "django_session"."session_key" = 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd'); args=(datetime.datetime(2016, 1, 5, 3, 14, 30, 269153, tzinfo=<UTC>), 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd')
+DEBUG 2016-01-04 19:14:30,327 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" = 1; args=(1,)
+DEBUG 2016-01-04 19:14:31,037 base Exception while resolving variable 'is_popup' in template 'admin/index.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/context.py", line 77, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 885, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(type(current), bit):
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in "[{'None': None, 'False': False, 'True': True}, {'DEFAULT_MESSAGE_LEVELS': {'WARNING': 30, 'ERROR': 40, 'DEBUG': 10, 'SUCCESS': 25, 'INFO': 20}, 'messages': <django.contrib.messages.storage.fallback.FallbackStorage object at 0x1118b42e8>, 'user': <SimpleLazyObject: <User: peterflynn>>, 'debug': True, 'sql_queries': <function debug.<locals>.<lambda> at 0x1117febf8>, 'csrf_token': <SimpleLazyObject: 'NRnuDtMWgxwRZlvJtqEebw42x255KnTd'>, 'perms': <django.contrib.auth.context_processors.PermWrapper object at 0x1118b9fd0>, 'request': <WSGIRequest: GET '/admin/'>}, {}, {'app_list': [{'app_label': 'auth', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ebc6c50>, 'models': [{'add_url': '/admin/auth/group/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1908>, 'admin_url': '/admin/auth/group/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Group'}, {'add_url': '/admin/auth/user/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1dd8>, 'admin_url': '/admin/auth/user/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'User'}], 'app_url': '/admin/auth/', 'has_module_perms': True}, {'app_label': 'authtoken', 'name': 'Authtoken', 'models': [{'add_url': '/admin/authtoken/token/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1c88>, 'admin_url': '/admin/authtoken/token/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Token'}], 'app_url': '/admin/authtoken/', 'has_module_perms': True}, {'app_label': 'matchup', 'name': 'Matchup', 'models': [{'add_url': '/admin/matchup/ammenity/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1e80>, 'admin_url': '/admin/matchup/ammenity/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Ammenity'}, {'add_url': '/admin/matchup/court/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1c18>, 'admin_url': '/admin/matchup/court/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Court'}, {'add_url': '/admin/matchup/feedback/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1ac8>, 'admin_url': '/admin/matchup/feedback/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Feedback'}, {'add_url': '/admin/matchup/hendersonpark/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11184c978>, 'admin_url': '/admin/matchup/hendersonpark/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'HendersonPark'}, {'add_url': '/admin/matchup/match/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11184c400>, 'admin_url': '/admin/matchup/match/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Match'}, {'add_url': '/admin/matchup/park/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1ef0>, 'admin_url': '/admin/matchup/park/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Park'}, {'add_url': '/admin/matchup/skill/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1a90>, 'admin_url': '/admin/matchup/skill/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Skill'}], 'app_url': '/admin/matchup/', 'has_module_perms': True}, {'app_label': 'sites', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ebc6438>, 'models': [{'add_url': '/admin/sites/site/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1438>, 'admin_url': '/admin/sites/site/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Site'}], 'app_url': '/admin/sites/', 'has_module_perms': True}, {'app_label': 'users', 'name': 'Users', 'models': [{'add_url': '/admin/users/profile/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11184ca90>, 'admin_url': '/admin/users/profile/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Profile'}], 'app_url': '/admin/users/', 'has_module_perms': True}], 'has_permission': True, 'LANGUAGE_BIDI': False, 'site_title': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ee0fb00>, 'title': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ee0ff98>, 'site_header': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ee0fa58>, 'LANGUAGE_CODE': 'en-us', 'site_url': '/', 'available_apps': [{'app_label': 'auth', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ebc6c50>, 'models': [{'add_url': '/admin/auth/group/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1111233c8>, 'admin_url': '/admin/auth/group/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Group'}, {'add_url': '/admin/auth/user/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1111232b0>, 'admin_url': '/admin/auth/user/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'User'}], 'app_url': '/admin/auth/', 'has_module_perms': True}, {'app_label': 'authtoken', 'name': 'Authtoken', 'models': [{'add_url': '/admin/authtoken/token/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118aa518>, 'admin_url': '/admin/authtoken/token/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Token'}], 'app_url': '/admin/authtoken/', 'has_module_perms': True}, {'app_label': 'matchup', 'name': 'Matchup', 'models': [{'add_url': '/admin/matchup/ammenity/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118aaf98>, 'admin_url': '/admin/matchup/ammenity/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Ammenity'}, {'add_url': '/admin/matchup/court/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118aaef0>, 'admin_url': '/admin/matchup/court/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Court'}, {'add_url': '/admin/matchup/feedback/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1080>, 'admin_url': '/admin/matchup/feedback/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Feedback'}, {'add_url': '/admin/matchup/hendersonpark/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1ba8>, 'admin_url': '/admin/matchup/hendersonpark/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'HendersonPark'}, {'add_url': '/admin/matchup/match/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b12e8>, 'admin_url': '/admin/matchup/match/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Match'}, {'add_url': '/admin/matchup/park/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1d30>, 'admin_url': '/admin/matchup/park/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Park'}, {'add_url': '/admin/matchup/skill/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118aacf8>, 'admin_url': '/admin/matchup/skill/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Skill'}], 'app_url': '/admin/matchup/', 'has_module_perms': True}, {'app_label': 'sites', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ebc6438>, 'models': [{'add_url': '/admin/sites/site/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118aaf60>, 'admin_url': '/admin/sites/site/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Site'}], 'app_url': '/admin/sites/', 'has_module_perms': True}, {'app_label': 'users', 'name': 'Users', 'models': [{'add_url': '/admin/users/profile/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b15c0>, 'admin_url': '/admin/users/profile/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Profile'}], 'app_url': '/admin/users/', 'has_module_perms': True}]}]"
+DEBUG 2016-01-04 19:14:31,041 base Exception while resolving variable 'is_popup' in template 'admin/index.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/context.py", line 77, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 885, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(type(current), bit):
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in "[{'None': None, 'False': False, 'True': True}, {'DEFAULT_MESSAGE_LEVELS': {'WARNING': 30, 'ERROR': 40, 'DEBUG': 10, 'SUCCESS': 25, 'INFO': 20}, 'messages': <django.contrib.messages.storage.fallback.FallbackStorage object at 0x1118b42e8>, 'user': <SimpleLazyObject: <User: peterflynn>>, 'debug': True, 'sql_queries': <function debug.<locals>.<lambda> at 0x1117febf8>, 'csrf_token': <SimpleLazyObject: 'NRnuDtMWgxwRZlvJtqEebw42x255KnTd'>, 'perms': <django.contrib.auth.context_processors.PermWrapper object at 0x1118b9fd0>, 'request': <WSGIRequest: GET '/admin/'>}, {}, {'app_list': [{'app_label': 'auth', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ebc6c50>, 'models': [{'add_url': '/admin/auth/group/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1908>, 'admin_url': '/admin/auth/group/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Group'}, {'add_url': '/admin/auth/user/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1dd8>, 'admin_url': '/admin/auth/user/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'User'}], 'app_url': '/admin/auth/', 'has_module_perms': True}, {'app_label': 'authtoken', 'name': 'Authtoken', 'models': [{'add_url': '/admin/authtoken/token/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1c88>, 'admin_url': '/admin/authtoken/token/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Token'}], 'app_url': '/admin/authtoken/', 'has_module_perms': True}, {'app_label': 'matchup', 'name': 'Matchup', 'models': [{'add_url': '/admin/matchup/ammenity/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1e80>, 'admin_url': '/admin/matchup/ammenity/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Ammenity'}, {'add_url': '/admin/matchup/court/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1c18>, 'admin_url': '/admin/matchup/court/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Court'}, {'add_url': '/admin/matchup/feedback/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1ac8>, 'admin_url': '/admin/matchup/feedback/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Feedback'}, {'add_url': '/admin/matchup/hendersonpark/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11184c978>, 'admin_url': '/admin/matchup/hendersonpark/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'HendersonPark'}, {'add_url': '/admin/matchup/match/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11184c400>, 'admin_url': '/admin/matchup/match/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Match'}, {'add_url': '/admin/matchup/park/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1ef0>, 'admin_url': '/admin/matchup/park/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Park'}, {'add_url': '/admin/matchup/skill/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1a90>, 'admin_url': '/admin/matchup/skill/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Skill'}], 'app_url': '/admin/matchup/', 'has_module_perms': True}, {'app_label': 'sites', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ebc6438>, 'models': [{'add_url': '/admin/sites/site/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1438>, 'admin_url': '/admin/sites/site/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Site'}], 'app_url': '/admin/sites/', 'has_module_perms': True}, {'app_label': 'users', 'name': 'Users', 'models': [{'add_url': '/admin/users/profile/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11184ca90>, 'admin_url': '/admin/users/profile/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Profile'}], 'app_url': '/admin/users/', 'has_module_perms': True}], 'has_permission': True, 'LANGUAGE_BIDI': False, 'site_title': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ee0fb00>, 'title': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ee0ff98>, 'site_header': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ee0fa58>, 'LANGUAGE_CODE': 'en-us', 'site_url': '/', 'available_apps': [{'app_label': 'auth', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ebc6c50>, 'models': [{'add_url': '/admin/auth/group/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1111233c8>, 'admin_url': '/admin/auth/group/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Group'}, {'add_url': '/admin/auth/user/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1111232b0>, 'admin_url': '/admin/auth/user/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'User'}], 'app_url': '/admin/auth/', 'has_module_perms': True}, {'app_label': 'authtoken', 'name': 'Authtoken', 'models': [{'add_url': '/admin/authtoken/token/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118aa518>, 'admin_url': '/admin/authtoken/token/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Token'}], 'app_url': '/admin/authtoken/', 'has_module_perms': True}, {'app_label': 'matchup', 'name': 'Matchup', 'models': [{'add_url': '/admin/matchup/ammenity/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118aaf98>, 'admin_url': '/admin/matchup/ammenity/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Ammenity'}, {'add_url': '/admin/matchup/court/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118aaef0>, 'admin_url': '/admin/matchup/court/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Court'}, {'add_url': '/admin/matchup/feedback/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1080>, 'admin_url': '/admin/matchup/feedback/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Feedback'}, {'add_url': '/admin/matchup/hendersonpark/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1ba8>, 'admin_url': '/admin/matchup/hendersonpark/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'HendersonPark'}, {'add_url': '/admin/matchup/match/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b12e8>, 'admin_url': '/admin/matchup/match/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Match'}, {'add_url': '/admin/matchup/park/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b1d30>, 'admin_url': '/admin/matchup/park/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Park'}, {'add_url': '/admin/matchup/skill/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118aacf8>, 'admin_url': '/admin/matchup/skill/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Skill'}], 'app_url': '/admin/matchup/', 'has_module_perms': True}, {'app_label': 'sites', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x10ebc6438>, 'models': [{'add_url': '/admin/sites/site/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118aaf60>, 'admin_url': '/admin/sites/site/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Site'}], 'app_url': '/admin/sites/', 'has_module_perms': True}, {'app_label': 'users', 'name': 'Users', 'models': [{'add_url': '/admin/users/profile/add/', 'name': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x1118b15c0>, 'admin_url': '/admin/users/profile/', 'perms': {'change': True, 'add': True, 'delete': True}, 'object_name': 'Profile'}], 'app_url': '/admin/users/', 'has_module_perms': True}]}]"
+DEBUG 2016-01-04 19:14:31,096 utils (0.002) SELECT "django_admin_log"."id", "django_admin_log"."action_time", "django_admin_log"."user_id", "django_admin_log"."content_type_id", "django_admin_log"."object_id", "django_admin_log"."object_repr", "django_admin_log"."action_flag", "django_admin_log"."change_message", "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined", "django_content_type"."id", "django_content_type"."app_label", "django_content_type"."model" FROM "django_admin_log" INNER JOIN "auth_user" ON ("django_admin_log"."user_id" = "auth_user"."id") LEFT OUTER JOIN "django_content_type" ON ("django_admin_log"."content_type_id" = "django_content_type"."id") WHERE "django_admin_log"."user_id" = 1 ORDER BY "django_admin_log"."action_time" DESC LIMIT 10; args=(1,)
+DEBUG 2016-01-04 19:14:32,693 utils (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."expire_date" > '2016-01-05T03:14:32.682458+00:00'::timestamptz AND "django_session"."session_key" = 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd'); args=(datetime.datetime(2016, 1, 5, 3, 14, 32, 682458, tzinfo=<UTC>), 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd')
+DEBUG 2016-01-04 19:14:32,740 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" = 1; args=(1,)
+DEBUG 2016-01-04 19:14:32,771 utils (0.001) SELECT COUNT(*) AS "__count" FROM "users_profile"; args=()
+DEBUG 2016-01-04 19:14:32,830 utils (0.001) SELECT "users_profile"."id", "users_profile"."user_id", "users_profile"."gender", "users_profile"."age", "users_profile"."avatar", "users_profile"."pic_url", "users_profile"."small_pic_url", "users_profile"."wants_texts", "users_profile"."phone_number", "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "users_profile" INNER JOIN "auth_user" ON ("users_profile"."user_id" = "auth_user"."id") ORDER BY "users_profile"."id" DESC; args=()
+DEBUG 2016-01-04 19:14:33,217 base Exception while resolving variable 'errors' in template 'admin/change_list.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'NoneType' object has no attribute 'errors'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'errors'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [errors] in 'None'
+DEBUG 2016-01-04 19:14:33,235 base Exception while resolving variable 'show' in template 'admin/change_list.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/context.py", line 77, in __getitem__
+    raise KeyError(key)
+KeyError: 'show'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 885, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(type(current), bit):
+AttributeError: type object 'RequestContext' has no attribute 'show'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'show'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [show] in "[{'None': None, 'csrf_token': <SimpleLazyObject: 'NRnuDtMWgxwRZlvJtqEebw42x255KnTd'>, 'False': False, 'True': True}]"
+DEBUG 2016-01-04 19:14:33,237 base Exception while resolving variable 'is_multipart' in template 'admin/change_list.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'NoneType' object has no attribute 'is_multipart'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'is_multipart'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_multipart] in 'None'
+DEBUG 2016-01-04 19:14:33,318 base Exception while resolving variable 'non_field_errors' in template 'admin/change_list.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'NoneType' object has no attribute 'non_field_errors'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'non_field_errors'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [non_field_errors] in 'None'
+DEBUG 2016-01-04 19:14:33,321 base Exception while resolving variable 'non_field_errors' in template 'admin/change_list.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'NoneType' object has no attribute 'non_field_errors'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'non_field_errors'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [non_field_errors] in 'None'
+DEBUG 2016-01-04 19:14:33,324 base Exception while resolving variable 'non_field_errors' in template 'admin/change_list.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'NoneType' object has no attribute 'non_field_errors'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'non_field_errors'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [non_field_errors] in 'None'
+DEBUG 2016-01-04 19:14:33,556 utils (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."expire_date" > '2016-01-05T03:14:33.546277+00:00'::timestamptz AND "django_session"."session_key" = 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd'); args=(datetime.datetime(2016, 1, 5, 3, 14, 33, 546277, tzinfo=<UTC>), 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd')
+DEBUG 2016-01-04 19:14:33,595 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" = 1; args=(1,)
+DEBUG 2016-01-04 19:14:35,423 utils (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."expire_date" > '2016-01-05T03:14:35.411807+00:00'::timestamptz AND "django_session"."session_key" = 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd'); args=(datetime.datetime(2016, 1, 5, 3, 14, 35, 411807, tzinfo=<UTC>), 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd')
+DEBUG 2016-01-04 19:14:35,463 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" = 1; args=(1,)
+DEBUG 2016-01-04 19:14:35,499 utils (0.001) SELECT "users_profile"."id", "users_profile"."user_id", "users_profile"."gender", "users_profile"."age", "users_profile"."avatar", "users_profile"."pic_url", "users_profile"."small_pic_url", "users_profile"."wants_texts", "users_profile"."phone_number" FROM "users_profile" WHERE "users_profile"."id" = 19; args=(19,)
+DEBUG 2016-01-04 19:14:35,570 utils (0.001) SELECT "django_content_type"."id", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE ("django_content_type"."app_label" = 'users' AND "django_content_type"."model" = 'profile'); args=('users', 'profile')
+DEBUG 2016-01-04 19:14:36,026 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" = 1; args=(1,)
+DEBUG 2016-01-04 19:14:36,257 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" ORDER BY "auth_user"."username" ASC; args=()
+DEBUG 2016-01-04 19:14:36,347 base Exception while resolving variable 'can_delete_related' in template 'admin/related_widget_wrapper.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/context.py", line 77, in __getitem__
+    raise KeyError(key)
+KeyError: 'can_delete_related'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 885, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(type(current), bit):
+AttributeError: type object 'Context' has no attribute 'can_delete_related'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'can_delete_related'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [can_delete_related] in '[{\'None\': None, \'False\': False, \'True\': True}, {\'name\': \'user\', \'can_add_related\': True, \'url_params\': \'_to_field=id&_popup=1\', \'add_related_url\': \'/admin/auth/user/add/\', \'change_related_template_url\': \'/admin/auth/user/__fk__/change/\', \'widget\': \'<select id="id_user" name="user">\\n<option value="">---------</option>\\n<option value="23">bob</option>\\n<option value="1" selected="selected">peterflynn</option>\\n<option value="24">sue</option>\\n</select>\', \'can_change_related\': True, \'model\': <django.utils.functional.lazy.<locals>.__proxy__ object at 0x11043c8d0>}, {\'block\': <Block Node: links. Contents: [<TextNode: \'\\n        \'>, <IfNode>, <TextNode: \'\\n        \'>, <IfNode>, <TextNode: \'\\n        \'>, <IfNode>, <TextNode: \'\\n    \'>]>}]'
+DEBUG 2016-01-04 19:14:36,692 utils (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."expire_date" > '2016-01-05T03:14:36.683657+00:00'::timestamptz AND "django_session"."session_key" = 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd'); args=(datetime.datetime(2016, 1, 5, 3, 14, 36, 683657, tzinfo=<UTC>), 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd')
+DEBUG 2016-01-04 19:14:36,729 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" = 1; args=(1,)
+DEBUG 2016-01-04 19:14:42,665 utils (0.003) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."expire_date" > '2016-01-05T03:14:42.652851+00:00'::timestamptz AND "django_session"."session_key" = 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd'); args=(datetime.datetime(2016, 1, 5, 3, 14, 42, 652851, tzinfo=<UTC>), 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd')
+DEBUG 2016-01-04 19:14:42,704 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" = 1; args=(1,)
+DEBUG 2016-01-04 19:14:42,735 utils (0.001) SELECT "users_profile"."id", "users_profile"."user_id", "users_profile"."gender", "users_profile"."age", "users_profile"."avatar", "users_profile"."pic_url", "users_profile"."small_pic_url", "users_profile"."wants_texts", "users_profile"."phone_number" FROM "users_profile" WHERE "users_profile"."id" = 19; args=(19,)
+DEBUG 2016-01-04 19:14:42,781 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" = 1; args=(1,)
+DEBUG 2016-01-04 19:14:45,376 utils (0.001) SELECT (1) AS "a" FROM "auth_user" WHERE "auth_user"."id" = 1 LIMIT 1; args=(1,)
+DEBUG 2016-01-04 19:14:45,429 utils (0.001) SELECT (1) AS "a" FROM "users_profile" WHERE ("users_profile"."user_id" = 1 AND NOT ("users_profile"."id" = 19)) LIMIT 1; args=(1, 19)
+DEBUG 2016-01-04 19:14:54,699 utils (0.001) SELECT "users_profile"."id", "users_profile"."user_id", "users_profile"."gender", "users_profile"."age", "users_profile"."avatar", "users_profile"."pic_url", "users_profile"."small_pic_url", "users_profile"."wants_texts", "users_profile"."phone_number" FROM "users_profile" WHERE "users_profile"."id" = 19; args=(19,)
+DEBUG 2016-01-04 19:14:54,783 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" = 1; args=(1,)
+DEBUG 2016-01-04 19:15:27,315 utils (0.001) UPDATE "users_profile" SET "user_id" = 1, "gender" = 'Female', "age" = '30''s', "avatar" = 'image/upload/v1451963727/tbqqm0vqlnsrwx7hd3mn.ai', "pic_url" = 'http://res.cloudinary.com/skill-match/image/upload/bo_1px_solid_rgb:747680,c_fill,g_face,h_200,r_4,w_200/v1451963719/o2suvlok9jctyblpcdkx.ai', "small_pic_url" = 'http://res.cloudinary.com/skill-match/image/upload/c_fill,g_face,h_050,r_23,w_050/v1451963719/o2suvlok9jctyblpcdkx.ai', "wants_texts" = false, "phone_number" = '' WHERE "users_profile"."id" = 19; args=(1, 'Female', "30's", 'image/upload/v1451963727/tbqqm0vqlnsrwx7hd3mn.ai', 'http://res.cloudinary.com/skill-match/image/upload/bo_1px_solid_rgb:747680,c_fill,g_face,h_200,r_4,w_200/v1451963719/o2suvlok9jctyblpcdkx.ai', 'http://res.cloudinary.com/skill-match/image/upload/c_fill,g_face,h_050,r_23,w_050/v1451963719/o2suvlok9jctyblpcdkx.ai', False, '', 19)
+DEBUG 2016-01-04 19:15:27,348 utils (0.001) INSERT INTO "django_admin_log" ("action_time", "user_id", "content_type_id", "object_id", "object_repr", "action_flag", "change_message") VALUES ('2016-01-05T03:15:27.345640+00:00'::timestamptz, 1, 15, '19', 'peterflynn', 2, 'Changed avatar.') RETURNING "django_admin_log"."id"; args=(datetime.datetime(2016, 1, 5, 3, 15, 27, 345640, tzinfo=<UTC>), 1, 15, '19', 'peterflynn', 2, 'Changed avatar.')
+DEBUG 2016-01-04 19:15:27,411 utils (0.001) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."expire_date" > '2016-01-05T03:15:27.403239+00:00'::timestamptz AND "django_session"."session_key" = 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd'); args=(datetime.datetime(2016, 1, 5, 3, 15, 27, 403239, tzinfo=<UTC>), 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd')
+DEBUG 2016-01-04 19:15:27,450 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" = 1; args=(1,)
+DEBUG 2016-01-04 19:15:27,486 utils (0.001) SELECT COUNT(*) AS "__count" FROM "users_profile"; args=()
+DEBUG 2016-01-04 19:15:27,541 utils (0.001) SELECT "users_profile"."id", "users_profile"."user_id", "users_profile"."gender", "users_profile"."age", "users_profile"."avatar", "users_profile"."pic_url", "users_profile"."small_pic_url", "users_profile"."wants_texts", "users_profile"."phone_number", "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "users_profile" INNER JOIN "auth_user" ON ("users_profile"."user_id" = "auth_user"."id") ORDER BY "users_profile"."id" DESC; args=()
+DEBUG 2016-01-04 19:15:27,904 base Exception while resolving variable 'errors' in template 'admin/change_list.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'NoneType' object has no attribute 'errors'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'errors'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [errors] in 'None'
+DEBUG 2016-01-04 19:15:27,922 base Exception while resolving variable 'show' in template 'admin/change_list.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/context.py", line 77, in __getitem__
+    raise KeyError(key)
+KeyError: 'show'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 885, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(type(current), bit):
+AttributeError: type object 'RequestContext' has no attribute 'show'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'show'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [show] in "[{'None': None, 'csrf_token': <SimpleLazyObject: 'NRnuDtMWgxwRZlvJtqEebw42x255KnTd'>, 'False': False, 'True': True}]"
+DEBUG 2016-01-04 19:15:27,925 base Exception while resolving variable 'is_multipart' in template 'admin/change_list.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'NoneType' object has no attribute 'is_multipart'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'is_multipart'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_multipart] in 'None'
+DEBUG 2016-01-04 19:15:27,994 base Exception while resolving variable 'non_field_errors' in template 'admin/change_list.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'NoneType' object has no attribute 'non_field_errors'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'non_field_errors'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [non_field_errors] in 'None'
+DEBUG 2016-01-04 19:15:27,996 base Exception while resolving variable 'non_field_errors' in template 'admin/change_list.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'NoneType' object has no attribute 'non_field_errors'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'non_field_errors'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [non_field_errors] in 'None'
+DEBUG 2016-01-04 19:15:27,998 base Exception while resolving variable 'non_field_errors' in template 'admin/change_list.html'.
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 887, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'NoneType' object has no attribute 'non_field_errors'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'non_field_errors'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peterflynn/sandbox/skill-match-api/.direnv/python-3.5.0/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [non_field_errors] in 'None'
+DEBUG 2016-01-04 19:15:28,256 utils (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."expire_date" > '2016-01-05T03:15:28.247268+00:00'::timestamptz AND "django_session"."session_key" = 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd'); args=(datetime.datetime(2016, 1, 5, 3, 15, 28, 247268, tzinfo=<UTC>), 'wm8p0pe6p97bq4vpy5mg7g3k3ghap2jd')
+DEBUG 2016-01-04 19:15:28,295 utils (0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" = 1; args=(1,)

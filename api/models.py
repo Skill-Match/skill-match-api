@@ -70,7 +70,7 @@ def check_and_add_profile_image(sender, instance=None, created=False, **kwargs):
     """
     if instance.avatar:
         profile = Profile.objects.get(pk=instance.id)
-        if not instance.pic_url == profile.pic_url:
+        if not instance.avatar == profile.avatar:
             image = cloudinary.uploader.upload(instance.avatar)
             split_url = image['url'].partition('upload/')
             small_img_url = split_url[0] + split_url[1] + 'c_fill,g_face,h_050,r_23,w_050/' + split_url[2]
