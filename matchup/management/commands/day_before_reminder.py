@@ -1,7 +1,8 @@
 from datetime import timedelta, date, datetime
-from api.notifications import twenty_four_hour_notify
+
 from django.core.management import BaseCommand
 from matchup.models import Match
+from matchup.notifications import twenty_four_hour_notify
 
 
 class Command(BaseCommand):

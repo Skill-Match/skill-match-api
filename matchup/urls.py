@@ -1,13 +1,11 @@
-from api import views as api_views
-from api.views import CreateUser, ListUsers, ListCreateMatches, ListParks, \
+from django.conf.urls import url
+from matchup import views as api_views
+from matchup.views import CreateUser, ListUsers, ListCreateMatches, ListParks, \
     CreateFeedbacks, DetailPark, DetailUpdateMatch, \
     DetailUpdateFeedback, DetailUpdateUser,  \
     JoinMatch, DeclineMatch, ConfirmMatch, ObtainAuthToken, \
     ListCreateCourts, LeaveMatch, ChallengeCreateMatch, DetailUpdateCourt, \
     DetailUpdateProfile
-
-from django.conf.urls import url, patterns
-from rest_framework.authtoken import views
 
 urlpatterns = (
     url(r'^users/$', ListUsers.as_view(), name='api_list_users'),
