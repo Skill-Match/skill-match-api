@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 
 from django.db import models
+from matchup.models import Feedback
 
 
 class Profile(models.Model):
@@ -58,3 +59,40 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class Skill(models.Model):
+    """
+    Skill process:
+    1. Command calls for calculations on skill level for all players.
+
+    Relationships:
+    1. player(User)
+    """
+    player = models.ForeignKey(User)
+    sport = models.CharField(max_length=40)
+    skill = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
+    sportsmanship = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
+    punctuality = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
+    num_feedbacks = models.IntegerField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True, null=True)
+
+    def __str__(self):
+        return "{}'s {} skill: {}".format(self.player.username, self.sport,
+                                          self.skill)
+
+    def calculate_skills(self):
+        feedbacks = Feedback.objects.filter(match__sport=self.sport).\
+            filter(player=self.player)
+        skill_total = 0
+        sportsmanship_total = 0
+        count = 0
+        for feedback in feedbacks:
+            skill_total += feedback.skill
+            sportsmanship_total += feedback.sportsmanship
+            count += 1
+        self.skill = skill_total / count
+        self.sportsmanship = sportsmanship_total / count
+        self.num_feedbacks = count
+        self.save()

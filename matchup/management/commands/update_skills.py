@@ -1,7 +1,8 @@
 from datetime import timedelta, datetime
 from api.calculations import calculate_skills
 from django.core.management import BaseCommand
-from matchup.models import Feedback, Skill
+from matchup.models import Feedback
+from users.models import Skill
 
 
 class Command(BaseCommand):

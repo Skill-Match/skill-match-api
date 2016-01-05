@@ -1,5 +1,5 @@
 from django.contrib import admin
-from matchup.models import Feedback, Match, Park, Skill, HendersonPark, \
+from matchup.models import Feedback, Match, Park, HendersonPark, \
     Ammenity, Court
 
 
@@ -19,11 +19,6 @@ class MatchAdmin(admin.ModelAdmin):
 class FeedbackAdmin(admin.ModelAdmin):
     list_display = ('id', 'reviewer', 'player', 'match', 'skill',
                     'sportsmanship', 'availability')
-
-@admin.register(Skill)
-class SkillAdmin(admin.ModelAdmin):
-    list_display = ('id', 'player', 'sport', 'skill', 'sportsmanship',
-                    'num_feedbacks')
 
 @admin.register(HendersonPark)
 class HendersonParkAdmin(admin.ModelAdmin):

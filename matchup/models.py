@@ -174,28 +174,6 @@ class Feedback(models.Model):
                                                   self.skill)
 
 
-class Skill(models.Model):
-    """
-    Skill process:
-    1. Command calls for calculations on skill level for all players.
-
-    Relationships:
-    1. player(User)
-    """
-    player = models.ForeignKey(User)
-    sport = models.CharField(max_length=40)
-    skill = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
-    sportsmanship = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
-    punctuality = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
-    num_feedbacks = models.IntegerField(null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateField(auto_now=True, null=True)
-
-    def __str__(self):
-        return "{}'s {} skill: {}".format(self.player.username, self.sport,
-                                          self.skill)
-
-
 class Court(models.Model):
     park = models.ForeignKey(Park, null=True, blank=True)
     sport = models.CharField(max_length=25, choices=SPORT_CHOICES)

@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User
-from matchup.models import Park, Match, Feedback, Skill, Court
+from matchup.models import Park, Match, Feedback, Court
 from rest_framework import serializers
 from rest_framework.relations import StringRelatedField
-from users.models import Profile
+from users.models import Profile, Skill
 
 
 # USER RELATED SERIALIZERS
