@@ -15,8 +15,16 @@ class UserTests(APITestCase):
         Profile.objects.create(user=self.user, gender='Male', age="30's",
                                wants_texts=True)
 
-    def test_create_token(self):
+    def test_created_token(self):
         self.assertEqual(hasattr(self.user, 'auth_token'), True)
+
+    def test_obtain_auth_token(self):
+        data = {"username": self.user.username, "password": 'password'}
+        url = reverse('api_obtain_auth_token')
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['username'], self.user.username)
+        self.assertEqual(response.data['user_id'], self.user.id)
 
     def test_list_users(self):
         self.client.force_authenticate(user=self.user)
@@ -57,20 +65,21 @@ class ParkTests(APITestCase):
         self.user = User.objects.create_user(username='joe',
                                              email='test@test.com',
                                              password='password',)
+        Profile.objects.create(user=self.user, gender='Male', age="20's",
+                               wants_texts=False, phone_number="5082693675")
+
         self.park = Park.objects.create(name='Test Park',
                                         rating=4.0,
                                         url="www.testpark.com",
                                         image_url='www.imageurl.com',
                                         rating_img_url='www.rating.com',
-                                        rating_img_url_small='www.ratingimg.com',
+                                        rating_img_url_small='www.ratimg.com',
                                         city='Boston',
                                         state_code='MA',
                                         display_address1='10 Happy St.',
                                         display_address2='Downtown',
                                         display_address3='Boston, MA 02121',
                                         postal_code='89148')
-        Profile.objects.create(user=self.user, gender='Male', age="20's",
-                               wants_texts=False, phone_number="5082693675")
 
     def test_list_parks(self):
         url = reverse('api_list_parks')
@@ -175,8 +184,7 @@ class FeedbackTests(APITestCase):
                                           sport='Tennis',
                                           skill_level=80,
                                           date='2015-12-22',
-                                          time='18:23',
-                                          )
+                                          time='18:23',)
         self.match.players.add(self.user)
         self.match.players.add(self.user2)
         self.match.save()
@@ -184,7 +192,7 @@ class FeedbackTests(APITestCase):
     def test_create_feedback(self):
         self.client.force_authenticate(user=self.user)
         url = reverse('api_create_feedback')
-        data = {'match': 1, 'skill': 50, 'sportsmanship': 90,
+        data = {'match': self.match.id, 'skill': 50, 'sportsmanship': 90,
                 'punctuality': 'On Time', 'availability': 5}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -195,7 +203,7 @@ class FeedbackTests(APITestCase):
     def test_create_feeback_player(self):
         self.client.force_authenticate(user=self.user)
         url = reverse('api_create_feedback')
-        data = {'match': 1, 'skill': 50, 'sportsmanship': 90,
+        data = {'match': self.match.id, 'skill': 50, 'sportsmanship': 90,
                 'punctuality': 'On Time', 'availability': 5,
                 'player': self.user2.id}
         response = self.client.post(url, data, format='json')
@@ -204,6 +212,7 @@ class FeedbackTests(APITestCase):
         self.assertEqual(response.data['skill'], 50)
         self.assertEqual(response.data['punctuality'], 'On Time')
         self.assertEqual(response.data['player'], self.user2.id)
+
 
 class CourtTests(APITestCase):
     def setUp(self):

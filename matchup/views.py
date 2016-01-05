@@ -13,7 +13,7 @@ from matchup.exceptions import OneFeedbackAllowed, SelfSignUp, \
 from matchup.models import Park, Match, Feedback, Court
 from matchup.notifications import join_match_notify, confirm_match_notify, \
     decline_match_notify, leave_match_notify, challenge_declined_notify, \
-    challenge_accepted_notify
+    challenge_accepted_notify, create_match_notify
 from matchup.serializers import UserSerializer, ParkSerializer, MatchSerializer,\
     FeedbackSerializer, ChallengerMatchSerializer, \
     ProfileSerializer, CourtSerializer, ListParksSerializer
@@ -152,7 +152,8 @@ class ListCreateMatches(generics.ListCreateAPIView):
         else:
             img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451804013/trophy_200_cnaras.jpg"
 
-        serializer.save(creator=user, img_url=img_url)
+        match = serializer.save(creator=user, img_url=img_url)
+        create_match_notify(match)
 
     def get_queryset(self):
         """Querysets:
