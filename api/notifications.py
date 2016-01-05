@@ -13,6 +13,7 @@ def send_email(email, subject, html):
     message.set_html(html)
     message.set_from(sender)
     status, msg = sg.send(message)
+    debug = 'true'
 
 
 def send_text(phone_number, body):

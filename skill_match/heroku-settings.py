@@ -23,12 +23,18 @@ STATICFILES_DIR = (
     os.path.join(BASE_DIR, 'static')
 )
 
-CONSUMER_KEY = os.environ['CONSUMER_KEY']
-CONSUMER_SECRET = os.environ['CONSUMER_SECRET']
-TOKEN = os.environ['TOKEN']
-TOKEN_SECRET = os.environ['TOKEN_SECRET']
+YELP_CONSUMER_KEY = os.environ['YELP_CONSUMER_KEY']
+YELP_CONSUMER_SECRET = os.environ['YELP_CONSUMER_SECRET']
+YELP_TOKEN = os.environ['YELP_TOKEN']
+YELP_TOKEN_SECRET = os.environ['YELP_TOKEN_SECRET']
 
-# SENDGRID_KEY = os.environ['SENDGRID_KEY']
+SENDGRID_KEY = os.environ['SENDGRID_KEY']
 
-# TWILIO_SID = os.environ['TWILIO_SID']
-# TWILIO_TOKEN = os.environ['TWILIO_TOKEN']
+TWILIO_SID = os.environ['TWILIO_SID']
+TWILIO_TOKEN = os.environ['TWILIO_TOKEN']
+
+cloudinary.config(
+  cloud_name=os.environ['CLOUD_NAME'],
+  api_key=os.environ['CLOUDINARY_KEY'],
+  api_secret=os.environ['CLOUDINARY_SECRET']
+)

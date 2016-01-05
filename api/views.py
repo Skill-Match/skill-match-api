@@ -26,8 +26,8 @@ from rest_framework.decorators import api_view
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from skill_match.settings import CONSUMER_KEY, CONSUMER_SECRET, TOKEN, \
-    TOKEN_SECRET
+from skill_match.settings import YELP_CONSUMER_KEY, YELP_CONSUMER_SECRET, YELP_TOKEN, \
+    YELP_TOKEN_SECRET
 from users.models import Profile
 from rest_framework import parsers, renderers
 from rest_framework.authtoken.models import Token
@@ -496,18 +496,18 @@ def hello_world(request):
     """
     url = 'http://api.yelp.com/v2/search/' + '?location=89148, NV &category_filter=parks'
 
-    consumer = oauth2.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
+    consumer = oauth2.Consumer(YELP_CONSUMER_KEY, YELP_TOKEN_SECRET)
     oauth_request = oauth2.Request(method="GET", url=url)
 
     oauth_request.update(
         {
             'oauth_nonce': oauth2.generate_nonce(),
             'oauth_timestamp': oauth2.generate_timestamp(),
-            'oauth_token': TOKEN,
-            'oauth_consumer_key': CONSUMER_KEY
+            'oauth_token': YELP_TOKEN,
+            'oauth_consumer_key': YELP_CONSUMER_SECRET
         }
     )
-    token = oauth2.Token(TOKEN, TOKEN_SECRET)
+    token = oauth2.Token(YELP_TOKEN, YELP_TOKEN_SECRET)
     oauth_request.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, token)
     signed_url = oauth_request.to_url()
     response = requests.get(signed_url)

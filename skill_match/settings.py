@@ -20,7 +20,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'pna##ozdjc%*ak4)g+64ec553v8%)1rky82r^mhvbr9%*oqsn6'
+# SECRET_KEY = 'pna##ozdjc%*ak4)g+64ec553v8%)1rky82r^mhvbr9%*oqsn6'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -178,7 +179,7 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['file', 'console', 'mailer'],
+            'handlers': ['file',],
             'propagate': True,
             'level':'DEBUG',
         },
@@ -193,18 +194,18 @@ LOGGING = {
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
-CONSUMER_KEY="J_lQomBe-LKch6QM6lp_4Q"
-CONSUMER_SECRET="uvPNl74cDNK23h9KeWWDPGCJ0rA"
-TOKEN="Dxa-Yr4Zbf7dG52CHqxYAc5KpgDrdX62"
-TOKEN_SECRET="8eJm_JtFMSkmt9hAWMYRp-uew3o"
+YELP_CONSUMER_KEY = os.environ['YELP_CONSUMER_KEY']
+YELP_CONSUMER_SECRET = os.environ['YELP_CONSUMER_SECRET']
+YELP_TOKEN = os.environ['YELP_TOKEN']
+YELP_TOKEN_SECRET = os.environ['YELP_TOKEN_SECRET']
 
-SENDGRID_KEY="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"
+SENDGRID_KEY = os.environ['SENDGRID_KEY']
 
-TWILIO_SID="AC7abeb22b6d9775d7ccedb4dd79d780ec"
-TWILIO_TOKEN="1dfcc16a0490ce0cfa27d770bedf345d"
+TWILIO_SID = os.environ['TWILIO_SID']
+TWILIO_TOKEN = os.environ['TWILIO_TOKEN']
 
 cloudinary.config(
-  cloud_name = "skill-match",
-  api_key = "985923717251977",
-  api_secret = "41B79Ua7ppYqEx4iK-wafV53jAA"
+  cloud_name=os.environ['CLOUD_NAME'],
+  api_key=os.environ['CLOUDINARY_KEY'],
+  api_secret=os.environ['CLOUDINARY_SECRET']
 )
