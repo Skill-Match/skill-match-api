@@ -11,6 +11,7 @@ from api.serializers import UserSerializer, ParkSerializer, MatchSerializer,\
     FeedbackSerializer, ChallengerMatchSerializer, \
     ProfileSerializer, CourtSerializer, ListParksSerializer
 from django.contrib.auth.models import User
+from django.db.models import Count
 from django.shortcuts import render
 from geopy import Nominatim
 from matchup.models import Park, Match, Feedback, Court
@@ -126,7 +127,17 @@ class ListParks(generics.ListAPIView):
         latitude = self.request.query_params.get('lat', None)
         longitude = self.request.query_params.get('long', None)
         zip_code = self.request.query_params.get('zip', None)
+        search = self.request.query_params.get('search', None)
+        sport = self.request.query_params.get('sport', None)
+        courts = self.request.query_params.get('courts', None)
 
+        if search:
+            qs = qs.filter(name__icontains=search)
+        if sport:
+            sport = sport.title()
+            qs = qs.filter(court__sport=sport)
+        if courts:
+            qs = qs.annotate(count=Count('court')).exclude(count=0)
         if latitude and longitude:
             pnt = G('POINT(' + str(longitude) + ' ' + str(latitude) + ')', srid=4326)
         elif zip_code:
