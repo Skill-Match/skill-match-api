@@ -79,11 +79,6 @@ class DetailUpdateUser(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
 
 
-class DetailUpdateProfile(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-
-
 class ListParks(generics.ListAPIView):
     """Permissions: all"""
     queryset = Park.objects.all()

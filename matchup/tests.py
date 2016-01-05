@@ -46,10 +46,11 @@ class UserTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['username'], self.user.username)
         response = self.client.put(url, {'username': 'bob', 'email': 'email@email.com', 'password':
-                'pwd', 'profile': {'gender': "Male", 'age': "20's",
+                'pwd', 'profile': {'gender': "Male", 'age': "20's", "phone_number": "",
                                    'wants_texts': False}}, format='json')
         self.assertEqual(response.data['username'], 'bob')
         self.assertEqual(response.data['profile']['age'], "20's")
+
 
 class ParkTests(APITestCase):
     def setUp(self):
