@@ -38,3 +38,36 @@ cloudinary.config(
   api_key=os.environ['CLOUDINARY_KEY'],
   api_secret=os.environ['CLOUDINARY_SECRET']
 )
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(message)s'
+        }
+    },
+    'handlers': {
+        'mailer': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
+        'api': {
+            'handlers': ['console', 'mailer'],
+            'level': 'DEBUG',
+            'propagate': True
+        }
+    },
+}
