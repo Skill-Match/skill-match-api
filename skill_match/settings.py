@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'matchup',
     'users',
-    'api',
 ]
 
 MIDDLEWARE_CLASSES = [
