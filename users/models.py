@@ -1,9 +1,20 @@
 from cloudinary import CloudinaryImage
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
-
+from rest_framework.authtoken.models import Token
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from matchup.models import Feedback
+
+
+@receiver(post_save, sender=User)
+def create_user_token(sender, instance=None, created=False, **kwargs):
+    """
+        When User object is created, Token with 1to1 is created for that user.
+    """
+    if created:
+        Token.objects.create(user=instance)
 
 
 class Profile(models.Model):
@@ -96,6 +107,18 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+@receiver(post_save, sender=Profile)
+def add_profile_image(sender, instance=None, created=False, **kwargs):
+
+    if created:
+        if not instance.avatar:
+            if instance.gender == 'Female':
+                instance.avatar = CloudinaryImage("Woman_ibpgkk.png").image()
+            else:
+                instance.avatar = CloudinaryImage("Man_cqggt4.png").image()
+            instance.save()
 
 
 class Skill(models.Model):

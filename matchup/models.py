@@ -2,6 +2,10 @@ from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 
 #SPORT CHOICES for multiple models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from matchup.notifications import create_match_notify
+
 TENNIS = 'Tennis'
 BASKETBALL = 'Basketball'
 FOOTBALL = 'Football'
@@ -85,6 +89,8 @@ class Ammenity(models.Model):
         return self.name
 
 
+
+
 class Match(models.Model):
     """
     Process for Match:
@@ -129,6 +135,14 @@ class Match(models.Model):
     def __str__(self):
         return "{}'s {} match, match #{}".format(self.creator.username,
                                                  self.sport, self.id)
+
+
+@receiver(post_save, sender=Match)
+def send_email(sender, instance=None, created=False, **kwargs):
+
+    if created:
+        match = instance
+        create_match_notify(match)
 
 class Feedback(models.Model):
     """

@@ -24,6 +24,32 @@ def send_text(phone_number, body):
                                      body=body)
 
 
+def create_match_notify(match):
+
+    user_email = match.creator.email
+    park_name = match.park.name
+    sport = match.sport
+    date = match.date.strftime("%A %B, %d")
+    time = match.time.strftime("%I:%M %p")
+
+    body_message = "You have succesfully created a match. You want to " \
+                   "play {} at {} on {} at {}. We'll let you know if " \
+                   "someone joins your match!".format(sport, park_name,
+                                                      date, time)
+
+    sg = sendgrid.SendGridClient(SENDGRID_KEY)
+
+    message = sendgrid.Mail()
+    message.add_to(user_email)
+    message.set_subject(
+        'Hi from SkillMatch!'
+    )
+    message.set_html("<p> " + body_message + "</p>")
+    message.set_text(body_message)
+    message.set_from('SkillMatch <fredoflynn@gmail.com>')
+    status, msg = sg.send(message)
+
+
 def join_match_notify(match, joiner):
     creator = match.creator
     challenger = joiner
