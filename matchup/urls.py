@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from matchup import views as api_views
+from matchup import views as matchup_views
 from matchup.views import CreateUser, ListUsers, ListCreateMatches, ListParks, \
     CreateFeedbacks, DetailPark, DetailUpdateMatch, \
     DetailUpdateFeedback, DetailUpdateUser,  \
@@ -12,9 +12,8 @@ urlpatterns = (
     url(r'^users/create/$', CreateUser.as_view(), name='api_create_user'),
     url(r'^users/(?P<pk>\d+)/$', DetailUpdateUser.as_view(),
         name='api_detail_update_user'),
-    url(r'^profiles/(?P<pk>\d+)/$', DetailUpdateProfile.as_view(),
-        name='api_detail_update_user'),
-    url(r'^api-token-auth/$', ObtainAuthToken.as_view()),
+    url(r'^api-token-auth/$', ObtainAuthToken.as_view(),
+        name='api_obtain_auth_token'),
     url(r'^matches/$', ListCreateMatches.as_view(),
         name='api_list_create_matches'),
     url(r'^matches/challenge/$', ChallengeCreateMatch.as_view(),
@@ -38,5 +37,5 @@ urlpatterns = (
         name='api_detail_feedback'),
     url(r'^feedbacks/create/$', CreateFeedbacks.as_view(),
         name='api_create_feedback'),
-    url(r'^yelp/$', api_views.hello_world)
+    url(r'^yelp/$', matchup_views.hello_world)
 )

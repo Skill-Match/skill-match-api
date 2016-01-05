@@ -68,6 +68,13 @@ class UserSerializer(serializers.ModelSerializer):
         user.email = validated_data['email']
         user.password = validated_data['password']
         user.username = validated_data['username']
+        profile_data = validated_data.pop('profile')
+        user.profile.gender = profile_data['gender']
+        user.profile.age = profile_data['age']
+        user.profile.phone_number = profile_data['phone_number']
+        user.profile.wants_texts = profile_data['wants_texts']
+        user.profile.save()
+
         return user
 
 

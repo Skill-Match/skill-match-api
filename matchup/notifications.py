@@ -2,7 +2,6 @@ import sendgrid
 from skill_match.settings import SENDGRID_KEY, TWILIO_SID, TWILIO_TOKEN
 from twilio.rest import TwilioRestClient
 
-
 def send_email(email, subject, html):
     sender = 'SkillMatch <fredoflynn@gmail.com>'
     sg = sendgrid.SendGridClient(SENDGRID_KEY)

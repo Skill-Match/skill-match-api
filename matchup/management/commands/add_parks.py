@@ -61,6 +61,8 @@ class Command(BaseCommand):
                 park_rating = park['rating']
                 park_mobile_url = park['mobile_url']
                 park_image_url = park.get('image_url', None)
+                park_rating_img_url = park['rating_img_url']
+                park_rating_img_url_small = park['rating_img_url_small']
                 park_id = park['id']
                 park_city = park['location']['city']
                 park_yelp_url = park['url']
@@ -70,6 +72,8 @@ class Command(BaseCommand):
                 park_state_code = park['location']['state_code']
                 park = Park.objects.create(
                     rating=park_rating,
+                    rating_img_url=park_rating_img_url,
+                    rating_img_url_small=park_rating_img_url_small,
                     mobile_url=park_mobile_url,
                     name=park_name,
                     yelp_id=park_id,

@@ -144,6 +144,7 @@ def send_email(sender, instance=None, created=False, **kwargs):
         match = instance
         create_match_notify(match)
 
+
 class Feedback(models.Model):
     """
     Feedback process:
