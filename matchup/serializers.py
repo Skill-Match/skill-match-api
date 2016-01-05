@@ -1,3 +1,4 @@
+import cloudinary
 from django.contrib.auth.models import User
 from matchup.models import Park, Match, Feedback, Court
 from rest_framework import serializers

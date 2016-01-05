@@ -38,11 +38,29 @@ class Profile(models.Model):
                               default=MALE)
     age = models.CharField(max_length=8, choices=AGE_CHOICES)
     avatar = CloudinaryField('image', null=True, blank=True)
-    pic_url = models.URLField(max_length=300, default='http://res.cloudinary.com/skill-match/image/upload/c_scale,w_200/v1451856958/Man_cqggt4.png')
-    small_pic_url = models.URLField(max_length=300, default='http://res.cloudinary.com/skill-match/image/upload/c_scale,w_50/v1451856958/Man_cqggt4.png')
+    # pic_url = models.URLField(max_length=300, default='http://res.cloudinary.com/skill-match/image/upload/c_scale,w_200/v1451856958/Man_cqggt4.png')
+    # small_pic_url = models.URLField(max_length=300, default='http://res.cloudinary.com/skill-match/image/upload/c_scale,w_50/v1451856958/Man_cqggt4.png')
     wants_texts = models.BooleanField(default=False)
     phone_number = models.CharField(null=True, blank=True, max_length=15)
 
+    @property
+    def pic_url(self):
+        url = self.avatar.url
+        if url == 'http://res.cloudinary.com/skill-match/image/upload/v1451856958/Man_cqggt4.png':
+            return 'http://res.cloudinary.com/skill-match/image/upload/c_scale,w_200/v1451856958/Man_cqggt4.png'
+        elif url == 'http://res.cloudinary.com/skill-match/image/upload/v1451856777/Woman_ibpgkk.png':
+            return 'http://res.cloudinary.com/skill-match/image/upload/c_scale,w_200/v1451856777/Woman_ibpgkk.png'
+        else:
+            split_url = url.partition('upload/')
+            img_url = split_url[0] + split_url[1] + 'bo_1px_solid_rgb:747680,c_fill,g_face,h_200,r_4,w_200/' + split_url[2]
+            return img_url
+
+    @property
+    def small_pic_url(self):
+        url = self.avatar.url
+        split_url = url.partition('upload/')
+        img_url = split_url[0] + split_url[1] + 'c_fill,g_face,h_050,r_23,w_050/' + split_url[2]
+        return img_url
 
     @property
     def sportsmanship(self):
