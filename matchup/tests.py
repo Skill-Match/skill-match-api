@@ -1,11 +1,16 @@
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from matchup.models import Match, Park, Feedback
+from matchup.models import Match, Park, Feedback, Court
 from rest_framework import status
 from rest_framework.test import APITestCase
 from users.models import Profile
+from django.contrib.gis.geos import GEOSGeometry as G
 
+
+LAS_VEGAS_LOC = G('POINT(-115.13983 36.169941)', srid=4326)
+BOSTON_LOC = G('POINT(-71.05888 42.360082)', srid=4326)
+SHARON_MA_LOC = G('POINT(-71.178624 42.123650)', srid=4326)
 
 class UserTests(APITestCase):
     def setUp(self):
@@ -79,15 +84,66 @@ class ParkTests(APITestCase):
                                         display_address1='10 Happy St.',
                                         display_address2='Downtown',
                                         display_address3='Boston, MA 02121',
-                                        postal_code='89148')
+                                        postal_code='02121',
+                                        location=BOSTON_LOC)
+        self.park2 = Park.objects.create(name='Test Park2',
+                                         rating=3.0,
+                                         url="www.testpark2.com",
+                                         image_url='www.imageurl2.com',
+                                         rating_img_url='www.rating2.com',
+                                         rating_img_url_small='www.rtimg2.com',
+                                         city='Las Vegas',
+                                         state_code='NV',
+                                         display_address1='12 Happy St.',
+                                         display_address2='Suburb',
+                                         display_address3='Las Vegas, NV',
+                                         postal_code='89148',
+                                         location=LAS_VEGAS_LOC)
+        self.park3 = Park.objects.create(name='Test Park3',
+                                         rating=5.0,
+                                         url="www.testpark3.com",
+                                         image_url='www.imageurl3.com',
+                                         rating_img_url='www.rating3.com',
+                                         rating_img_url_small='www.rtimg3.com',
+                                         city='Sharon',
+                                         state_code='MA',
+                                         display_address1='16 High St.',
+                                         display_address2='Suburb',
+                                         display_address3='Sharon, MA 02067',
+                                         postal_code='02067',
+                                         location=SHARON_MA_LOC)
+
+        self.court = Court.objects.create(park=self.park, sport="Tennis")
+        self.court2 = Court.objects.create(park=self.park3, sport="Basketball")
 
     def test_list_parks(self):
+        # Not sure how to test that parks are coming back in the right order
         url = reverse('api_list_parks')
         response = self.client.get(url, {}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 1)
-        response_park_list = response.data['results'][0]
-        self.assertEqual(response_park_list['name'], self.park.name)
+        self.assertEqual(response.data['count'], 3)
+        url2 = reverse('api_list_parks') + '?search=park2'
+        response2 = self.client.get(url2, {}, format='json')
+        response_park2 = response2.data['results'][0]
+        self.assertEqual(response2.status_code, status.HTTP_200_OK)
+        self.assertEqual(response_park2['name'], self.park2.name)
+        url3 = reverse('api_list_parks') + '?sport=tennis'
+        response3 = self.client.get(url3, {}, format='json')
+        response_park3 = response3.data['results'][0]
+        self.assertEqual(response3.status_code, status.HTTP_200_OK)
+        self.assertEqual(response_park3['name'], self.park.name)
+        url4 = reverse('api_list_parks') + '?courts=True'
+        response4 = self.client.get(url4, {}, format='json')
+        self.assertEqual(response4.status_code, status.HTTP_200_OK)
+        self.assertEqual(response4.data['count'], 2)
+        url5 = reverse('api_list_parks') + '?zip_code=02112'
+        response5 = self.client.get(url5, {}, format='json')
+        self.assertEqual(response5.status_code, status.HTTP_200_OK)
+        self.assertEqual(response5.data['count'], 3)
+        url6 = reverse('api_list_parks') + '?lat=36.169941&long=-115.139830'
+        response6 = self.client.get(url6, {}, format='json')
+        self.assertEqual(response6.status_code, status.HTTP_200_OK)
+        self.assertEqual(response6.data['count'], 3)
 
 
 class MatchTests(APITestCase):
