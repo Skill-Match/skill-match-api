@@ -46,9 +46,9 @@ class Profile(models.Model):
     @property
     def pic_url(self):
         url = self.avatar.url
-        if url == 'http://res.cloudinary.com/skill-match/image/upload/v1451856958/Man_cqggt4.png':
+        if url == 'http://res.cloudinary.com/skill-match/image/upload/v1/image/upload/%3Cimg%20src%3D%22http://res.cloudinary.com/skill-match/image/upload/Man_cqggt4.png"/>':
             return 'http://res.cloudinary.com/skill-match/image/upload/c_scale,w_200/v1451856958/Man_cqggt4.png'
-        elif url == 'http://res.cloudinary.com/skill-match/image/upload/v1451856777/Woman_ibpgkk.png':
+        elif url == 'http://res.cloudinary.com/skill-match/image/upload/v1/image/upload/%3Cimg%20src%3D%22http://res.cloudinary.com/skill-match/image/upload/Woman_ibpgkk.png"/>':
             return 'http://res.cloudinary.com/skill-match/image/upload/c_scale,w_200/v1451856777/Woman_ibpgkk.png'
         else:
             split_url = url.partition('upload/')
@@ -58,6 +58,10 @@ class Profile(models.Model):
     @property
     def small_pic_url(self):
         url = self.avatar.url
+        if url == 'http://res.cloudinary.com/skill-match/image/upload/v1/image/upload/%3Cimg%20src%3D%22http://res.cloudinary.com/skill-match/image/upload/Man_cqggt4.png"/>':
+            return 'http://res.cloudinary.com/skill-match/image/upload/c_scale,w_50/v1451856777/Man_cqggt4.png'
+        elif url == 'http://res.cloudinary.com/skill-match/image/upload/v1/image/upload/%3Cimg%20src%3D%22http://res.cloudinary.com/skill-match/image/upload/Woman_ibpgkk.png"/>':
+            return 'http://res.cloudinary.com/skill-match/image/upload/c_scale,w_50/v1451856777/Woman_ibpgkk.png'
         split_url = url.partition('upload/')
         img_url = split_url[0] + split_url[1] + 'c_fill,g_face,h_050,r_23,w_050/' + split_url[2]
         return img_url
