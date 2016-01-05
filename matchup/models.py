@@ -34,8 +34,6 @@ class Park(models.Model):
     rating_img_url = models.URLField(max_length=300, null=True, blank=True)
     rating_img_url_small = models.URLField(max_length=300, null=True, blank=True)
     name = models.CharField(max_length=200)
-    yelp_id = models.CharField(null=True, blank=True, max_length=100)
-    mobile_url = models.URLField(null=True, blank=True)
     url = models.URLField(null=True, blank=True)
     image_url = models.URLField(null=True, blank=True)
     city = models.CharField(max_length=50, null=True, blank=True)

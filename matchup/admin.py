@@ -5,7 +5,7 @@ from matchup.models import Feedback, Match, Park, HendersonPark, \
 
 @admin.register(Park)
 class ParkAdmin(admin.ModelAdmin):
-    list_display = ('id', 'yelp_id', 'name','rating', 'url',
+    list_display = ('id', 'name','rating', 'url',
                     'display_address1', 'display_address2', 'display_address3',
                     'postal_code', 'location')
 

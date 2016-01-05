@@ -58,6 +58,16 @@ class ParkTests(APITestCase):
                                              email='test@test.com',
                                              password='password',)
         self.park = Park.objects.create(name='Test Park',
+                                        rating=4.0,
+                                        url="www.testpark.com",
+                                        image_url='www.imageurl.com',
+                                        rating_img_url='www.rating.com',
+                                        rating_img_url_small='www.ratingimg.com',
+                                        city='Boston',
+                                        state_code='MA',
+                                        display_address1='10 Happy St.',
+                                        display_address2='Downtown',
+                                        display_address3='Boston, MA 02121',
                                         postal_code='89148')
         Profile.objects.create(user=self.user, gender='Male', age="20's",
                                wants_texts=False, phone_number="5082693675")

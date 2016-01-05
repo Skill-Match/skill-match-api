@@ -4,8 +4,7 @@ from matchup.views import CreateUser, ListUsers, ListCreateMatches, ListParks, \
     CreateFeedbacks, DetailPark, DetailUpdateMatch, \
     DetailUpdateFeedback, DetailUpdateUser,  \
     JoinMatch, DeclineMatch, ConfirmMatch, ObtainAuthToken, \
-    ListCreateCourts, LeaveMatch, ChallengeCreateMatch, DetailUpdateCourt, \
-    DetailUpdateProfile
+    ListCreateCourts, LeaveMatch, ChallengeCreateMatch, DetailUpdateCourt
 
 urlpatterns = (
     url(r'^users/$', ListUsers.as_view(), name='api_list_users'),
