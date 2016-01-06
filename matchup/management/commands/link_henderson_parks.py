@@ -8,9 +8,9 @@ class Command(BaseCommand):
         parks = Park.objects.filter(city__icontains='henderson')
         for park in parks:
             h_park = HendersonPark.objects.filter(name__icontains=park.name)
-            if not h_park.park:
-                if len(h_park) == 1:
-                    h_park = h_park[0]
+            if len(h_park) == 1:
+                h_park = h_park[0]
+                if not h_park.park:
                     h_park.park = park
                     h_park.save()
                     count += 1
