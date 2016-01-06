@@ -180,25 +180,27 @@ class ListCreateMatches(generics.ListCreateAPIView):
         :return:
         """
         user = self.request.user
-        # sport = serializer.initial_data['sport']
+        sport = serializer.initial_data['sport']
 
-        # if sport == 'Tennis':
-        #     img_url = TENNIS_IMG_URL
-        # elif sport == 'Basketball':
-        #     img_url = BASKETBALL_IMG_URL
-        # elif sport == 'Football':
-        #     img_url = FOOTBALL_IMG_URL
-        # elif sport == 'Soccer':
-        #     img_url = SOCCER_IMG_URL
-        # elif sport == 'Volleyball':
-        #     img_url = VOLLEYBALL_IMG_URL
-        # elif sport == 'Pickleball':
-        #     img_url = PICKLEBALL_IMG_URL
-        # else:
-        #     img_url = TROPHY_IMG_URL
+        if sport == 'Tennis':
+            img_url = TENNIS_IMG_URL
+        elif sport == 'Basketball':
+            img_url = BASKETBALL_IMG_URL
+        elif sport == 'Football':
+            img_url = FOOTBALL_IMG_URL
+        elif sport == 'Soccer':
+            img_url = SOCCER_IMG_URL
+        elif sport == 'Volleyball':
+            img_url = VOLLEYBALL_IMG_URL
+        elif sport == 'Pickleball':
+            img_url = PICKLEBALL_IMG_URL
+        else:
+            img_url = TROPHY_IMG_URL
 
-        match = serializer.save(creator=user)
-        Court.objects.create(park=match.park, sport=match.sport)
+        match = serializer.save(creator=user, img_url=img_url)
+        already_exists = Court.objects.filter(park=match.park, sport=match.sport)
+        if not already_exists:
+            Court.objects.create(park=match.park, sport=match.sport)
         create_match_notify(match)
 
     def get_queryset(self):
