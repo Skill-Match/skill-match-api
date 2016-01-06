@@ -184,7 +184,6 @@ class Court(models.Model):
     sport = models.CharField(max_length=25, choices=SPORT_CHOICES)
     other = models.CharField(max_length=25, null=True, blank=True)
     num_courts = models.IntegerField(null=True, blank=True)
-    #change img_url to null=False when refactor
     img_url = models.URLField(default=DEFAULT_IMG)
     location = models.PointField(null=True, blank=True)
     ranking = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)

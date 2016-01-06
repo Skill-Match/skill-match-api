@@ -14,9 +14,9 @@ from matchup.models import Park, Match, Feedback, Court
 from matchup.notifications import join_match_notify, confirm_match_notify, \
     decline_match_notify, leave_match_notify, challenge_declined_notify, \
     challenge_accepted_notify, create_match_notify
-from matchup.serializers import UserSerializer, ParkSerializer, MatchSerializer,\
-    FeedbackSerializer, ChallengerMatchSerializer, \
-    ProfileSerializer, CourtSerializer, ListParksSerializer
+from matchup.serializers import UserSerializer, ParkSerializer, \
+    MatchSerializer, FeedbackSerializer, ChallengerMatchSerializer, \
+    CourtSerializer, ListParksSerializer
 from rest_framework import generics
 from rest_framework import parsers, renderers
 from rest_framework.authtoken.models import Token
@@ -25,12 +25,38 @@ from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from skill_match.settings import YELP_CONSUMER_KEY, YELP_CONSUMER_SECRET, YELP_TOKEN, \
-    YELP_TOKEN_SECRET
-from users.models import Profile
+from skill_match.settings import YELP_CONSUMER_KEY, YELP_CONSUMER_SECRET, \
+    YELP_TOKEN, YELP_TOKEN_SECRET
 
 logger = logging.getLogger(__name__)
 
+TENNIS_IMG_URL = "http://res.cloudinary.com/skill-match/image/upload/" \
+                 "c_scale,w_200/v1451803727/1451824644_tennis_jegpea.png"
+BASKETBALL_IMG_URL = "http://res.cloudinary.com/skill-match/image/upload/" \
+                     "c_scale,w_200/v1451811954/basketball_lxzgmw.png"
+FOOTBALL_IMG_URL = "http://res.cloudinary.com/skill-match/image/upload/" \
+                   "c_scale,w_200/v1451812093/American-Football_vbp5ww.png"
+SOCCER_IMG_URL = "http://res.cloudinary.com/skill-match/image/upload/" \
+                 "c_scale,w_200/v1451803724/1451824570_soccer_mwvtwy.png"
+VOLLEYBALL_IMG_URL = "http://res.cloudinary.com/skill-match/image/upload/" \
+                     "c_scale,w_200/v1451803790/1451824851_" \
+                     "volleyball_v2pu0m.png"
+PICKLEBALL_IMG_URL = "http://res.cloudinary.com/skill-match/image/upload/" \
+                     "c_scale,w_200/v1451803795/1451824990_" \
+                     "table_tennis_uqv436.png"
+TROPHY_IMG_URL = "http://res.cloudinary.com/skill-match/image/upload/" \
+                "v1451804013/trophy_200_cnaras.jpg"
+
+class SmallPagination(PageNumberPagination):
+    page_size = 10
+
+
+#################### USER RELATED VIEWS ############################
+#
+#
+#
+#
+###################### USER ########################################
 
 
 class ObtainAuthToken(APIView):
@@ -54,10 +80,6 @@ class ObtainAuthToken(APIView):
                          'user_id': user_id})
 
 
-class SmallPagination(PageNumberPagination):
-    page_size = 10
-
-
 class ListUsers(generics.ListAPIView):
     """
     Permissions:
@@ -77,6 +99,14 @@ class DetailUpdateUser(generics.RetrieveUpdateDestroyAPIView):
     """Permissions: User only or ADMIN"""
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+#################### PARK RELATED VIEWS ############################
+#
+#
+#
+#
+#################### PARK ##########################################
 
 
 class ListParks(generics.ListAPIView):
@@ -122,6 +152,21 @@ class ListParks(generics.ListAPIView):
         return by_distance
 
 
+class DetailPark(generics.RetrieveAPIView):
+    """ Permissions: all
+    """
+    queryset = Park.objects.all()
+    serializer_class = ParkSerializer
+
+
+#################### MATCH RELATED VIEWS ############################
+#
+#
+#
+#
+################### MATCH ###########################################
+
+
 class ListCreateMatches(generics.ListCreateAPIView):
     """Permissions: logged in user or admin"""
     queryset = Match.objects.all().order_by('-created_at')
@@ -138,19 +183,19 @@ class ListCreateMatches(generics.ListCreateAPIView):
         sport = serializer.initial_data['sport']
 
         if sport == 'Tennis':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803727/1451824644_tennis_jegpea.png"
+            img_url = TENNIS_IMG_URL
         elif sport == 'Basketball':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451811954/basketball_lxzgmw.png"
+            img_url = BASKETBALL_IMG_URL
         elif sport == 'Football':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451812093/American-Football_vbp5ww.png"
+            img_url = FOOTBALL_IMG_URL
         elif sport == 'Soccer':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803724/1451824570_soccer_mwvtwy.png"
+            img_url = SOCCER_IMG_URL
         elif sport == 'Volleyball':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803790/1451824851_volleyball_v2pu0m.png"
+            img_url = VOLLEYBALL_IMG_URL
         elif sport == 'Pickleball':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803795/1451824990_table_tennis_uqv436.png"
+            img_url = PICKLEBALL_IMG_URL
         else:
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451804013/trophy_200_cnaras.jpg"
+            img_url = TROPHY_IMG_URL
 
         match = serializer.save(creator=user, img_url=img_url)
         create_match_notify(match)
@@ -209,79 +254,26 @@ class ChallengeCreateMatch(generics.CreateAPIView):
         challenged = User.objects.get(pk=challenge_id)
         if challenged == user:
             raise SelfSignUp
-        players = [user, challenged]
+        # players = [user, challenged]
         sport = serializer.initial_data['sport']
 
         if sport == 'Tennis':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803727/1451824644_tennis_jegpea.png"
+            img_url = TENNIS_IMG_URL
         elif sport == 'Basketball':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451811954/basketball_lxzgmw.png"
+            img_url = BASKETBALL_IMG_URL
         elif sport == 'Football':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451812093/American-Football_vbp5ww.png"
+            img_url = FOOTBALL_IMG_URL
         elif sport == 'Soccer':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803724/1451824570_soccer_mwvtwy.png"
+            img_url = SOCCER_IMG_URL
         elif sport == 'Volleyball':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803790/1451824851_volleyball_v2pu0m.png"
+            img_url = VOLLEYBALL_IMG_URL
         elif sport == 'Pickleball':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803795/1451824990_table_tennis_uqv436.png"
+            img_url = PICKLEBALL_IMG_URL
         else:
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451804013/trophy_200_cnaras.jpg"
+            img_url = TROPHY_IMG_URL
 
-        serializer.save(creator=user, players=players, is_open=False,
+        serializer.save(creator=user, challenged=challenged, is_open=False,
                         is_challenge=True, img_url=img_url)
-
-
-class CreateFeedbacks(generics.CreateAPIView):
-    """Logged in user only, *** must be player in the match also ***"""
-    queryset = Feedback.objects.all()
-    serializer_class = FeedbackSerializer
-
-    def perform_create(self, serializer):
-        """If no player, Get match_id from serializer. Find Match object with match_id. Use Match
-            object to find player and reviewer from the match. (Reviewer =
-            logged in user.
-          If player, use player_id to find User to be reviewed
-          Error if they already provided Feedback for that player.
-        """
-        reviewer = self.request.user
-        match_id = serializer.initial_data['match']
-        match = Match.objects.get(pk=match_id)
-        player_id = serializer.initial_data.get('player', None)
-        if player_id:
-
-            # if id for player does not match a user , error
-            existing_user = User.objects.filter(id=player_id)
-            if not existing_user:
-                raise NonExistingPlayer
-
-            player = User.objects.get(pk=player_id)
-            existing_feedback = match.feedback_set.filter(reviewer=reviewer, player=player)
-            if existing_feedback:
-                raise OneFeedbackAllowed
-            serializer.save(player=player, reviewer=reviewer)
-        else:
-            existing_feedback = match.feedback_set.filter(reviewer=reviewer)
-            if existing_feedback:
-                raise OneFeedbackAllowed
-            for person in match.players.all():
-                if not person == reviewer:
-                    player = person
-            serializer.save(player=player, reviewer=reviewer)
-
-
-class DetailUpdateFeedback(generics.RetrieveUpdateDestroyAPIView):
-    """
-    Permissions: ADMIN or user only.
-    """
-    queryset = Feedback.objects.all()
-    serializer_class = FeedbackSerializer
-
-
-class DetailPark(generics.RetrieveAPIView):
-    """ Permissions: all
-    """
-    queryset = Park.objects.all()
-    serializer_class = ParkSerializer
 
 
 class DetailUpdateMatch(generics.RetrieveUpdateDestroyAPIView):
@@ -327,7 +319,7 @@ class JoinMatch(generics.UpdateAPIView):
 class LeaveMatch(generics.UpdateAPIView):
     queryset = Match.objects.all()
     serializer_class = ChallengerMatchSerializer
-    
+
     def perform_update(self, serializer):
         """
         Users may leave a match if they get tired waiting for Match creator to
@@ -420,6 +412,66 @@ class ConfirmMatch(generics.UpdateAPIView):
             confirm_match_notify(match)
 
 
+#################### FEEDBACK RELATED VIEWS ############################
+#
+#
+#
+#
+#################### FEEDBACK #########################################
+
+
+class CreateFeedbacks(generics.CreateAPIView):
+    """Logged in user only, *** must be player in the match also ***"""
+    queryset = Feedback.objects.all()
+    serializer_class = FeedbackSerializer
+
+    def perform_create(self, serializer):
+        """If no player, Get match_id from serializer. Find Match object with match_id. Use Match
+            object to find player and reviewer from the match. (Reviewer =
+            logged in user.
+          If player, use player_id to find User to be reviewed
+          Error if they already provided Feedback for that player.
+        """
+        reviewer = self.request.user
+        match_id = serializer.initial_data['match']
+        match = Match.objects.get(pk=match_id)
+        player_id = serializer.initial_data.get('player', None)
+        if player_id:
+
+            # if id for player does not match a user , error
+            existing_user = User.objects.filter(id=player_id)
+            if not existing_user:
+                raise NonExistingPlayer
+
+            player = User.objects.get(pk=player_id)
+            existing_feedback = match.feedback_set.filter(reviewer=reviewer, player=player)
+            if existing_feedback:
+                raise OneFeedbackAllowed
+            serializer.save(player=player, reviewer=reviewer)
+        else:
+            existing_feedback = match.feedback_set.filter(reviewer=reviewer)
+            if existing_feedback:
+                raise OneFeedbackAllowed
+            for person in match.players.all():
+                if not person == reviewer:
+                    player = person
+            serializer.save(player=player, reviewer=reviewer)
+
+
+class DetailUpdateFeedback(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Permissions: ADMIN or user only.
+    """
+    queryset = Feedback.objects.all()
+    serializer_class = FeedbackSerializer
+
+#################### COURT(SPORT) RELATED VIEWS ############################
+#
+#
+#
+#
+#################### COURT(SPORT) ##########################################
+
 class ListCreateCourts(generics.ListCreateAPIView):
     queryset = Court.objects.all()
     serializer_class = CourtSerializer
@@ -440,19 +492,19 @@ class ListCreateCourts(generics.ListCreateAPIView):
                 raise CourtAlreadyExists
 
         if sport == 'Tennis':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803727/1451824644_tennis_jegpea.png"
+            img_url = TENNIS_IMG_URL
         elif sport == 'Basketball':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451811954/basketball_lxzgmw.png"
+            img_url = BASKETBALL_IMG_URL
         elif sport == 'Football':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451812093/American-Football_vbp5ww.png"
+            img_url = FOOTBALL_IMG_URL
         elif sport == 'Soccer':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803724/1451824570_soccer_mwvtwy.png"
+            img_url = SOCCER_IMG_URL
         elif sport == 'Volleyball':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803790/1451824851_volleyball_v2pu0m.png"
+            img_url = VOLLEYBALL_IMG_URL
         elif sport == 'Pickleball':
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451803795/1451824990_table_tennis_uqv436.png"
+            img_url = PICKLEBALL_IMG_URL
         else:
-            img_url = "http://res.cloudinary.com/skill-match/image/upload/v1451804013/trophy_200_cnaras.jpg"
+            img_url = TROPHY_IMG_URL
 
         lat = serializer.initial_data.get('lat', None)
         long = serializer.initial_data.get('long', None)

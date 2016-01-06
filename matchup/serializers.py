@@ -111,12 +111,11 @@ class MatchSerializer(serializers.ModelSerializer):
                   'park_name', 'sport', 'other', 'skill_level', 'date', 'time',
                   'players', 'img_url', 'is_open', 'is_completed',
                   'is_confirmed', 'is_challenge', 'challenge_declined',
-                  'is_succesful', 'distance')
+                  'distance')
 
         read_only_fields = ('id', 'creator', 'players', 'is_open',
                             'is_completed', 'is_confirmed', 'img_url',
-                            'is_challenge', 'challenge_declined',
-                            'is_succesful')
+                            'is_challenge', 'challenge_declined', 'distance')
 
     def create(self, validated_data):
         """
@@ -124,9 +123,14 @@ class MatchSerializer(serializers.ModelSerializer):
         :param validated_data:
         :return:
         """
+        challenged = validated_data.get('challenged', None)
+        if challenged:
+            challenged = validated_data.pop('challenged')
         match = super().create(validated_data)
         creator = validated_data['creator']
         match.players.add(creator)
+        if match.is_challenge:
+            match.players.add(challenged)
         match.save()
         return match
 
