@@ -159,11 +159,16 @@ class MatchTests(APITestCase):
                                              email='test@test.com',
                                              password='password')
         self.user2 = User.objects.create_user(username='bob',
-                                             email='test@test.com',
+                                             email='test1@test.com',
+                                             password='password')
+        self.user3 = User.objects.create_user(username='sarah',
+                                             email='test2@test.com',
                                              password='password')
         Profile.objects.create(user=self.user, gender='Male', age="20's",
                                wants_texts=False, phone_number="5082693675")
         Profile.objects.create(user=self.user2, gender='Male', age="30's",
+                               wants_texts=False)
+        Profile.objects.create(user=self.user3, gender='Female', age="20's",
                                wants_texts=False)
         self.park = Park.objects.create(name='Test Park',
                                         rating=4.0,
@@ -317,6 +322,31 @@ class MatchTests(APITestCase):
         self.assertEqual(response.data['is_confirmed'], False)
         self.assertEqual(response.data['is_open'], True)
 
+    def test_multiple_join_match(self):
+        self.client.force_authenticate(user=self.user2)
+        url = reverse('api_join_match', kwargs={'pk': self.match2.id})
+        response = self.client.put(url, {}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(self.match2.players.count(), 2)
+        self.assertEqual(response.data['is_open'], True)
+        self.client.force_authenticate(user=self.user3)
+        url = reverse('api_join_match', kwargs={'pk': self.match2.id})
+        response = self.client.put(url, {}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(self.match2.players.count(), 3)
+        self.assertEqual(response.data['is_open'], True)
+
+    def test_detail_update_match(self):
+        url = reverse('api_detail_update_match', kwargs={'pk': self.match.id})
+        response = self.client.get(url, {}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['skill_level'], self.match.skill_level)
+        data = {'park': self.park.id, 'sport': 'Tennis', 'skill_level': 35,
+                'date': '2016-2-2', 'time': '12:00'}
+        response2 = self.client.put(url, data, format='json')
+        self.assertEqual(response2.status_code, status.HTTP_200_OK)
+        self.assertEqual(response2.data['skill_level'], 35)
+
 
 class FeedbackTests(APITestCase):
     def setUp(self):
@@ -324,19 +354,90 @@ class FeedbackTests(APITestCase):
                                              email='test@test.com',
                                              password='password')
         self.user2 = User.objects.create_user(username='bob',
-                                             email='test@test.com',
+                                             email='test1@test.com',
                                              password='password')
+        self.user3 = User.objects.create_user(username='sarah',
+                                             email='test2@test.com',
+                                             password='password')
+        Profile.objects.create(user=self.user, gender='Male', age="20's",
+                               wants_texts=False, phone_number="5082693675")
+        Profile.objects.create(user=self.user2, gender='Male', age="30's",
+                               wants_texts=False)
+        Profile.objects.create(user=self.user3, gender='Female', age="20's",
+                               wants_texts=False)
         self.park = Park.objects.create(name='Test Park',
-                                        postal_code='89148')
+                                        rating=4.0,
+                                        url="www.testpark.com",
+                                        image_url='www.imageurl.com',
+                                        rating_img_url='www.rating.com',
+                                        rating_img_url_small='www.ratimg.com',
+                                        city='Boston',
+                                        state_code='MA',
+                                        display_address1='10 Happy St.',
+                                        display_address2='Downtown',
+                                        display_address3='Boston, MA 02121',
+                                        postal_code='02121',
+                                        location=BOSTON_LOC)
+        self.park2 = Park.objects.create(name='Test Park2',
+                                         rating=3.0,
+                                         url="www.testpark2.com",
+                                         image_url='www.imageurl2.com',
+                                         rating_img_url='www.rating2.com',
+                                         rating_img_url_small='www.rtimg2.com',
+                                         city='Las Vegas',
+                                         state_code='NV',
+                                         display_address1='12 Happy St.',
+                                         display_address2='Suburb',
+                                         display_address3='Las Vegas, NV',
+                                         postal_code='89148',
+                                         location=LAS_VEGAS_LOC)
+        self.park3 = Park.objects.create(name='Test Park3',
+                                         rating=5.0,
+                                         url="www.testpark3.com",
+                                         image_url='www.imageurl3.com',
+                                         rating_img_url='www.rating3.com',
+                                         rating_img_url_small='www.rtimg3.com',
+                                         city='Sharon',
+                                         state_code='MA',
+                                         display_address1='16 High St.',
+                                         display_address2='Suburb',
+                                         display_address3='Sharon, MA 02067',
+                                         postal_code='02067',
+                                         location=SHARON_MA_LOC)
         self.match = Match.objects.create(creator=self.user,
                                           park=self.park,
                                           sport='Tennis',
                                           skill_level=80,
-                                          date='2015-12-22',
-                                          time='18:23',)
+                                          date='2016-2-22',
+                                          time='18:30',
+                                          )
+        self.match2 = Match.objects.create(creator=self.user,
+                                           park=self.park2,
+                                           sport='Basketball',
+                                           skill_level=60,
+                                           date='2016-2-25',
+                                           time='9:00')
+        self.match3 = Match.objects.create(creator=self.user2,
+                                           park=self.park3,
+                                           sport='Tennis',
+                                           skill_level=75,
+                                           date='2016-3-3',
+                                           time='12:00')
         self.match.players.add(self.user)
         self.match.players.add(self.user2)
+        self.match2.players.add(self.user)
+        self.match3.players.add(self.user2)
         self.match.save()
+        self.match2.save()
+        self.match3.save()
+
+        self.feedback = Feedback.objects.create(reviewer=self.user,
+                                               player=self.user2,
+                                               match=self.match2,
+                                               skill=70,
+                                               sportsmanship=80,
+                                               punctuality='On Time',
+                                               availability=3)
 
     def test_create_feedback(self):
         self.client.force_authenticate(user=self.user)
@@ -345,7 +446,7 @@ class FeedbackTests(APITestCase):
                 'punctuality': 'On Time', 'availability': 5}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Feedback.objects.count(), 1)
+        self.assertEqual(Feedback.objects.count(), 2)
         self.assertEqual(response.data['skill'], 50)
         self.assertEqual(response.data['punctuality'], 'On Time')
 
@@ -357,10 +458,23 @@ class FeedbackTests(APITestCase):
                 'player': self.user2.id}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Feedback.objects.count(), 1)
+        self.assertEqual(Feedback.objects.count(), 2)
         self.assertEqual(response.data['skill'], 50)
         self.assertEqual(response.data['punctuality'], 'On Time')
         self.assertEqual(response.data['player'], self.user2.id)
+
+    def test_detail_update_feedback(self):
+        self.client.force_authenticate(user=self.user)
+        url = reverse('api_detail_update_feedback', kwargs={'pk': self.feedback.id})
+        response = self.client.get(url, {}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['skill'], self.feedback.skill)
+        data = {'match': self.match2.id, 'skill': 50, 'sportsmanship': 90,
+                'punctuality': 'On Time', 'availability': 5,
+                'player': self.user2.id}
+        response2 = self.client.put(url, data, format='json')
+        self.assertEqual(response2.status_code, status.HTTP_200_OK)
+        self.assertEqual(response2.data['skill'], 50)
 
 
 class CourtTests(APITestCase):
@@ -368,14 +482,45 @@ class CourtTests(APITestCase):
         self.user = User.objects.create_user(username='joe',
                                              email='test@test.com',
                                              password='password')
-        self.user2 = User.objects.create_user(username='bob',
-                                             email='test@test.com',
-                                             password='password')
         self.park = Park.objects.create(name='Test Park',
-                                        postal_code='89148')
+                                        rating=4.0,
+                                        url="www.testpark.com",
+                                        image_url='www.imageurl.com',
+                                        rating_img_url='www.rating.com',
+                                        rating_img_url_small='www.ratimg.com',
+                                        city='Boston',
+                                        state_code='MA',
+                                        display_address1='10 Happy St.',
+                                        display_address2='Downtown',
+                                        display_address3='Boston, MA 02121',
+                                        postal_code='02121',
+                                        location=BOSTON_LOC)
+        self.court = Court.objects.create(park=self.park, sport="Tennis")
 
-    def test_create_court(self):
-        pass
+    def test_simple_create_court(self):
+        self.client.force_authenticate(user=self.user)
+        url = reverse('api_create_courts')
+        data = {'park': self.park.id, 'sport': 'Basketball'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['sport'], 'Basketball')
+        response2 = self.client.post(url, data, format='json')
+        self.assertEqual(response2.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_list_courts(self):
-        pass
+    def test_create_court_by_location(self):
+        self.client.force_authenticate(user=self.user)
+        url = reverse('api_create_courts')
+        data = {'park': self.park.id, 'sport': 'Other', 'other': 'Disc Golf',
+                'lat': '42.123650', 'long': '-71.178624', 'num_courts': 1}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['other'], 'Disc Golf')
+
+    def detail_update_court(self):
+        self.client.force_authenticate(user=self.user)
+        url = reverse('api_detail_update_court', kwargs={'pk': self.court.id})
+        data = {'park': self.park.id, 'sport': 'Tennis',
+                'lat': '42.123650', 'long': '-71.178624', 'num_courts': 2}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['num_courts'], 2)
