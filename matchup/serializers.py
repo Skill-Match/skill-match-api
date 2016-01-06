@@ -220,10 +220,10 @@ class ParkSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Park
-        fields = ('id', 'name', 'rating', 'url', 'image_url', 'city', 'state_code',
+        fields = ('id', 'name', 'rating', 'url', 'image_url', 'rating_img_url', 'city', 'state_code',
                   'display_address1', 'display_address2', 'display_address3',
                   'postal_code', 'distance', 'latitude', 'longitude', 'court_set', 'match_set',)
-        read_only_fields = ('id', 'name', 'rating', 'url', 'image_url', 'city', 'state_code',
+        read_only_fields = ('id', 'name', 'rating', 'url', 'image_url', 'rating_img_url', 'city', 'state_code',
                             'display_address1', 'display_address2',
                             'display_address3', 'postal_code')
 
@@ -235,10 +235,11 @@ class ListParksSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Park
-        fields = ('id', 'name', 'rating', 'url', 'image_url', 'city', 'state_code',
+        fields = ('id', 'name', 'rating', 'url', 'image_url', 'rating_img_url', 'city', 'state_code',
                   'display_address1', 'display_address2', 'display_address3',
-                  'postal_code', 'distance', 'latitude', 'longitude', 'court_set',)
-        read_only_fields = ('id', 'name', 'rating', 'url', 'image_url', 'city', 'state_code',
+                  'postal_code', 'distance', 'latitude', 'longitude', 'court_set',
+                  )
+        read_only_fields = ('id', 'name', 'rating', 'url', 'image_url', 'rating_img_url', 'city', 'state_code',
                             'display_address1', 'display_address2',
                             'display_address3', 'postal_code')
 
