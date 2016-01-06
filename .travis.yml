@@ -10,6 +10,7 @@ env:
   - DJANGO=1.9
 
 before_install:
+  - export SECRET_KEY=$SECRET_KEY
   - export DJANGO_SETTINGS_MODULE=skill_match.travis-settings
   - export PYTHONPATH=$HOME/builds/Skill-Match/skill-match-api
   - export PIP_USE_MIRRORS=true
@@ -25,7 +26,6 @@ before_script:
   - python manage.py migrate
 
 script:
-  - export SECRET_KEY=$SECRET_KEY
   - coverage run --source='.' manage.py test users matchup api
 
 after_success:
