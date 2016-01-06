@@ -1,11 +1,11 @@
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 
-#SPORT CHOICES for multiple models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from matchup.notifications import create_match_notify
 
+from django.db.models.signals import pre_save, post_save
+from django.dispatch import receiver
+
+#SPORT CHOICES for multiple models
 TENNIS = 'Tennis'
 BASKETBALL = 'Basketball'
 FOOTBALL = 'Football'
@@ -22,8 +22,25 @@ SPORT_CHOICES = (
     (PICKLEBALL, 'Pickleball'),
     (OTHER, 'Other')
 )
+
 DEFAULT_IMG = 'http://res.cloudinary.com/skill-match/image/upload/' \
               'v1451804013/trophy_200_cnaras.jpg'
+TENNIS_IMG_URL = "http://res.cloudinary.com/skill-match/image/upload/" \
+                 "c_scale,w_200/v1451803727/1451824644_tennis_jegpea.png"
+BASKETBALL_IMG_URL = "http://res.cloudinary.com/skill-match/image/upload/" \
+                     "c_scale,w_200/v1451811954/basketball_lxzgmw.png"
+FOOTBALL_IMG_URL = "http://res.cloudinary.com/skill-match/image/upload/" \
+                   "c_scale,w_200/v1451812093/American-Football_vbp5ww.png"
+SOCCER_IMG_URL = "http://res.cloudinary.com/skill-match/image/upload/" \
+                 "c_scale,w_200/v1451803724/1451824570_soccer_mwvtwy.png"
+VOLLEYBALL_IMG_URL = "http://res.cloudinary.com/skill-match/image/upload/" \
+                     "c_scale,w_200/v1451803790/1451824851_" \
+                     "volleyball_v2pu0m.png"
+PICKLEBALL_IMG_URL = "http://res.cloudinary.com/skill-match/image/upload/" \
+                     "c_scale,w_200/v1451803795/1451824990_" \
+                     "table_tennis_uqv436.png"
+TROPHY_IMG_URL = "http://res.cloudinary.com/skill-match/image/upload/" \
+                "v1451804013/trophy_200_cnaras.jpg"
 
 
 class Park(models.Model):
@@ -90,8 +107,6 @@ class Ammenity(models.Model):
         return self.name
 
 
-
-
 class Match(models.Model):
     """
     Process for Match:
@@ -135,6 +150,27 @@ class Match(models.Model):
     def __str__(self):
         return "{}'s {} match, match #{}".format(self.creator.username,
                                                  self.sport, self.id)
+
+
+@receiver(post_save, sender=Match)
+def add_profile_image(sender, instance=None, created=False, **kwargs):
+
+    if created:
+        if instance.sport == 'Tennis':
+            instance.img_url = TENNIS_IMG_URL
+        elif instance.sport == 'Basketball':
+            instance.img_url = BASKETBALL_IMG_URL
+        elif instance.sport == 'Football':
+            instance.img_url = FOOTBALL_IMG_URL
+        elif instance.sport == 'Soccer':
+            instance.img_url = SOCCER_IMG_URL
+        elif instance.sport == 'Volleyball':
+            instance.img_url = VOLLEYBALL_IMG_URL
+        elif instance.sport == 'Pickleball':
+            instance.img_url = PICKLEBALL_IMG_URL
+        else:
+            instance.img_url = TROPHY_IMG_URL
+        instance.save()
 
 
 class Feedback(models.Model):
