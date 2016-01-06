@@ -472,7 +472,7 @@ class DetailUpdateFeedback(generics.RetrieveUpdateDestroyAPIView):
 #
 #################### COURT(SPORT) ##########################################
 
-class ListCreateCourts(generics.ListCreateAPIView):
+class CreateCourts(generics.CreateAPIView):
     queryset = Court.objects.all()
     serializer_class = CourtSerializer
 

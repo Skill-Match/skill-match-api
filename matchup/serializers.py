@@ -188,15 +188,19 @@ class CourtSerializer(serializers.ModelSerializer):
         court = Court.objects.create(
             park=validated_data['park'],
             sport=validated_data['sport'],
-            other=validated_data['other'],
-            num_courts=validated_data['num_courts'],
             img_url=validated_data['img_url']
         )
+        other = validated_data.get('other', None)
+        num_courts = validated_data.get('num_courts', None)
         lat = validated_data.get('lat', None)
         long = validated_data.get('long', None)
+        if other:
+            court.other = other
+        if num_courts:
+            court.num_courts = num_courts
         if lat and long:
             court.location = 'POINT(' + str(validated_data['long']) + ' ' + str(validated_data['lat']) + ')'
-            court.save()
+        court.save()
 
         return court
 

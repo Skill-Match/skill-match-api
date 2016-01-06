@@ -4,7 +4,7 @@ from matchup.views import CreateUser, ListUsers, ListCreateMatches, ListParks, \
     CreateFeedbacks, DetailPark, DetailUpdateMatch, \
     DetailUpdateFeedback, DetailUpdateUser,  \
     JoinMatch, DeclineMatch, ConfirmMatch, ObtainAuthToken, \
-    ListCreateCourts, LeaveMatch, ChallengeCreateMatch, DetailUpdateCourt
+    CreateCourts, LeaveMatch, ChallengeCreateMatch, DetailUpdateCourt
 
 urlpatterns = (
     url(r'^users/$', ListUsers.as_view(), name='api_list_users'),
@@ -29,11 +29,11 @@ urlpatterns = (
         name='api_confirm_match'),
     url(r'^matches/(?P<pk>\d+)/decline/$', DeclineMatch.as_view(),
         name='api_decline_match'),
-    url(r'^courts/$', ListCreateCourts.as_view(), name='api_list_courts'),
+    url(r'^courts/$', CreateCourts.as_view(), name='api_create_courts'),
     url(r'^courts/(?P<pk>\d+)/$', DetailUpdateCourt.as_view(),
         name='api_detail_update_court'),
     url(r'^feedbacks/(?P<pk>\d+)', DetailUpdateFeedback.as_view(),
-        name='api_detail_feedback'),
+        name='api_detail_update_feedback'),
     url(r'^feedbacks/create/$', CreateFeedbacks.as_view(),
         name='api_create_feedback'),
     url(r'^yelp/$', matchup_views.hello_world)
