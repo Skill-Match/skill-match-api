@@ -1,7 +1,10 @@
 from django.contrib.auth.models import User
+from django.core.management import call_command
 from django.core.urlresolvers import reverse
+from django.db.models import Count
 from django.test import TestCase
-from matchup.models import Match, Park, Feedback, Court
+from matchup.models import Match, Park, Feedback, Court, HendersonPark, \
+    Ammenity
 from rest_framework import status
 from rest_framework.test import APITestCase
 from users.models import Profile, Skill
@@ -583,3 +586,79 @@ class SkillTests(APITestCase):
 
     def test_calculate_skill(self):
         self.assertEqual(self.skill.skill, 66.29)
+
+
+class CommandsTests(TestCase):
+    def test_add_parks(self):
+        args = ['89148']
+        call_command('add_parks', args)
+        park_count = Park.objects.count()
+        self.assertEqual(park_count, 20)
+
+    def test_add_henderson_parks(self):
+        call_command('add_henderson_parks')
+        park_count = HendersonPark.objects.count()
+        ammenities_count = Ammenity.objects.count()
+        ammenities = False
+        parks = False
+        if park_count > 0:
+            parks = True
+        if ammenities_count > 0:
+            ammenities = True
+        self.assertEqual(parks, True)
+        self.assertEqual(ammenities, True)
+
+    def test_link_henderson_parks(self):
+        call_command('add_parks', ['89074'])
+        call_command('add_henderson_parks')
+        call_command('link_henderson_parks')
+        parks = Park.objects.annotate(count=Count('henderson_park')).exclude(count=0)
+        count = parks.count()
+        linked_parks = False
+        if count > 0:
+            linked_parks = True
+        self.assertEqual(linked_parks, True)
+
+    def test_courts_by_ammenity(self):
+        call_command('add_parks', ['89074'])
+        call_command('add_henderson_parks')
+        call_command('link_henderson_parks')
+        call_command('add_courts_by_ammenity')
+        count = Court.objects.count()
+        courts = False
+        if count > 0:
+            courts = True
+        self.assertEqual(courts, True)
+
+    # def test_close_completed_matches(self):
+    #     user = User.objects.create_user(username='peter',
+    #                                     email='test@test.com',
+    #                                     password='pwd')
+    #     user2 = User.objects.create_user(username='bob',
+    #                                     email='test2@test.com',
+    #                                     password='pwd')
+    #     park = Park.objects.create(name='Test Park',
+    #                                     rating=4.0,
+    #                                     url="www.testpark.com",
+    #                                     image_url='www.imageurl.com',
+    #                                     rating_img_url='www.rating.com',
+    #                                     rating_img_url_small='www.ratimg.com',
+    #                                     city='Boston',
+    #                                     state_code='MA',
+    #                                     display_address1='10 Happy St.',
+    #                                     display_address2='Downtown',
+    #                                     display_address3='Boston, MA 02121',
+    #                                     postal_code='02121',
+    #                                     location=BOSTON_LOC)
+    #     match = Match.objects.create(creator=user, park=park, sport='Tennis',
+    #                          skill_level=50, date='2015-12-31', time='15:00',
+    #                          is_open=False)
+    #     match.players.add(user)
+    #     match.players.add(user2)
+    #     match.save()
+    #     self.assertEqual(match.is_completed, False)
+    #     call_command('close_completed_matches')
+    #     self.assertEqual(match.is_completed, True)
+
+
+
