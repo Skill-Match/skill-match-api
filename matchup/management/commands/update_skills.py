@@ -25,11 +25,11 @@ class Command(BaseCommand):
             if feedback_count % 3 == 0:
                 if skill:
                     skill = skill[0]
-                    calculate_skills(skill, sport)
+                    skill.calculate()
                     num_updates += 1
                 else:
                     new_skill = Skill.objects.create(player=player, sport=sport)
-                    calculate_skills(new_skill, sport)
+                    new_skill.calculate()
                     num_updates += 1
 
         self.stdout.write("{} Skills updated".format(num_updates))
