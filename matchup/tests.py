@@ -225,7 +225,7 @@ class MatchTests(APITestCase):
                                            time='12:00')
         self.match.players.add(self.user)
         self.match2.players.add(self.user)
-        self.match3.players.add(self.user)
+        self.match3.players.add(self.user2)
         self.match.save()
         self.match2.save()
         self.match3.save()
@@ -235,16 +235,13 @@ class MatchTests(APITestCase):
         url = reverse('api_list_create_matches')
         response = self.client.get(url, {}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 1)
-        response_matches_list = response.data['results'][0]
-        self.assertEqual(response_matches_list['sport'], self.match.sport)
-        self.assertEqual((response_matches_list['skill_level']), 80)
+        self.assertEqual(response.data['count'], 3)
         url2 = reverse('api_list_create_matches') + '?sport=basketball'
         response2 = self.client.get(url2, {}, format='json')
         self.assertEqual(response2.status_code, status.HTTP_200_OK)
         self.assertEqual(response2.data['count'], 1)
         basketball_match = response2.data['results'][0]
-        self.assertEqual(basketball_match.sport, 'Basketball')
+        self.assertEqual(basketball_match['sport'], 'Basketball')
         url3 = reverse('api_list_create_matches') + '?username=' + self.user.username
         response3 = self.client.get(url3, {}, format='json')
         self.assertEqual(response3.status_code, status.HTTP_200_OK)
@@ -269,9 +266,21 @@ class MatchTests(APITestCase):
                 'date': '2016-2-2', 'time': '12:00'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Match.objects.count(), 2)
+        self.assertEqual(Match.objects.count(), 4)
         self.assertEqual(response.data['sport'], 'Tennis')
+        self.assertEqual(response.data['is_open'], True)
         self.assertEqual(response.data['skill_level'], 35)
+
+    def test_create_challenge_match(self):
+        self.client.force_authenticate(user=self.user)
+        url = reverse('api_challenge')
+        data = {'park': self.park.id, 'sport': 'Tennis', 'skill_level': 55,
+                'date': '2016-2-2', 'time': '1:00', 'challenge': self.user2.id}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['skill_level'], 55)
+        self.assertEqual(response.data['is_open'], False)
+        self.assertEqual(response.data['is_challenge'], True)
 
     def test_join_confirm_match(self):
         #join
