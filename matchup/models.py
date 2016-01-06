@@ -166,7 +166,6 @@ class Feedback(models.Model):
     skill = models.IntegerField()
     sportsmanship = models.IntegerField()
     availability = models.IntegerField()
-    is_succesful = models.BooleanField(default=False)
     punctuality = models.CharField(max_length=15,
                                    choices=PUNCTUALITY_CHOICES,
                                    default=ON_TIME)
