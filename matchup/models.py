@@ -81,7 +81,8 @@ class HendersonPark(models.Model):
     """
     Scraped with permission from Henderson Parks and Rec Website
     """
-    park = models.OneToOneField(Park, null=True, blank=True)
+    park = models.ForeignKey(Park, null=True, blank=True,
+                             related_name='henderson_park')
     name = models.CharField(max_length=200)
     address = models.CharField(max_length=150)
     url = models.URLField()
