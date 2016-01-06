@@ -25,7 +25,7 @@ before_script:
   - python manage.py migrate
 
 script:
-  export SECRET_KEY=$SECRET_KEY
+  - export SECRET_KEY=$SECRET_KEY
   - coverage run --source='.' manage.py test users matchup api
 
 after_success:
