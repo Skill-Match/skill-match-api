@@ -25,24 +25,25 @@ SPORT_CHOICES = (
 DEFAULT_IMG = 'http://res.cloudinary.com/skill-match/image/upload/' \
               'v1451804013/trophy_200_cnaras.jpg'
 
+
 class Park(models.Model):
     """
     Currently borrowed from YELP API.
     Some are linked via OneToOne with HendersonParks
     """
-    rating = models.FloatField(null=True, blank=True)
-    rating_img_url = models.URLField(max_length=300, null=True, blank=True)
-    rating_img_url_small = models.URLField(max_length=300, null=True, blank=True)
+    rating = models.FloatField()
+    rating_img_url = models.URLField(max_length=300)
+    rating_img_url_small = models.URLField(max_length=300)
     name = models.CharField(max_length=200)
-    url = models.URLField(null=True, blank=True)
+    url = models.URLField()
     image_url = models.URLField(null=True, blank=True)
-    city = models.CharField(max_length=50, null=True, blank=True)
-    display_address1 = models.CharField(max_length=40, null=True, blank=True)
+    city = models.CharField(max_length=50)
+    display_address1 = models.CharField(max_length=40)
     display_address2 = models.CharField(max_length=40, null=True, blank=True)
     display_address3 = models.CharField(max_length=40, null=True, blank=True)
-    postal_code = models.CharField(max_length=10, null=True, blank=True)
-    location = models.PointField(null=True, blank=True)
-    state_code = models.CharField(max_length=5, null=True, blank=True)
+    postal_code = models.CharField(max_length=10)
+    location = models.PointField()
+    state_code = models.CharField(max_length=5)
     created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -58,16 +59,18 @@ class Park(models.Model):
         longitude = self.location.coords[0]
         return longitude
 
+
 class HendersonPark(models.Model):
     """
     Scraped with permission from Henderson Parks and Rec Website
     """
     park = models.OneToOneField(Park, null=True, blank=True)
     name = models.CharField(max_length=200)
-    address = models.CharField(max_length=150, null=True, blank=True)
-    url = models.URLField(null=True, blank=True)
+    address = models.CharField(max_length=150)
+    url = models.URLField()
     img_url = models.URLField(null=True, blank=True, max_length=350)
-    # created_on = models.DateTimeField(auto_now_add=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    modifided_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -125,7 +128,6 @@ class Match(models.Model):
     is_completed = models.BooleanField(default=False)
     is_confirmed = models.BooleanField(default=False)
     is_challenge = models.BooleanField(default=False)
-    is_succesful = models.BooleanField(default=False)
     challenge_declined = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True, null=True)
@@ -163,9 +165,9 @@ class Feedback(models.Model):
     reviewer = models.ForeignKey(User, related_name='reviewed_feedbacks')
     player = models.ForeignKey(User)
     match = models.ForeignKey(Match)
-    skill = models.IntegerField()
-    sportsmanship = models.IntegerField()
-    availability = models.IntegerField()
+    skill = models.PositiveIntegerField()
+    sportsmanship = models.PositiveIntegerField()
+    availability = models.PositiveIntegerField()
     punctuality = models.CharField(max_length=15,
                                    choices=PUNCTUALITY_CHOICES,
                                    default=ON_TIME)
@@ -179,13 +181,13 @@ class Feedback(models.Model):
 
 
 class Court(models.Model):
+    #in the future add ranking
     park = models.ForeignKey(Park, null=True, blank=True)
     sport = models.CharField(max_length=25, choices=SPORT_CHOICES)
     other = models.CharField(max_length=25, null=True, blank=True)
     num_courts = models.IntegerField(null=True, blank=True)
     img_url = models.URLField(default=DEFAULT_IMG)
     location = models.PointField(null=True, blank=True)
-    ranking = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 

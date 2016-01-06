@@ -282,6 +282,13 @@ class DetailUpdateMatch(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MatchSerializer
 
 
+########### JOIN, LEAVE, DECLINE, CONFIRM MATCH ########################
+#
+#
+#
+########################################################################
+
+
 class JoinMatch(generics.UpdateAPIView):
     queryset = Match.objects.all()
     serializer_class = ChallengerMatchSerializer
