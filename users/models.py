@@ -165,8 +165,14 @@ class Skill(models.Model):
             if reviewer_cred:
                 reviewer_cred = reviewer_cred[0]
                 xp = reviewer_cred.num_feedbacks
+                if not xp:
+                    xp = 0
                 sportsmanship = reviewer_cred.sportsmanship
+                if not sportsmanship:
+                    sportsmanship = 40
                 skill = reviewer_cred.skill
+                if not skill:
+                    skill = 40
             else:
                 #give default values for new or unranked users
                 xp = 0
@@ -197,7 +203,7 @@ class Skill(models.Model):
             sportsmanship_total += feedback.sportsmanship * weight
             count += 1
 
-        self.skill = skill_total / total_weight
-        self.sportsmanship = sportsmanship_total / total_weight
+        self.skill = round((skill_total / total_weight), 2)
+        self.sportsmanship = round((sportsmanship_total / total_weight), 2)
         self.num_feedbacks = count
         self.save()

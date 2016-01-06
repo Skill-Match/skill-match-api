@@ -4,7 +4,7 @@ from django.test import TestCase
 from matchup.models import Match, Park, Feedback, Court
 from rest_framework import status
 from rest_framework.test import APITestCase
-from users.models import Profile
+from users.models import Profile, Skill
 from django.contrib.gis.geos import GEOSGeometry as G
 
 
@@ -354,16 +354,11 @@ class FeedbackTests(APITestCase):
                                              email='test@test.com',
                                              password='password')
         self.user2 = User.objects.create_user(username='bob',
-                                             email='test1@test.com',
-                                             password='password')
-        self.user3 = User.objects.create_user(username='sarah',
-                                             email='test2@test.com',
-                                             password='password')
+                                              email='test1@test.com',
+                                              password='password')
         Profile.objects.create(user=self.user, gender='Male', age="20's",
                                wants_texts=False, phone_number="5082693675")
         Profile.objects.create(user=self.user2, gender='Male', age="30's",
-                               wants_texts=False)
-        Profile.objects.create(user=self.user3, gender='Female', age="20's",
                                wants_texts=False)
         self.park = Park.objects.create(name='Test Park',
                                         rating=4.0,
@@ -391,19 +386,6 @@ class FeedbackTests(APITestCase):
                                          display_address3='Las Vegas, NV',
                                          postal_code='89148',
                                          location=LAS_VEGAS_LOC)
-        self.park3 = Park.objects.create(name='Test Park3',
-                                         rating=5.0,
-                                         url="www.testpark3.com",
-                                         image_url='www.imageurl3.com',
-                                         rating_img_url='www.rating3.com',
-                                         rating_img_url_small='www.rtimg3.com',
-                                         city='Sharon',
-                                         state_code='MA',
-                                         display_address1='16 High St.',
-                                         display_address2='Suburb',
-                                         display_address3='Sharon, MA 02067',
-                                         postal_code='02067',
-                                         location=SHARON_MA_LOC)
         self.match = Match.objects.create(creator=self.user,
                                           park=self.park,
                                           sport='Tennis',
@@ -417,19 +399,11 @@ class FeedbackTests(APITestCase):
                                            skill_level=60,
                                            date='2016-2-25',
                                            time='9:00')
-        self.match3 = Match.objects.create(creator=self.user2,
-                                           park=self.park3,
-                                           sport='Tennis',
-                                           skill_level=75,
-                                           date='2016-3-3',
-                                           time='12:00')
         self.match.players.add(self.user)
         self.match.players.add(self.user2)
         self.match2.players.add(self.user)
-        self.match3.players.add(self.user2)
         self.match.save()
         self.match2.save()
-        self.match3.save()
 
         self.feedback = Feedback.objects.create(reviewer=self.user,
                                                player=self.user2,
@@ -524,3 +498,88 @@ class CourtTests(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['num_courts'], 2)
+
+class SkillTests(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='joe',
+                                             email='test@test.com',
+                                             password='password')
+        self.user2 = User.objects.create_user(username='bob',
+                                             email='test1@test.com',
+                                             password='password')
+        self.user3 = User.objects.create_user(username='sarah',
+                                             email='test2@test.com',
+                                             password='password')
+        Profile.objects.create(user=self.user, gender='Male', age="20's",
+                               wants_texts=False, phone_number="5082693675")
+        Profile.objects.create(user=self.user2, gender='Male', age="30's",
+                               wants_texts=False)
+        Profile.objects.create(user=self.user3, gender='Female', age="20's",
+                               wants_texts=False)
+        self.park = Park.objects.create(name='Test Park',
+                                        rating=4.0,
+                                        url="www.testpark.com",
+                                        image_url='www.imageurl.com',
+                                        rating_img_url='www.rating.com',
+                                        rating_img_url_small='www.ratimg.com',
+                                        city='Boston',
+                                        state_code='MA',
+                                        display_address1='10 Happy St.',
+                                        display_address2='Downtown',
+                                        display_address3='Boston, MA 02121',
+                                        postal_code='02121',
+                                        location=BOSTON_LOC)
+        self.match = Match.objects.create(creator=self.user,
+                                          park=self.park,
+                                          sport='Tennis',
+                                          skill_level=80,
+                                          date='2016-2-22',
+                                          time='18:30',
+                                          )
+        self.match2 = Match.objects.create(creator=self.user,
+                                           park=self.park,
+                                           sport='Tennis',
+                                           skill_level=60,
+                                           date='2016-2-25',
+                                           time='9:00')
+        self.match3 = Match.objects.create(creator=self.user2,
+                                           park=self.park,
+                                           sport='Tennis',
+                                           skill_level=75,
+                                           date='2016-3-3',
+                                           time='12:00')
+        self.match.players.add(self.user)
+        self.match.players.add(self.user2)
+        self.match2.players.add(self.user)
+        self.match2.players.add(self.user2)
+        self.match3.players.add(self.user2)
+        self.match3.players.add(self.user3)
+        self.match.save()
+        self.match2.save()
+        self.match3.save()
+
+        Feedback.objects.create(reviewer=self.user, player=self.user2,
+                                match=self.match, skill=90, sportsmanship=90,
+                                availability=5, punctuality='On Time')
+        Feedback.objects.create(reviewer=self.user2, player=self.user,
+                                match=self.match, skill=80, sportsmanship=80,
+                                availability=5, punctuality='On Time')
+        Feedback.objects.create(reviewer=self.user, player=self.user2,
+                                match=self.match2, skill=90, sportsmanship=90,
+                                availability=5, punctuality='On Time')
+        Feedback.objects.create(reviewer=self.user2, player=self.user,
+                                match=self.match2, skill=80, sportsmanship=80,
+                                availability=5, punctuality='On Time')
+        Feedback.objects.create(reviewer=self.user3, player=self.user,
+                                match=self.match3, skill=10, sportsmanship=10,
+                                availability=5, punctuality='On Time')
+
+        self.skill = Skill.objects.create(player=self.user, sport='Tennis')
+        self.skill2 = Skill.objects.create(player=self.user2, sport='Tennis')
+        self.skill2.calculate()
+        self.skill2.save()
+        self.skill.calculate()
+        self.skill.save()
+
+    def test_calculate_skill(self):
+        self.assertEqual(self.skill.skill, 66.29)
