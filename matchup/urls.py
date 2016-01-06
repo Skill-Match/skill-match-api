@@ -1,10 +1,12 @@
 from django.conf.urls import url
 from matchup import views as matchup_views
-from matchup.views import CreateUser, ListUsers, ListCreateMatches, ListParks, \
+from matchup.views import  ListCreateMatches, ListParks, \
     CreateFeedbacks, DetailPark, DetailUpdateMatch, \
-    DetailUpdateFeedback, DetailUpdateUser,  \
-    JoinMatch, DeclineMatch, ConfirmMatch, ObtainAuthToken, \
+    DetailUpdateFeedback,   \
+    JoinMatch, DeclineMatch, ConfirmMatch,  \
     CreateCourts, LeaveMatch, ChallengeCreateMatch, DetailUpdateCourt
+from users.views import ListUsers, CreateUser, DetailUpdateUser, \
+    ObtainAuthToken
 
 urlpatterns = (
     url(r'^users/$', ListUsers.as_view(), name='api_list_users'),
