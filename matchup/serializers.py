@@ -188,7 +188,6 @@ class CourtSerializer(serializers.ModelSerializer):
         court = Court.objects.create(
             park=validated_data['park'],
             sport=validated_data['sport'],
-            img_url=validated_data['img_url']
         )
         other = validated_data.get('other', None)
         num_courts = validated_data.get('num_courts', None)

@@ -198,6 +198,7 @@ class ListCreateMatches(generics.ListCreateAPIView):
         #     img_url = TROPHY_IMG_URL
 
         match = serializer.save(creator=user)
+        Court.objects.create(park=match.park, sport=match.sport)
         create_match_notify(match)
 
     def get_queryset(self):
@@ -254,7 +255,6 @@ class ChallengeCreateMatch(generics.CreateAPIView):
         challenged = User.objects.get(pk=challenge_id)
         if challenged == user:
             raise SelfSignUp
-        # players = [user, challenged]
         sport = serializer.initial_data['sport']
 
         if sport == 'Tennis':
@@ -273,7 +273,7 @@ class ChallengeCreateMatch(generics.CreateAPIView):
             img_url = TROPHY_IMG_URL
 
         serializer.save(creator=user, challenged=challenged, is_open=False,
-                        is_challenge=True, img_url=img_url)
+                        img_url=img_url, is_challenge=True)
 
 
 class DetailUpdateMatch(generics.RetrieveUpdateDestroyAPIView):
@@ -498,27 +498,27 @@ class CreateCourts(generics.CreateAPIView):
             if already_exists:
                 raise CourtAlreadyExists
 
-        if sport == 'Tennis':
-            img_url = TENNIS_IMG_URL
-        elif sport == 'Basketball':
-            img_url = BASKETBALL_IMG_URL
-        elif sport == 'Football':
-            img_url = FOOTBALL_IMG_URL
-        elif sport == 'Soccer':
-            img_url = SOCCER_IMG_URL
-        elif sport == 'Volleyball':
-            img_url = VOLLEYBALL_IMG_URL
-        elif sport == 'Pickleball':
-            img_url = PICKLEBALL_IMG_URL
-        else:
-            img_url = TROPHY_IMG_URL
+        # if sport == 'Tennis':
+        #     img_url = TENNIS_IMG_URL
+        # elif sport == 'Basketball':
+        #     img_url = BASKETBALL_IMG_URL
+        # elif sport == 'Football':
+        #     img_url = FOOTBALL_IMG_URL
+        # elif sport == 'Soccer':
+        #     img_url = SOCCER_IMG_URL
+        # elif sport == 'Volleyball':
+        #     img_url = VOLLEYBALL_IMG_URL
+        # elif sport == 'Pickleball':
+        #     img_url = PICKLEBALL_IMG_URL
+        # else:
+        #     img_url = TROPHY_IMG_URL
 
         lat = serializer.initial_data.get('lat', None)
         long = serializer.initial_data.get('long', None)
         if lat and long:
-            serializer.save(lat=lat, long=long, img_url=img_url)
+            serializer.save(lat=lat, long=long)
         else:
-            serializer.save(img_url=img_url)
+            serializer.save()
 
 
 class DetailUpdateCourt(generics.RetrieveUpdateDestroyAPIView):

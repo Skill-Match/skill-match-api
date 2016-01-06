@@ -232,7 +232,28 @@ class Court(models.Model):
 
     @property
     def small_sport_img(self):
-        split_url = self.img_url.partition('upload/')
-        small_sport_img = split_url[0] + split_url[1] + \
-                          'c_fill,g_face,h_050,r_23,w_050/' + split_url[2]
+        split_url = self.img_url.partition('c_scale,w_200/')
+        small_sport_img = split_url[0] + \
+                          'c_scale,h_50,w_50/' + split_url[2]
         return small_sport_img
+
+
+@receiver(post_save, sender=Court)
+def add_profile_image(sender, instance=None, created=False, **kwargs):
+
+    if created:
+        if instance.sport == 'Tennis':
+            instance.img_url = TENNIS_IMG_URL
+        elif instance.sport == 'Basketball':
+            instance.img_url = BASKETBALL_IMG_URL
+        elif instance.sport == 'Football':
+            instance.img_url = FOOTBALL_IMG_URL
+        elif instance.sport == 'Soccer':
+            instance.img_url = SOCCER_IMG_URL
+        elif instance.sport == 'Volleyball':
+            instance.img_url = VOLLEYBALL_IMG_URL
+        elif instance.sport == 'Pickleball':
+            instance.img_url = PICKLEBALL_IMG_URL
+        else:
+            instance.img_url = TROPHY_IMG_URL
+        instance.save()

@@ -43,6 +43,7 @@ class Profile(models.Model):
         (FIFTIES, "50's"),
         (SIXTY, "60+")
     )
+
     DEFAULT_MALE_IMG_URL = 'http://res.cloudinary.com/skill-match/image/' \
                            'upload/v1/image/upload/%3Cimg%20src%3D%22http://' \
                            'res.cloudinary.com/skill-match/image/upload/' \
