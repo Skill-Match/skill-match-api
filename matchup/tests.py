@@ -340,6 +340,7 @@ class MatchTests(APITestCase):
         self.assertEqual(response.data['is_open'], True)
 
     def test_detail_update_match(self):
+        self.client.force_authenticate(user=self.user)
         url = reverse('api_detail_update_match', kwargs={'pk': self.match.id})
         response = self.client.get(url, {}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -409,12 +410,12 @@ class FeedbackTests(APITestCase):
         self.match2.save()
 
         self.feedback = Feedback.objects.create(reviewer=self.user,
-                                               player=self.user2,
-                                               match=self.match2,
-                                               skill=70,
-                                               sportsmanship=80,
-                                               punctuality='On Time',
-                                               availability=3)
+                                                player=self.user2,
+                                                match=self.match2,
+                                                skill=70,
+                                                sportsmanship=80,
+                                                punctuality='On Time',
+                                                availability=3)
 
     def test_create_feedback(self):
         self.client.force_authenticate(user=self.user)
@@ -442,6 +443,7 @@ class FeedbackTests(APITestCase):
 
     def test_detail_update_feedback(self):
         self.client.force_authenticate(user=self.user)
+        self.client.force_login(user=self.user)
         url = reverse('api_detail_update_feedback', kwargs={'pk': self.feedback.id})
         response = self.client.get(url, {}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)

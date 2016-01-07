@@ -420,7 +420,7 @@ class CreateFeedbacks(generics.CreateAPIView):
 
 
 class DetailUpdateFeedback(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsOwner, permissions.IsAdminUser, )
+    permission_classes = (IsOwner, )
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
 

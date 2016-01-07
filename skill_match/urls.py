@@ -20,4 +20,5 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include('matchup.urls')),
+    url(r'^docs/', include('rest_framework_swagger.urls'))
 ]
