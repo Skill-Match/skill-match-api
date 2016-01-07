@@ -77,6 +77,11 @@ class Profile(models.Model):
             split_url = url.partition('upload/')
             img_url = split_url[0] + split_url[1] + self.IMG_URL_ADD_ON + \
                       split_url[2]
+            file_type = img_url[-3:].lower()
+            if file_type == 'jpg':
+                new_img_url = img_url[:-3]
+                new_img_url += 'png'
+                return new_img_url
             return img_url
 
     @property
@@ -91,6 +96,12 @@ class Profile(models.Model):
         split_url = url.partition('upload/')
         img_url = split_url[0] + split_url[1] + self.SMALL_IMG_URL_ADD_ON + \
                   split_url[2]
+        file_type = img_url[-3:].lower()
+        if file_type == 'jpg':
+            new_img_url = img_url[:-3]
+            new_img_url += 'png'
+            return new_img_url
+
         return img_url
 
     @property

@@ -661,6 +661,3 @@ class CommandsTests(TestCase):
     #     self.assertEqual(match.is_completed, False)
     #     call_command('close_completed_matches')
     #     self.assertEqual(match.is_completed, True)
-
-
-

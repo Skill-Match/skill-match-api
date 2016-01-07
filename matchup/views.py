@@ -1,15 +1,15 @@
 import logging
-
 import oauth2
 import requests
 from django.contrib.auth.models import User
 from django.contrib.gis.db.models.functions import Distance
-from django.contrib.gis.geos import GEOSGeometry as G
+from django.contrib.gis.geos import GEOSGeometry as Geos
 from django.db.models import Count
 from geopy import Nominatim
 from matchup.exceptions import OneFeedbackAllowed, SelfSignUp, \
-    OnlyCreatorMayConfirmOrDecline, NoPlayerToConfirmOrDecline, AlreadyJoined, \
-    AlreadyConfirmed, NotInMatch, CourtAlreadyExists, NonExistingPlayer
+    OnlyCreatorMayConfirmOrDecline, NoPlayerToConfirmOrDecline, \
+    AlreadyJoined, AlreadyConfirmed, NotInMatch, CourtAlreadyExists, \
+    NonExistingPlayer
 from matchup.models import Park, Match, Feedback, Court
 from matchup.notifications import join_match_notify, confirm_match_notify, \
     decline_match_notify, leave_match_notify, challenge_declined_notify, \
@@ -86,16 +86,19 @@ class ListParks(generics.ListAPIView):
         if courts:
             qs = qs.annotate(count=Count('court')).exclude(count=0)
         if latitude and longitude:
-            pnt = G('POINT(' + str(longitude) + ' ' + str(latitude) + ')', srid=4326)
+            pnt = Geos('POINT(' + str(longitude) + ' ' + str(latitude) + ')',
+                    srid=4326)
         elif zip_code:
             geolocator = Nominatim()
             location = geolocator.geocode(zip_code + ' NV')
-            pnt = G('POINT(' + str(location.longitude) + ' ' + str(location.latitude) + ')', srid=4326)
+            pnt = Geos('POINT(' + str(location.longitude) + ' '
+                    + str(location.latitude) + ')', srid=4326)
             x = 5
         else:
-            pnt = G('POINT(-115.13983 36.169941)', srid=4326)
+            pnt = Geos('POINT(-115.13983 36.169941)', srid=4326)
 
-        by_distance = qs.annotate(distance=Distance('location', pnt)).order_by('distance')[:20]
+        by_distance = qs.annotate(distance=Distance(
+                'location', pnt)).order_by('distance')[:20]
         return by_distance
 
 
@@ -143,7 +146,8 @@ class ListCreateMatches(generics.ListCreateAPIView):
             img_url = TROPHY_IMG_URL
 
         match = serializer.save(creator=user, img_url=img_url)
-        already_exists = Court.objects.filter(park=match.park, sport=match.sport)
+        already_exists = Court.objects.filter(park=match.park,
+                                              sport=match.sport)
         if not already_exists:
             Court.objects.create(park=match.park, sport=match.sport)
         create_match_notify(match)
@@ -174,15 +178,18 @@ class ListCreateMatches(generics.ListCreateAPIView):
         if home:
             qs = qs.filter(is_open=True).order_by('date')
         if latitude and longitude:
-            pnt = G('POINT(' + str(longitude) + ' ' + str(latitude) + ')', srid=4326)
+            pnt = Geos('POINT(' + str(longitude) + ' ' + str(latitude) + ')',
+                    srid=4326)
         elif zip_code:
             geolocator = Nominatim()
             location = geolocator.geocode(zip_code + ' NV')
-            pnt = G('POINT(' + str(location.longitude) + ' ' + str(location.latitude) + ')', srid=4326)
+            pnt = Geos('POINT(' + str(location.longitude) + ' ' +
+                       str(location.latitude) + ')', srid=4326)
         else:
-            pnt = G('POINT(-115.13983 36.169941)', srid=4326)
+            pnt = Geos('POINT(-115.13983 36.169941)', srid=4326)
 
-        by_distance = qs.annotate(distance=Distance('park__location', pnt)).order_by('distance')[:30]
+        by_distance = qs.annotate(distance=Distance(
+                'park__location', pnt)).order_by('distance')[:30]
         return by_distance
 
 
@@ -193,8 +200,8 @@ class ChallengeCreateMatch(generics.CreateAPIView):
     def perform_create(self, serializer):
         """
         Adds player making request and finds challenged(User) by id. Adds both
-        players into list to serializer. Adds img_url based on sport, closes sport
-        and indicates it's a challenge with is_challenge=True
+        players into list to serializer. Adds img_url based on sport, closes
+        sport and indicates it's a challenge with is_challenge=True
         :param serializer:
         :return:
         """
@@ -331,7 +338,7 @@ class DeclineMatch(generics.UpdateAPIView):
         decliner = self.request.user
         challenger = serializer.instance.players.exclude(id=decliner.id)[0]
 
-        if serializer.instance.is_challenge == True:
+        if serializer.instance.is_challenge:
             if challenger == serializer.instance.creator:
                 match = serializer.save(challenge_declined=True)
                 challenge_declined_notify(match, challenger)
@@ -385,9 +392,9 @@ class CreateFeedbacks(generics.CreateAPIView):
     serializer_class = FeedbackSerializer
 
     def perform_create(self, serializer):
-        """If no player, Get match_id from serializer. Find Match object with match_id. Use Match
-            object to find player and reviewer from the match. (Reviewer =
-            logged in user.
+        """If no player, Get match_id from serializer. Find Match object with
+           match_id. Use Match object to find player and reviewer from the
+           match. (Reviewer = logged in user.
           If player, use player_id to find User to be reviewed
           Error if they already provided Feedback for that player.
         """
@@ -405,7 +412,8 @@ class CreateFeedbacks(generics.CreateAPIView):
                 raise NonExistingPlayer
 
             player = User.objects.get(pk=player_id)
-            existing_feedback = match.feedback_set.filter(reviewer=reviewer, player=player)
+            existing_feedback = match.feedback_set.filter(reviewer=reviewer,
+                                                          player=player)
             if existing_feedback:
                 raise OneFeedbackAllowed
             serializer.save(player=player, reviewer=reviewer)
@@ -489,7 +497,8 @@ def hello_world(request):
     :param request:
     :return:
     """
-    url = 'http://api.yelp.com/v2/search/' + '?location=89148, NV &category_filter=parks'
+    url = 'http://api.yelp.com/v2/search/' + '?location=89148, ' \
+                                             'NV &category_filter=parks'
 
     consumer = oauth2.Consumer(YELP_CONSUMER_KEY, YELP_TOKEN_SECRET)
     oauth_request = oauth2.Request(method="GET", url=url)
