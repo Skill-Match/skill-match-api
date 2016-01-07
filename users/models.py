@@ -160,6 +160,7 @@ class Skill(models.Model):
         total_weight = 0
         count = 0
         for feedback in feedbacks:
+
             # Get reviewer skill, sportsmanship, and num_feedbacks to determine
             # how his/her feedback should be weighted
             reviewer_cred = feedback.reviewer.skill_set.filter(sport=self.sport)
