@@ -344,7 +344,7 @@ class DeclineMatch(generics.UpdateAPIView):
 
 
 class ConfirmMatch(generics.UpdateAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, )
     queryset = Match.objects.all()
     serializer_class = ChallengerMatchSerializer
 
@@ -432,7 +432,7 @@ class DetailUpdateFeedback(generics.RetrieveUpdateDestroyAPIView):
 #################### COURT(SPORT) ##########################################
 
 class CreateCourts(generics.CreateAPIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
     queryset = Court.objects.all()
     serializer_class = CourtSerializer
 

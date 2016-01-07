@@ -88,6 +88,7 @@ def leave_match_notify(match, joiner):
     if creator.profile.wants_texts:
         send_text(creator.profile.phone_number, body)
 
+
 def confirm_match_notify(match):
     challenger_email = match.players.exclude(id=match.creator.id)[0].email
     date = match.date.strftime("%A %B, %d")
