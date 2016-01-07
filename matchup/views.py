@@ -14,17 +14,14 @@ from matchup.models import Park, Match, Feedback, Court
 from matchup.notifications import join_match_notify, confirm_match_notify, \
     decline_match_notify, leave_match_notify, challenge_declined_notify, \
     challenge_accepted_notify, create_match_notify
-from matchup.serializers import UserSerializer, ParkSerializer, \
+from matchup.permissions import IsOwnerOrReadOnly, IsOwner
+from matchup.serializers import ParkSerializer, \
     MatchSerializer, FeedbackSerializer, ChallengerMatchSerializer, \
     CourtSerializer, ListParksSerializer
-from rest_framework import generics
-from rest_framework import parsers, renderers
-from rest_framework.authtoken.models import Token
-from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework import generics, permissions
 from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from skill_match.settings import YELP_CONSUMER_KEY, YELP_CONSUMER_SECRET, \
     YELP_TOKEN, YELP_TOKEN_SECRET
 
@@ -47,19 +44,9 @@ PICKLEBALL_IMG_URL = "http://res.cloudinary.com/skill-match/image/upload/" \
 TROPHY_IMG_URL = "http://res.cloudinary.com/skill-match/image/upload/" \
                 "v1451804013/trophy_200_cnaras.jpg"
 
+
 class SmallPagination(PageNumberPagination):
     page_size = 10
-
-
-#################### USER RELATED VIEWS ############################
-#
-#
-#
-#
-###################### USER ########################################
-
-
-
 
 
 #################### PARK RELATED VIEWS ############################
@@ -71,7 +58,6 @@ class SmallPagination(PageNumberPagination):
 
 
 class ListParks(generics.ListAPIView):
-    """Permissions: all"""
     queryset = Park.objects.all()
     serializer_class = ListParksSerializer
     pagination_class = SmallPagination
@@ -114,8 +100,6 @@ class ListParks(generics.ListAPIView):
 
 
 class DetailPark(generics.RetrieveAPIView):
-    """ Permissions: all
-    """
     queryset = Park.objects.all()
     serializer_class = ParkSerializer
 
@@ -129,7 +113,7 @@ class DetailPark(generics.RetrieveAPIView):
 
 
 class ListCreateMatches(generics.ListCreateAPIView):
-    """Permissions: logged in user or admin"""
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = Match.objects.all().order_by('-created_at')
     serializer_class = MatchSerializer
     pagination_class = SmallPagination
@@ -204,6 +188,7 @@ class ListCreateMatches(generics.ListCreateAPIView):
 
 class ChallengeCreateMatch(generics.CreateAPIView):
     serializer_class = MatchSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
     def perform_create(self, serializer):
         """
@@ -240,7 +225,7 @@ class ChallengeCreateMatch(generics.CreateAPIView):
 
 
 class DetailUpdateMatch(generics.RetrieveUpdateDestroyAPIView):
-    """Permissions: detail-all, update/destroy - match creator only"""
+    permission_classes = (IsOwnerOrReadOnly,)
     queryset = Match.objects.all()
     serializer_class = MatchSerializer
 
@@ -253,6 +238,7 @@ class DetailUpdateMatch(generics.RetrieveUpdateDestroyAPIView):
 
 
 class JoinMatch(generics.UpdateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = Match.objects.all()
     serializer_class = ChallengerMatchSerializer
 
@@ -287,6 +273,7 @@ class JoinMatch(generics.UpdateAPIView):
 
 
 class LeaveMatch(generics.UpdateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = Match.objects.all()
     serializer_class = ChallengerMatchSerializer
 
@@ -326,6 +313,7 @@ class LeaveMatch(generics.UpdateAPIView):
 
 
 class DeclineMatch(generics.UpdateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = Match.objects.all()
     serializer_class = ChallengerMatchSerializer
 
@@ -356,6 +344,7 @@ class DeclineMatch(generics.UpdateAPIView):
 
 
 class ConfirmMatch(generics.UpdateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = Match.objects.all()
     serializer_class = ChallengerMatchSerializer
 
@@ -391,7 +380,7 @@ class ConfirmMatch(generics.UpdateAPIView):
 
 
 class CreateFeedbacks(generics.CreateAPIView):
-    """Logged in user only, *** must be player in the match also ***"""
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
 
@@ -405,6 +394,8 @@ class CreateFeedbacks(generics.CreateAPIView):
         reviewer = self.request.user
         match_id = serializer.initial_data['match']
         match = Match.objects.get(pk=match_id)
+        if reviewer not in match.players.all():
+            raise NotInMatch
         player_id = serializer.initial_data.get('player', None)
         if player_id:
 
@@ -429,9 +420,7 @@ class CreateFeedbacks(generics.CreateAPIView):
 
 
 class DetailUpdateFeedback(generics.RetrieveUpdateDestroyAPIView):
-    """
-    Permissions: ADMIN or user only.
-    """
+    permission_classes = (IsOwner, permissions.IsAdminUser, )
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
 
@@ -443,6 +432,7 @@ class DetailUpdateFeedback(generics.RetrieveUpdateDestroyAPIView):
 #################### COURT(SPORT) ##########################################
 
 class CreateCourts(generics.CreateAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly)
     queryset = Court.objects.all()
     serializer_class = CourtSerializer
 
@@ -485,6 +475,7 @@ class CreateCourts(generics.CreateAPIView):
 
 
 class DetailUpdateCourt(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (permissions.IsAuthenticated, )
     queryset = Court.objects.all()
     serializer_class = CourtSerializer
 
