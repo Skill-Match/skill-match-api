@@ -65,7 +65,7 @@ def join_match_notify(match, joiner):
 
     send_email(creator.email, subject, body)
 
-    if creator.profile.wants_texts:
+    if creator.profile.wants_texts and creator.profile.phone_number:
         send_text(creator.profile.phone_number, body)
 
 
@@ -116,7 +116,7 @@ def decline_match_notify(match, challenger):
 
 def twenty_four_hour_notify(match):
     for player in match.players.all():
-        if player.profile.wants_texts:
+        if player.profile.wants_texts and player.profile.phone_number:
             time = time = match.time.strftime("%I:%M %p")
             body = "Reminder: Your {} match tomorrow is at {} at {}. Have a " \
                    "good one!".format(match.sport, time, match.park.name)
