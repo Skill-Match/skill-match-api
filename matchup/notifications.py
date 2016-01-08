@@ -100,9 +100,6 @@ def confirm_match_notify(match):
 
     send_email(challenger_email, subject, body)
 
-    if match.creator.profile.phone_number and match.creator.profile.wants_texts:
-        send_text(match.creator.profile.phone_number, body)
-
 
 def decline_match_notify(match, challenger):
     challenger_email = challenger.email
@@ -117,8 +114,8 @@ def decline_match_notify(match, challenger):
 
     send_email(challenger_email, subject, body)
 
-    if match.creator.profile.phone_number and match.creator.profile.wants_texts:
-        send_text(match.creator.profile.phone_number, body)
+    if challenger.profile.phone_number and challenger.profile.wants_texts:
+        send_text(challenger.profile.phone_number, body)
 
 
 def twenty_four_hour_notify(match):
