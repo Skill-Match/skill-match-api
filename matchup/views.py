@@ -1,5 +1,6 @@
 import logging
 import oauth2
+import re
 import requests
 from django.contrib.auth.models import User
 from django.contrib.gis.db.models.functions import Distance
@@ -73,28 +74,29 @@ class ListParks(generics.ListAPIView):
         qs = super().get_queryset()
         latitude = self.request.query_params.get('lat', None)
         longitude = self.request.query_params.get('long', None)
-        zip_code = self.request.query_params.get('zip', None)
         search = self.request.query_params.get('search', None)
         sport = self.request.query_params.get('sport', None)
         courts = self.request.query_params.get('courts', None)
+        pnt = None
 
-        if search:
-            qs = qs.filter(name__icontains=search)
         if sport:
             sport = sport.title()
             qs = qs.filter(court__sport=sport)
         if courts:
             qs = qs.annotate(count=Count('court')).exclude(count=0)
+        if search:
+            zip_code = re.match('^\d{5}$', search)
+            if zip_code:
+                geolocator = Nominatim()
+                location = geolocator.geocode(search + ' NV')
+                pnt = Geos('POINT(' + str(location.longitude) + ' ' +
+                           str(location.latitude) + ')', srid=4326)
+            else:
+                qs = qs.filter(name__icontains=search)
         if latitude and longitude:
             pnt = Geos('POINT(' + str(longitude) + ' ' + str(latitude) + ')',
-                    srid=4326)
-        elif zip_code:
-            geolocator = Nominatim()
-            location = geolocator.geocode(zip_code + ' NV')
-            pnt = Geos('POINT(' + str(location.longitude) + ' '
-                    + str(location.latitude) + ')', srid=4326)
-            x = 5
-        else:
+                       srid=4326)
+        if not pnt:
             pnt = Geos('POINT(-115.13983 36.169941)', srid=4326)
 
         by_distance = qs.annotate(distance=Distance(
