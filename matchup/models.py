@@ -98,7 +98,7 @@ class Ammenity(models.Model):
     """
     Also scraped from Henderson Parks and Rec.
     ManyToMany Relationship with HendersonPark
-    Example ammenities: 'Open Grass Field', 'Lighted Tennis Courts'
+    Example amenities: 'Open Grass Field', 'Lighted Tennis Courts'
     """
     name = models.CharField(max_length=125)
     parks = models.ManyToManyField(HendersonPark)

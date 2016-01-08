@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.contrib.auth.models import User
 from django.core.management import call_command
 from django.core.urlresolvers import reverse
@@ -169,11 +171,11 @@ class MatchTests(APITestCase):
                                              email='test2@test.com',
                                              password='password')
         Profile.objects.create(user=self.user, gender='Male', age="20's",
-                               wants_texts=False, phone_number="5082693675")
+                               wants_texts=True, phone_number="5082693675")
         Profile.objects.create(user=self.user2, gender='Male', age="30's",
-                               wants_texts=False)
+                               wants_texts=True)
         Profile.objects.create(user=self.user3, gender='Female', age="20's",
-                               wants_texts=False)
+                               wants_texts=True)
         self.park = Park.objects.create(name='Test Park',
                                         rating=4.0,
                                         url="www.testpark.com",
@@ -593,55 +595,16 @@ class SkillTests(APITestCase):
 
 
 class CommandsTests(TestCase):
-    def test_add_parks(self):
-        args = ['89148']
-        call_command('add_parks', args)
-        park_count = Park.objects.count()
-        self.assertEqual(park_count, 20)
-
-    def test_add_henderson_parks(self):
-        call_command('add_henderson_parks')
-        park_count = HendersonPark.objects.count()
-        ammenities_count = Ammenity.objects.count()
-        ammenities = False
-        parks = False
-        if park_count > 0:
-            parks = True
-        if ammenities_count > 0:
-            ammenities = True
-        self.assertEqual(parks, True)
-        self.assertEqual(ammenities, True)
-
-    def test_link_henderson_parks(self):
-        call_command('add_parks', ['89074'])
-        call_command('add_henderson_parks')
-        call_command('link_henderson_parks')
-        parks = Park.objects.annotate(count=Count('henderson_park')).exclude(count=0)
-        count = parks.count()
-        linked_parks = False
-        if count > 0:
-            linked_parks = True
-        self.assertEqual(linked_parks, True)
-
-    def test_courts_by_ammenity(self):
-        call_command('add_parks', ['89074'])
-        call_command('add_henderson_parks')
-        call_command('link_henderson_parks')
-        call_command('add_courts_by_ammenity')
-        count = Court.objects.count()
-        courts = False
-        if count > 0:
-            courts = True
-        self.assertEqual(courts, True)
-
-    def test_close_completed_matches(self):
-        user = User.objects.create_user(username='peter',
+    def setUp(self):
+        self.user = User.objects.create_user(username='peter',
                                         email='test@test.com',
                                         password='pwd')
-        user2 = User.objects.create_user(username='bob',
+        self.user2 = User.objects.create_user(username='bob',
                                         email='test2@test.com',
                                         password='pwd')
-        park = Park.objects.create(name='Test Park',
+        Profile.objects.create(user=self.user, gender='Male', age="20's",
+                               wants_texts=True, phone_number="5082693675")
+        self.park = Park.objects.create(name='Test Park',
                                         rating=4.0,
                                         url="www.testpark.com",
                                         image_url='www.imageurl.com',
@@ -654,15 +617,104 @@ class CommandsTests(TestCase):
                                         display_address3='Boston, MA 02121',
                                         postal_code='02121',
                                         location=BOSTON_LOC)
-        match = Match.objects.create(creator=user, park=park, sport='Tennis',
+        self.match = Match.objects.create(creator=self.user, park=self.park, sport='Tennis',
                              skill_level=50, date='2015-12-31', time='15:00',
                              is_open=False)
-        match.players.add(user)
-        match.players.add(user2)
-        match.save()
-        self.assertEqual(match.is_completed, False)
+        self.match2 = Match.objects.create(creator=self.user, park=self.park, sport='Tennis',
+                             skill_level=50, date='2015-12-31', time='15:00',
+                             is_open=False)
+        self.match3 = Match.objects.create(creator=self.user, park=self.park, sport='Tennis',
+                             skill_level=50, date='2015-12-31', time='15:00',
+                             is_open=False)
+        self.match.players.add(self.user)
+        self.match.players.add(self.user2)
+        self.match.save()
+        self.match2.players.add(self.user)
+        self.match2.players.add(self.user2)
+        self.match2.save()
+        self.match3.players.add(self.user)
+        self.match3.players.add(self.user2)
+        self.match3.save()
+
+        self.feedback = Feedback.objects.create(reviewer=self.user,
+                                                player=self.user2,
+                                                match=self.match,
+                                                skill=50,
+                                                sportsmanship=50,
+                                                availability=4,
+                                                punctuality='On Time')
+        self.feedback2 = Feedback.objects.create(reviewer=self.user,
+                                                player=self.user2,
+                                                match=self.match2,
+                                                skill=50,
+                                                sportsmanship=50,
+                                                availability=4,
+                                                punctuality='On Time')
+        self.feedback3 = Feedback.objects.create(reviewer=self.user,
+                                                player=self.user2,
+                                                match=self.match3,
+                                                skill=50,
+                                                sportsmanship=50,
+                                                availability=4,
+                                                punctuality='On Time')
+
+    def test_add_parks(self):
+        args = ['89148']
+        out = StringIO()
+        call_command('add_parks', args, stdout=out)
+        park_count = Park.objects.count()
+        self.assertEqual(park_count, 21)
+        self.assertIn('Parks Added to Database', out.getvalue())
+
+    def test_add_henderson_parks(self):
+        out = StringIO()
+        call_command('add_henderson_parks', stdout=out)
+        self.assertIn('Henderson Parks', out.getvalue())
+        self.assertIn('Amenities added to Database', out.getvalue())
+
+    def test_link_henderson_parks(self):
+        out = StringIO()
+        call_command('add_parks', ['89074'])
+        call_command('add_henderson_parks')
+        call_command('link_henderson_parks', stdout=out)
+        parks = Park.objects.annotate(count=Count('henderson_park')).\
+            exclude(count=0)
+        count = parks.count()
+        linked_parks = False
+        if count > 0:
+            linked_parks = True
+        self.assertEqual(linked_parks, True)
+        self.assertIn('Parks added,', out.getvalue())
+
+    def test_courts_by_amenity(self):
+        out = StringIO()
+        call_command('add_parks', ['89074'])
+        call_command('add_henderson_parks')
+        call_command('link_henderson_parks')
+        call_command('add_courts_by_amenity', stdout=out)
+        count = Court.objects.count()
+        courts = False
+        if count > 0:
+            courts = True
+        self.assertEqual(courts, True)
+        self.assertIn('Courts added', out.getvalue())
+
+    def test_close_completed_matches(self):
+        self.assertEqual(self.match.is_completed, False)
         out = StringIO()
         call_command('close_completed_matches', stdout=out)
-        self.assertEqual(Match.objects.count(), 1)
-        self.assertEqual('1 Matches completed\n', out.getvalue())
+        self.assertEqual('3 Matches completed\n', out.getvalue())
+
+    def test_update_all_skills(self):
+        out = StringIO()
+        call_command('update_all_skills', stdout=out)
+        self.assertIn('Skills updated successfully', out.getvalue())
+        self.assertEqual(Skill.objects.count(), 1)
+
+    def test_update_skills(self):
+        out = StringIO()
+        call_command('update_skills', stdout=out)
+        self.assertIn('Skills updated', out.getvalue())
+        self.assertEqual(Skill.objects.count(), 1)
+
 

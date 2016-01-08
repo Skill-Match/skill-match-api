@@ -73,5 +73,5 @@ class Command(BaseCommand):
                         ammenity.parks.add(this_park)
                         ammenity.save()
 
-        self.stdout.write("{} Henderson Parks {} Ammenities added to Database"
+        self.stdout.write("{} Henderson Parks {} Amenities added to Database"
                           .format(count, amm_count))
