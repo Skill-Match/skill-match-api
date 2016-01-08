@@ -54,7 +54,7 @@ class Profile(models.Model):
                              '//res.cloudinary.com/skill-match/image/upload/' \
                              'Woman_ibpgkk.png"/>'
     IMG_URL_ADD_ON = 'bo_1px_solid_rgb:747680,c_fill,g_face,h_200,r_4,w_200/'
-    SMALL_IMG_URL_ADD_ON = 'c_fill,g_face,h_050,r_23,w_050/'
+    SMALL_IMG_URL_ADD_ON = 'c_fill,g_face,h_070,r_23,w_070/'
 
     user = models.OneToOneField(User)
     gender = models.CharField(max_length=8, choices=GENDER_CHOICES,
