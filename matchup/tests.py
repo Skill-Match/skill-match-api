@@ -3,6 +3,7 @@ from django.core.management import call_command
 from django.core.urlresolvers import reverse
 from django.db.models import Count
 from django.test import TestCase
+from django.utils.six import StringIO
 from matchup.models import Match, Park, Feedback, Court, HendersonPark, \
     Ammenity
 from rest_framework import status
@@ -504,6 +505,7 @@ class CourtTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['num_courts'], 2)
 
+
 class SkillTests(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='joe',
@@ -632,32 +634,35 @@ class CommandsTests(TestCase):
             courts = True
         self.assertEqual(courts, True)
 
-    # def test_close_completed_matches(self):
-    #     user = User.objects.create_user(username='peter',
-    #                                     email='test@test.com',
-    #                                     password='pwd')
-    #     user2 = User.objects.create_user(username='bob',
-    #                                     email='test2@test.com',
-    #                                     password='pwd')
-    #     park = Park.objects.create(name='Test Park',
-    #                                     rating=4.0,
-    #                                     url="www.testpark.com",
-    #                                     image_url='www.imageurl.com',
-    #                                     rating_img_url='www.rating.com',
-    #                                     rating_img_url_small='www.ratimg.com',
-    #                                     city='Boston',
-    #                                     state_code='MA',
-    #                                     display_address1='10 Happy St.',
-    #                                     display_address2='Downtown',
-    #                                     display_address3='Boston, MA 02121',
-    #                                     postal_code='02121',
-    #                                     location=BOSTON_LOC)
-    #     match = Match.objects.create(creator=user, park=park, sport='Tennis',
-    #                          skill_level=50, date='2015-12-31', time='15:00',
-    #                          is_open=False)
-    #     match.players.add(user)
-    #     match.players.add(user2)
-    #     match.save()
-    #     self.assertEqual(match.is_completed, False)
-    #     call_command('close_completed_matches')
-    #     self.assertEqual(match.is_completed, True)
+    def test_close_completed_matches(self):
+        user = User.objects.create_user(username='peter',
+                                        email='test@test.com',
+                                        password='pwd')
+        user2 = User.objects.create_user(username='bob',
+                                        email='test2@test.com',
+                                        password='pwd')
+        park = Park.objects.create(name='Test Park',
+                                        rating=4.0,
+                                        url="www.testpark.com",
+                                        image_url='www.imageurl.com',
+                                        rating_img_url='www.rating.com',
+                                        rating_img_url_small='www.ratimg.com',
+                                        city='Boston',
+                                        state_code='MA',
+                                        display_address1='10 Happy St.',
+                                        display_address2='Downtown',
+                                        display_address3='Boston, MA 02121',
+                                        postal_code='02121',
+                                        location=BOSTON_LOC)
+        match = Match.objects.create(creator=user, park=park, sport='Tennis',
+                             skill_level=50, date='2015-12-31', time='15:00',
+                             is_open=False)
+        match.players.add(user)
+        match.players.add(user2)
+        match.save()
+        self.assertEqual(match.is_completed, False)
+        out = StringIO()
+        call_command('close_completed_matches', stdout=out)
+        self.assertEqual(Match.objects.count(), 1)
+        self.assertEqual('1 Matches completed\n', out.getvalue())
+
