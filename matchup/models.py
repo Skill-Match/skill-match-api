@@ -153,27 +153,6 @@ class Match(models.Model):
                                                  self.sport, self.id)
 
 
-@receiver(post_save, sender=Match)
-def add_profile_image(sender, instance=None, created=False, **kwargs):
-
-    if created:
-        if instance.sport == 'Tennis':
-            instance.img_url = TENNIS_IMG_URL
-        elif instance.sport == 'Basketball':
-            instance.img_url = BASKETBALL_IMG_URL
-        elif instance.sport == 'Football':
-            instance.img_url = FOOTBALL_IMG_URL
-        elif instance.sport == 'Soccer':
-            instance.img_url = SOCCER_IMG_URL
-        elif instance.sport == 'Volleyball':
-            instance.img_url = VOLLEYBALL_IMG_URL
-        elif instance.sport == 'Pickleball':
-            instance.img_url = PICKLEBALL_IMG_URL
-        else:
-            instance.img_url = TROPHY_IMG_URL
-        instance.save()
-
-
 class Feedback(models.Model):
     """
     Feedback process:
