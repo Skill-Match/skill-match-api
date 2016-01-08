@@ -85,8 +85,9 @@ def leave_match_notify(match, joiner):
 
     send_email(creator.email, subject, body)
 
-    if creator.profile.wants_texts:
+    if creator.profile.wants_texts and creator.profile.wants_texts:
         send_text(creator.profile.phone_number, body)
+
 
 def confirm_match_notify(match):
     challenger_email = match.players.exclude(id=match.creator.id)[0].email
@@ -98,6 +99,9 @@ def confirm_match_notify(match):
     subject = "Your match has been accepted!"
 
     send_email(challenger_email, subject, body)
+
+    if match.creator.profile.phone_number and match.creator.profile.wants_texts:
+        send_text(match.creator.profile.phone_number, body)
 
 
 def decline_match_notify(match, challenger):
@@ -112,6 +116,9 @@ def decline_match_notify(match, challenger):
     subject = "Your match request has been declined."
 
     send_email(challenger_email, subject, body)
+
+    if match.creator.profile.phone_number and match.creator.profile.wants_texts:
+        send_text(match.creator.profile.phone_number, body)
 
 
 def twenty_four_hour_notify(match):
