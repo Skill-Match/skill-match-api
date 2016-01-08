@@ -461,21 +461,6 @@ class CreateCourts(generics.CreateAPIView):
             if already_exists:
                 raise CourtAlreadyExists
 
-        # if sport == 'Tennis':
-        #     img_url = TENNIS_IMG_URL
-        # elif sport == 'Basketball':
-        #     img_url = BASKETBALL_IMG_URL
-        # elif sport == 'Football':
-        #     img_url = FOOTBALL_IMG_URL
-        # elif sport == 'Soccer':
-        #     img_url = SOCCER_IMG_URL
-        # elif sport == 'Volleyball':
-        #     img_url = VOLLEYBALL_IMG_URL
-        # elif sport == 'Pickleball':
-        #     img_url = PICKLEBALL_IMG_URL
-        # else:
-        #     img_url = TROPHY_IMG_URL
-
         lat = serializer.initial_data.get('lat', None)
         long = serializer.initial_data.get('long', None)
         if lat and long:

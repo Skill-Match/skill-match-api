@@ -38,5 +38,4 @@ urlpatterns = (
         name='api_detail_update_feedback'),
     url(r'^feedbacks/create/$', CreateFeedbacks.as_view(),
         name='api_create_feedback'),
-    url(r'^yelp/$', matchup_views.hello_world)
 )
