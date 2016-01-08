@@ -174,7 +174,7 @@ class ListCreateMatches(generics.ListCreateAPIView):
         zip_code = self.request.query_params.get('zip', None)
         if sport:
             sport = sport.title()
-            qs = qs.filter(sport=sport)
+            qs = qs.filter(sport=sport).filter(is_open=True)
         if username:
             qs = qs.filter(players__username=username).order_by('-date')
         if home:
@@ -182,13 +182,16 @@ class ListCreateMatches(generics.ListCreateAPIView):
         if latitude and longitude:
             pnt = Geos('POINT(' + str(longitude) + ' ' + str(latitude) + ')',
                     srid=4326)
+            qs = qs.filter(is_open=True)
         elif zip_code:
             geolocator = Nominatim()
             location = geolocator.geocode(zip_code + ' NV')
             pnt = Geos('POINT(' + str(location.longitude) + ' ' +
                        str(location.latitude) + ')', srid=4326)
+            qs = qs.filter(is_open=True)
         else:
             pnt = Geos('POINT(-115.13983 36.169941)', srid=4326)
+            qs = qs.filter(is_open=True)
 
         by_distance = qs.annotate(distance=Distance(
                 'park__location', pnt)).order_by('distance')
