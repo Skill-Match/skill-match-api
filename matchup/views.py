@@ -488,38 +488,3 @@ class DetailUpdateCourt(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticated, )
     queryset = Court.objects.all()
     serializer_class = CourtSerializer
-
-
-@api_view()
-def hello_world(request):
-    """
-    Not being used in the scope of the project at the moment. It
-        fetches data from yelp api and sends it through this project api.
-        It finds the top 20 parks in the area code of 89148 from Yelp.
-    :param request:
-    :return:
-    """
-    url = 'http://api.yelp.com/v2/search/' + '?location=89148, ' \
-                                             'NV &category_filter=parks'
-
-    consumer = oauth2.Consumer(YELP_CONSUMER_KEY, YELP_TOKEN_SECRET)
-    oauth_request = oauth2.Request(method="GET", url=url)
-
-    oauth_request.update(
-        {
-            'oauth_nonce': oauth2.generate_nonce(),
-            'oauth_timestamp': oauth2.generate_timestamp(),
-            'oauth_token': YELP_TOKEN,
-            'oauth_consumer_key': YELP_CONSUMER_SECRET
-        }
-    )
-    token = oauth2.Token(YELP_TOKEN, YELP_TOKEN_SECRET)
-    oauth_request.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, token)
-    signed_url = oauth_request.to_url()
-    response = requests.get(signed_url)
-    content = response.json()
-    parks = content['businesses']
-    a = parks[0]['id']
-    name = parks[0]['name']
-    data = {"message": "hello"}
-    return Response(content)
