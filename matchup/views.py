@@ -191,7 +191,6 @@ class ListCreateMatches(generics.ListCreateAPIView):
             qs = qs.filter(is_open=True)
         else:
             pnt = Geos('POINT(-115.13983 36.169941)', srid=4326)
-            qs = qs.filter(is_open=True)
 
         by_distance = qs.annotate(distance=Distance(
                 'park__location', pnt)).order_by('distance')
