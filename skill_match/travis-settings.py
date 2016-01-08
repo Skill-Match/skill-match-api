@@ -12,3 +12,5 @@ DATABASES = {
         'PORT': ''
     }
 }
+
+LOGGING = None
