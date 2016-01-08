@@ -191,7 +191,7 @@ class ListCreateMatches(generics.ListCreateAPIView):
             pnt = Geos('POINT(-115.13983 36.169941)', srid=4326)
 
         by_distance = qs.annotate(distance=Distance(
-                'park__location', pnt)).order_by('distance')[:30]
+                'park__location', pnt)).order_by('distance')
         return by_distance
 
 
