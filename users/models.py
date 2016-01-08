@@ -141,6 +141,7 @@ class Skill(models.Model):
     Relationships:
     1. player(User)
     """
+    #change this: player to user
     player = models.ForeignKey(User)
     sport = models.CharField(max_length=40)
     skill = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
