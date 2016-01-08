@@ -341,6 +341,54 @@ class MatchTests(APITestCase):
         self.assertEqual(response.data['is_open'], False)
         self.assertEqual(response.data['is_challenge'], True)
 
+    def test_create_challenge_basketball_match(self):
+        self.client.force_authenticate(user=self.user)
+        url = reverse('api_challenge')
+        data = {'park': self.park.id, 'sport': 'Basketball', 'skill_level': 55,
+                'date': '2016-2-2', 'time': '1:00', 'challenge': self.user2.id}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_challenge_football_match(self):
+        self.client.force_authenticate(user=self.user)
+        url = reverse('api_challenge')
+        data = {'park': self.park.id, 'sport': 'Football', 'skill_level': 55,
+                'date': '2016-2-2', 'time': '1:00', 'challenge': self.user2.id}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_challenge_soccer_match(self):
+        self.client.force_authenticate(user=self.user)
+        url = reverse('api_challenge')
+        data = {'park': self.park.id, 'sport': 'Soccer', 'skill_level': 55,
+                'date': '2016-2-2', 'time': '1:00', 'challenge': self.user2.id}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_challenge_volleyball_match(self):
+        self.client.force_authenticate(user=self.user)
+        url = reverse('api_challenge')
+        data = {'park': self.park.id, 'sport': 'Volleyball', 'skill_level': 55,
+                'date': '2016-2-2', 'time': '1:00', 'challenge': self.user2.id}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_challenge_pickleball_match(self):
+        self.client.force_authenticate(user=self.user)
+        url = reverse('api_challenge')
+        data = {'park': self.park.id, 'sport': 'Pickleball', 'skill_level': 55,
+                'date': '2016-2-2', 'time': '1:00', 'challenge': self.user2.id}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_challenge_other_match(self):
+        self.client.force_authenticate(user=self.user)
+        url = reverse('api_challenge')
+        data = {'park': self.park.id, 'sport': 'Other', 'skill_level': 55,
+                'date': '2016-2-2', 'time': '1:00', 'challenge': self.user2.id}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
     def test_join_confirm_match(self):
         #join
         self.client.force_authenticate(user=self.user2)
