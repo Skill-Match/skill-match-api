@@ -140,7 +140,7 @@ class ParkTests(APITestCase):
         response4 = self.client.get(url4, {}, format='json')
         self.assertEqual(response4.status_code, status.HTTP_200_OK)
         self.assertEqual(response4.data['count'], 2)
-        url5 = reverse('api_list_parks') + '?zip_code=02112'
+        url5 = reverse('api_list_parks') + '?search=89148'
         response5 = self.client.get(url5, {}, format='json')
         self.assertEqual(response5.status_code, status.HTTP_200_OK)
         self.assertEqual(response5.data['count'], 3)
