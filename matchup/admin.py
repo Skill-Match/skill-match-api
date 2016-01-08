@@ -13,7 +13,7 @@ class ParkAdmin(admin.ModelAdmin):
 class MatchAdmin(admin.ModelAdmin):
     list_display = ('id', 'description', 'park', 'sport',
                     'skill_level', 'date', 'time', 'is_open', 'is_completed',
-                    'is_confirmed')
+                    'is_confirmed', 'img_url')
 
 @admin.register(Feedback)
 class FeedbackAdmin(admin.ModelAdmin):
