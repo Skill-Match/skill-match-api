@@ -3,8 +3,6 @@
 [![Build Status](https://travis-ci.org/Skill-Match/skill-match-api.svg?branch=master)](https://travis-ci.org/Skill-Match/skill-match-api)
 
 
-The customer is Parks and Recreation across America. Municipalities who are interested in increasing the use and function of public facilities.
-
 Search with ease for parks/courts in your area. Search by name, zip code or location. Filter by sport or search Parks and see easily with icons what sports are available at each park.
 
 Create a meet-up at a local park in your area. You can schedule a Tennis, Basketball, Football, Soccer, ^Pickleball, or Other match.
