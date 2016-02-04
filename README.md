@@ -2,6 +2,7 @@
 [![Coverage Status](https://coveralls.io/repos/Skill-Match/skill-match-api/badge.svg?branch=master&service=github)](https://coveralls.io/github/Skill-Match/skill-match-api?branch=master)
 [![Build Status](https://travis-ci.org/Skill-Match/skill-match-api.svg?branch=master)](https://travis-ci.org/Skill-Match/skill-match-api)
 
+## Features of the Entire Application
 
 Search with ease for parks/courts in your area. Search by name, zip code or location. Filter by sport or search Parks and see easily with icons what sports are available at each park.
 
