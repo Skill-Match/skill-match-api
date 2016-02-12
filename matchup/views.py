@@ -28,6 +28,12 @@ from skill_match.settings import YELP_CONSUMER_KEY, YELP_CONSUMER_SECRET, \
 
 logger = logging.getLogger(__name__)
 
+###############################################################################
+#
+# Image URL's used for sport representation
+#
+###############################################################################
+
 TENNIS_IMG_URL = "http://res.cloudinary.com/skill-match/image/upload/" \
                  "c_scale,w_200/v1451803727/1451824644_tennis_jegpea.png"
 BASKETBALL_IMG_URL = "http://res.cloudinary.com/skill-match/image/upload/" \
@@ -50,15 +56,17 @@ class SmallPagination(PageNumberPagination):
     page_size = 10
 
 
-#################### PARK RELATED VIEWS ############################
+###############################################################################
 #
+# PARK Related Views
 #
-#
-#
-#################### PARK ##########################################
+###############################################################################
 
 
 class ListParks(generics.ListAPIView):
+    """
+    Permissions: All
+    """
     queryset = Park.objects.all()
     serializer_class = ListParksSerializer
     pagination_class = SmallPagination
@@ -66,10 +74,20 @@ class ListParks(generics.ListAPIView):
     def get_queryset(self):
         """
         Querysets:
-        USER LOCATION
-        ZIP CODE
+        1. lat and long (latitude and longitude): use to order by distance
+        2. search: if 5-digit *zip code, use for distance, otherwise search for
+                   park name
+        3. sport: only include parks with that sport
+        4. courts: exclude parks with no listed courts
 
-        :return: Parks ordered by distance how far from user or zip code
+        * Uses Nominatim from the geopy library to get latitude and longitude
+        based on the zipcode.
+
+        Default Ordering: by distance
+        If no location provided, default location is Las Vegas, NV.
+        Uses Geos Point objects to order by distance.
+
+        :return: Parks ordered by distance
         """
         qs = super().get_queryset()
         latitude = self.request.query_params.get('lat', None)
@@ -105,19 +123,25 @@ class ListParks(generics.ListAPIView):
 
 
 class DetailPark(generics.RetrieveAPIView):
+    # Detail View for Park Detail Page. Thanks for making this easy Django
     queryset = Park.objects.all()
     serializer_class = ParkSerializer
 
 
-#################### MATCH RELATED VIEWS ############################
+###############################################################################
 #
+# MATCH Related Views
 #
-#
-#
-################### MATCH ###########################################
+###############################################################################
 
 
 class ListCreateMatches(generics.ListCreateAPIView):
+    """
+    Permissions: All may read. Only logged in Users can perform actions.
+
+    Default QuerySet: All Matches ordered by the time they were created,
+        although this is overridden in get_queryset to order by distance.
+    """
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = Match.objects.all().order_by('-created_at')
     serializer_class = MatchSerializer
@@ -125,9 +149,13 @@ class ListCreateMatches(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         """
-        Add creator to serializer, add img_url to serializer based on sport.
-        :param serializer:
-        :return:
+        1. Pass logged in user to Match serializer to fill Match creator field.
+        2. Add image_url based on sport selected.
+        3. Check to see if that park has a court object attached to it with
+           the selected sport. If it does not, create a court object for that
+           park.
+        :param serializer: Initial data submitted by the user.
+        :return: NONE
         """
         user = self.request.user
         sport = serializer.initial_data['sport']
@@ -155,15 +183,23 @@ class ListCreateMatches(generics.ListCreateAPIView):
         create_match_notify(match)
 
     def get_queryset(self):
-        """Querysets:
-        LOCATION
-        SPORT
-        USERNAME
-        HOME - lose this
-        LATITUDE & LONGITUDE
-        ZIP CODE
+        """
+        Querysets:
+        1. home: filter for only OPEN matches ordered by date of match upcoming
+        2. lat and long (latitude and longitude): use to order by distance
+        3. *zip code: use to order by distance
+        4. sport: only include parks with that sport
+        5. username: filter by only matches the user with that username
+           participated in
 
-        If no location provided, it will default to Las Vegas, NV
+        * Uses Nominatim from the geopy library to get latitude and longitude
+        based on the zipcode.
+
+        Default Ordering: by distance
+        If no location provided, default location is Las Vegas, NV.
+        Uses Geos Point objects to order by distance.
+
+        :return: Matches ordered by distance
         """
         qs = super().get_queryset()
         sport = self.request.query_params.get('sport', None)
@@ -198,16 +234,22 @@ class ListCreateMatches(generics.ListCreateAPIView):
 
 
 class ChallengeCreateMatch(generics.CreateAPIView):
+    """
+    View for the sole purpose of creating a Challenge Match.
+    """
     serializer_class = MatchSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
     def perform_create(self, serializer):
         """
-        Adds player making request and finds challenged(User) by id. Adds both
-        players into list to serializer. Adds img_url based on sport, closes
-        sport and indicates it's a challenge with is_challenge=True
+        Pass User making request as creator to serializer.
+        Find User being challenged (by challenge_id) and pass to serializer.
+        Add img_url based on sport.
+        Indicate it is a challenge match. (is_challenge=True)
+        Close match to public. (is_open=False)
+
         :param serializer:
-        :return:
+        :return: NONE
         """
         user = self.request.user
         challenge_id = serializer.initial_data['challenge']
@@ -236,16 +278,17 @@ class ChallengeCreateMatch(generics.CreateAPIView):
 
 
 class DetailUpdateMatch(generics.RetrieveUpdateDestroyAPIView):
+    # Detail
     permission_classes = (IsOwnerOrReadOnly,)
     queryset = Match.objects.all()
     serializer_class = MatchSerializer
 
 
-########### JOIN, LEAVE, DECLINE, CONFIRM MATCH ########################
+###############################################################################
 #
+# JOIN, LEAVE, DECLINE, CONFIRM MATCH
 #
-#
-########################################################################
+###############################################################################
 
 
 class JoinMatch(generics.UpdateAPIView):
