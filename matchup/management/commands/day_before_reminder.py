@@ -6,14 +6,11 @@ from matchup.notifications import twenty_four_hour_notify
 
 
 class Command(BaseCommand):
-
+    """
+        Sends Text Notification to remind of an upcoming match 23-24 hours
+        before the Match begins.
+    """
     def handle(self, *args, **options):
-        """
-
-        :param args:
-        :param options:
-        :return:
-        """
         day = timedelta(days=1)
         twenty3_hours = timedelta(hours=23)
         matches = Match.objects.filter(is_completed=False)\

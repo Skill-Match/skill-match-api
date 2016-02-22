@@ -1,13 +1,10 @@
-from datetime import timedelta
-
 from django.contrib.auth.models import User
 from django.core.management import call_command
 from django.core.urlresolvers import reverse
 from django.db.models import Count
 from django.test import TestCase
 from django.utils.six import StringIO
-from matchup.models import Match, Park, Feedback, Court, HendersonPark, \
-    Ammenity
+from matchup.models import Match, Park, Feedback, Court
 from rest_framework import status
 from rest_framework.test import APITestCase
 from users.models import Profile, Skill

@@ -3,6 +3,8 @@ from skill_match.settings import SENDGRID_KEY, TWILIO_SID, TWILIO_TOKEN
 from twilio.rest import TwilioRestClient
 
 
+# Notifications using Sendgrid for Email and Twilio for Text Messages.
+
 def send_email(email, subject, html):
     sender = 'SkillMatch <fredoflynn@gmail.com>'
     sg = sendgrid.SendGridClient(SENDGRID_KEY)
@@ -125,10 +127,3 @@ def twenty_four_hour_notify(match):
             body = "Reminder: Your {} match tomorrow is at {} at {}. Have a " \
                    "good one!".format(match.sport, time, match.park.name)
             send_text(player.profile.phone_number, body)
-
-
-def challenge_declined_notify(match, challenger):
-    pass
-
-def challenge_accepted_notify(match):
-    pass

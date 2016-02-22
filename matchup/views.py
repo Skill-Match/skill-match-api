@@ -425,12 +425,11 @@ class ConfirmMatch(generics.UpdateAPIView):
             confirm_match_notify(match)
 
 
-#################### FEEDBACK RELATED VIEWS ############################
+###############################################################################
 #
+# FEEDBACK RELATED VIEWS
 #
-#
-#
-#################### FEEDBACK #########################################
+###############################################################################
 
 
 class CreateFeedbacks(generics.CreateAPIView):
@@ -452,7 +451,6 @@ class CreateFeedbacks(generics.CreateAPIView):
             raise NotInMatch
         player_id = serializer.initial_data.get('player', None)
         if player_id:
-
             # if id for player does not match a user , error
             existing_user = User.objects.filter(id=player_id)
             if not existing_user:
@@ -479,12 +477,12 @@ class DetailUpdateFeedback(generics.RetrieveUpdateDestroyAPIView):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
 
-#################### COURT(SPORT) RELATED VIEWS ############################
+###############################################################################
 #
+# COURT RELATED VIEWS
 #
-#
-#
-#################### COURT(SPORT) ##########################################
+###############################################################################
+
 
 class CreateCourts(generics.CreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, )

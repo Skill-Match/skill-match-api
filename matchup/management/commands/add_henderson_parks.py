@@ -5,6 +5,10 @@ from matchup.models import HendersonPark, Ammenity
 
 
 class Command(BaseCommand):
+    """
+        This command uses beautifulsoup4 to scrape the Henderson website of
+        Park Names and ammenities
+    """
 
     def handle(self, *args, **options):
         r1 = requests.get('http://www.cityofhenderson.com/henderson-'

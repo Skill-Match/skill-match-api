@@ -3,6 +3,9 @@ from matchup.models import Park, HendersonPark
 
 
 class Command(BaseCommand):
+    """
+        Links Park objects to HendersonPark objects by comparing park names.
+    """
     def handle(self, *args, **options):
         count = 0
         parks = Park.objects.filter(city__icontains='henderson')
@@ -25,4 +28,5 @@ class Command(BaseCommand):
                     h_park.save()
                     count2 += 1
 
-        self.stdout.write("{} Parks added, {} parks using reverse".format(count, count2))
+        self.stdout.write("{} Parks added, {} parks using reverse".
+                          format(count, count2))

@@ -4,7 +4,9 @@ from users.models import Skill
 
 
 class Command(BaseCommand):
-
+    """
+        Calculates all skills for all players.
+    """
     def handle(self, *args, **options):
         feedbacks = Feedback.objects.all()
 
