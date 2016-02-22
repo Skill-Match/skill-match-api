@@ -1,7 +1,5 @@
 import logging
-import oauth2
 import re
-import requests
 from django.contrib.auth.models import User
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import GEOSGeometry as Geos
@@ -13,18 +11,13 @@ from matchup.exceptions import OneFeedbackAllowed, SelfSignUp, \
     NonExistingPlayer
 from matchup.models import Park, Match, Feedback, Court
 from matchup.notifications import join_match_notify, confirm_match_notify, \
-    decline_match_notify, leave_match_notify, challenge_declined_notify, \
-    challenge_accepted_notify, create_match_notify
+    decline_match_notify, leave_match_notify, create_match_notify
 from matchup.permissions import IsOwnerOrReadOnly, IsOwner
 from matchup.serializers import ParkSerializer, \
     MatchSerializer, FeedbackSerializer, ChallengerMatchSerializer, \
     CourtSerializer, ListParksSerializer
 from rest_framework import generics, permissions
-from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.response import Response
-from skill_match.settings import YELP_CONSUMER_KEY, YELP_CONSUMER_SECRET, \
-    YELP_TOKEN, YELP_TOKEN_SECRET
 
 logger = logging.getLogger(__name__)
 
@@ -217,7 +210,7 @@ class ListCreateMatches(generics.ListCreateAPIView):
             qs = qs.filter(is_open=True).order_by('date')
         if latitude and longitude:
             pnt = Geos('POINT(' + str(longitude) + ' ' + str(latitude) + ')',
-                    srid=4326)
+                       srid=4326)
             qs = qs.filter(is_open=True)
         elif zip_code:
             geolocator = Nominatim()
@@ -388,12 +381,12 @@ class DeclineMatch(generics.UpdateAPIView):
         if serializer.instance.is_challenge:
             if challenger == serializer.instance.creator:
                 match = serializer.save(challenge_declined=True)
-                challenge_declined_notify(match, challenger)
+                # [TEMP REMOVE] challenge_declined_notify(match, challenger)
         else:
             if not decliner == serializer.instance.creator:
                 raise OnlyCreatorMayConfirmOrDecline
 
-            match = serializer.save(players=[decliner,], is_open=True)
+            match = serializer.save(players=[decliner, ], is_open=True)
             decline_match_notify(match, challenger)
 
 
@@ -416,7 +409,7 @@ class ConfirmMatch(generics.UpdateAPIView):
 
         if serializer.instance.is_challenge:
             match = serializer.save(is_confirmed=True)
-            challenge_accepted_notify(match)
+            # [TEMP REMOVE] challenge_accepted_notify(match)
         else:
             if not confirmer == serializer.instance.creator:
                 raise OnlyCreatorMayConfirmOrDecline
