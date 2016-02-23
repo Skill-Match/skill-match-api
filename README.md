@@ -1,7 +1,7 @@
 [![Coverage Status](https://coveralls.io/repos/Skill-Match/skill-match-api/badge.svg?branch=master&service=github)](https://coveralls.io/github/Skill-Match/skill-match-api?branch=master)
 [![Build Status](https://travis-ci.org/Skill-Match/skill-match-api.svg?branch=master)](https://travis-ci.org/Skill-Match/skill-match-api)
 
-skill-match-api is an API to feed live JSON data of Parks and Recreation Centers in the Las Vegas area.
+skill-match-api is an API to feed JSON data of Parks and Recreation Centers in the Las Vegas area. Park data and location is stored in a PostGIS database so it can be used to query which parks are closest to you.
 
 It is designed to be used by a front-end team of developers to create web applications for local municipalities.
 
