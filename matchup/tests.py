@@ -1,13 +1,10 @@
-from datetime import timedelta
-
 from django.contrib.auth.models import User
 from django.core.management import call_command
 from django.core.urlresolvers import reverse
 from django.db.models import Count
 from django.test import TestCase
 from django.utils.six import StringIO
-from matchup.models import Match, Park, Feedback, Court, HendersonPark, \
-    Ammenity
+from matchup.models import Match, Park, Feedback, Court
 from rest_framework import status
 from rest_framework.test import APITestCase
 from users.models import Profile, Skill
@@ -65,9 +62,14 @@ class UserTests(APITestCase):
         response = self.client.get(url, {}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['username'], self.user.username)
-        response = self.client.put(url, {'username': 'bob', 'email': 'email@email.com', 'password':
-                'pwd', 'profile': {'gender': "Male", 'age': "20's", "phone_number": "",
-                                   'wants_texts': False}}, format='json')
+        response = self.client.put(url, {'username': 'bob',
+                                         'email': 'email@email.com',
+                                         'password': 'pwd',
+                                         'profile': {'gender': "Male",
+                                                     'age': "20's",
+                                                     "phone_number": "",
+                                                     'wants_texts': False}},
+                                   format='json')
         self.assertEqual(response.data['username'], 'bob')
         self.assertEqual(response.data['profile']['age'], "20's")
 
@@ -165,11 +167,11 @@ class MatchTests(APITestCase):
                                              email='test@test.com',
                                              password='password')
         self.user2 = User.objects.create_user(username='bob',
-                                             email='test1@test.com',
-                                             password='password')
+                                              email='test1@test.com',
+                                              password='password')
         self.user3 = User.objects.create_user(username='sarah',
-                                             email='test2@test.com',
-                                             password='password')
+                                              email='test2@test.com',
+                                              password='password')
         Profile.objects.create(user=self.user, gender='Male', age="20's",
                                wants_texts=True, phone_number="5082693675")
         Profile.objects.create(user=self.user2, gender='Male', age="30's",
@@ -253,7 +255,8 @@ class MatchTests(APITestCase):
         self.assertEqual(response2.data['count'], 1)
         basketball_match = response2.data['results'][0]
         self.assertEqual(basketball_match['sport'], 'Basketball')
-        url3 = reverse('api_list_create_matches') + '?username=' + self.user.username
+        url3 = reverse('api_list_create_matches') + '?username=' + \
+            self.user.username
         response3 = self.client.get(url3, {}, format='json')
         self.assertEqual(response3.status_code, status.HTTP_200_OK)
         self.assertEqual(response3.data['count'], 2)
@@ -261,7 +264,8 @@ class MatchTests(APITestCase):
         response4 = self.client.get(url4, {}, format='json')
         self.assertEqual(response4.status_code, status.HTTP_200_OK)
         self.assertEqual(response4.data['count'], 3)
-        url5 = reverse('api_list_create_matches') + '?lat=36.169941&long=-115.139830'
+        url5 = reverse('api_list_create_matches') + \
+            '?lat=36.169941&long=-115.139830'
         response5 = self.client.get(url5, {}, format='json')
         self.assertEqual(response5.status_code, status.HTTP_200_OK)
         self.assertEqual(response5.data['count'], 3)
@@ -390,16 +394,17 @@ class MatchTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_join_confirm_match(self):
-        #join
+        # join
         self.client.force_authenticate(user=self.user2)
         url = reverse('api_join_match', kwargs={'pk': self.match.id})
         response = self.client.put(url, {}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(self.match.players.count(), 2)
         self.assertEqual(response.data['is_open'], False)
-        #confirm
+        # confirm
         self.client.force_authenticate(user=self.user)
-        confirm_url = reverse('api_confirm_match', kwargs={'pk': self.match.id})
+        confirm_url = reverse('api_confirm_match',
+                              kwargs={'pk': self.match.id})
         response = self.client.put(confirm_url, {}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['is_confirmed'], True)
@@ -543,7 +548,8 @@ class FeedbackTests(APITestCase):
     def test_detail_update_feedback(self):
         self.client.force_authenticate(user=self.user)
         self.client.force_login(user=self.user)
-        url = reverse('api_detail_update_feedback', kwargs={'pk': self.feedback.id})
+        url = reverse('api_detail_update_feedback',
+                      kwargs={'pk': self.feedback.id})
         response = self.client.get(url, {}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['skill'], self.feedback.skill)
@@ -610,11 +616,11 @@ class SkillTests(APITestCase):
                                              email='test@test.com',
                                              password='password')
         self.user2 = User.objects.create_user(username='bob',
-                                             email='test1@test.com',
-                                             password='password')
+                                              email='test1@test.com',
+                                              password='password')
         self.user3 = User.objects.create_user(username='sarah',
-                                             email='test2@test.com',
-                                             password='password')
+                                              email='test2@test.com',
+                                              password='password')
         Profile.objects.create(user=self.user, gender='Male', age="20's",
                                wants_texts=False, phone_number="5082693675")
         Profile.objects.create(user=self.user2, gender='Male', age="30's",
@@ -693,11 +699,11 @@ class SkillTests(APITestCase):
 class CommandsTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='peter',
-                                        email='test@test.com',
-                                        password='pwd')
+                                             email='test@test.com',
+                                             password='pwd')
         self.user2 = User.objects.create_user(username='bob',
-                                        email='test2@test.com',
-                                        password='pwd')
+                                              email='test2@test.com',
+                                              password='pwd')
         Profile.objects.create(user=self.user, gender='Male', age="20's",
                                wants_texts=True, phone_number="5082693675")
         self.park = Park.objects.create(name='Test Park',
@@ -713,15 +719,18 @@ class CommandsTests(TestCase):
                                         display_address3='Boston, MA 02121',
                                         postal_code='02121',
                                         location=BOSTON_LOC)
-        self.match = Match.objects.create(creator=self.user, park=self.park, sport='Tennis',
-                             skill_level=50, date='2015-12-31', time='15:00',
-                             is_open=False)
-        self.match2 = Match.objects.create(creator=self.user, park=self.park, sport='Tennis',
-                             skill_level=50, date='2015-12-31', time='15:00',
-                             is_open=False)
-        self.match3 = Match.objects.create(creator=self.user, park=self.park, sport='Tennis',
-                             skill_level=50, date='2015-12-31', time='15:00',
-                             is_open=False)
+        self.match = Match.objects.create(creator=self.user, park=self.park,
+                                          sport='Tennis', skill_level=50,
+                                          date='2015-12-31', time='15:00',
+                                          is_open=False)
+        self.match2 = Match.objects.create(creator=self.user, park=self.park,
+                                           sport='Tennis', skill_level=50,
+                                           date='2015-12-31', time='15:00',
+                                           is_open=False)
+        self.match3 = Match.objects.create(creator=self.user, park=self.park,
+                                           sport='Tennis', skill_level=50,
+                                           date='2015-12-31', time='15:00',
+                                           is_open=False)
         self.match.players.add(self.user)
         self.match.players.add(self.user2)
         self.match.save()
@@ -740,19 +749,19 @@ class CommandsTests(TestCase):
                                                 availability=4,
                                                 punctuality='On Time')
         self.feedback2 = Feedback.objects.create(reviewer=self.user,
-                                                player=self.user2,
-                                                match=self.match2,
-                                                skill=50,
-                                                sportsmanship=50,
-                                                availability=4,
-                                                punctuality='On Time')
+                                                 player=self.user2,
+                                                 match=self.match2,
+                                                 skill=50,
+                                                 sportsmanship=50,
+                                                 availability=4,
+                                                 punctuality='On Time')
         self.feedback3 = Feedback.objects.create(reviewer=self.user,
-                                                player=self.user2,
-                                                match=self.match3,
-                                                skill=50,
-                                                sportsmanship=50,
-                                                availability=4,
-                                                punctuality='On Time')
+                                                 player=self.user2,
+                                                 match=self.match3,
+                                                 skill=50,
+                                                 sportsmanship=50,
+                                                 availability=4,
+                                                 punctuality='On Time')
 
     def test_add_parks(self):
         args = ['89148']
@@ -784,7 +793,7 @@ class CommandsTests(TestCase):
 
     def test_courts_by_amenity(self):
         out = StringIO()
-        call_command('add_parks', ['89074'])
+        call_command('add_parks', ['89074', ])
         call_command('add_henderson_parks')
         call_command('link_henderson_parks')
         call_command('add_courts_by_amenity', stdout=out)
@@ -812,5 +821,3 @@ class CommandsTests(TestCase):
         call_command('update_skills', stdout=out)
         self.assertIn('Skills updated', out.getvalue())
         self.assertEqual(Skill.objects.count(), 1)
-
-

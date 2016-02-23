@@ -13,6 +13,8 @@ class Command(BaseCommand):
         Court object is created with a foreign key to that park.
     """
     def handle(self, *args, **options):
+
+        # Only get parks with a related Henderson Park
         parks = Park.objects.annotate(count=Count('henderson_park')).\
             exclude(count=0)
         counter = 0

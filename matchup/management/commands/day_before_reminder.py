@@ -12,12 +12,6 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
-        """
-
-        :param args:
-        :param options:
-        :return:
-        """
         day = timedelta(days=1)
         twenty3_hours = timedelta(hours=23)
         matches = Match.objects.filter(is_completed=False)\

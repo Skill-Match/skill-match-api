@@ -6,6 +6,7 @@ from users.models import Profile, Skill
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'gender', 'age', 'avatar')
 
+
 @admin.register(Skill)
 class SkillAdmin(admin.ModelAdmin):
     list_display = ('id', 'player', 'sport', 'skill', 'sportsmanship',

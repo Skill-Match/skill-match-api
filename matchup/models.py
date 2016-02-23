@@ -5,7 +5,8 @@ from django.contrib.gis.db import models
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
-#SPORT CHOICES for multiple models
+
+# SPORT CHOICES for use with multiple models
 TENNIS = 'Tennis'
 BASKETBALL = 'Basketball'
 FOOTBALL = 'Football'
@@ -99,6 +100,7 @@ class Ammenity(models.Model):
     Also scraped from Henderson Parks and Rec.
     ManyToMany Relationship with HendersonPark
     Example amenities: 'Open Grass Field', 'Lighted Tennis Courts'
+    Yes I spelled Amenity wrong.
     """
     name = models.CharField(max_length=125)
     parks = models.ManyToManyField(HendersonPark)
@@ -197,7 +199,7 @@ class Feedback(models.Model):
 
 
 class Court(models.Model):
-    #in the future add ranking
+    # Model for Sport location, usually linked to a Park with Foreign Key
     park = models.ForeignKey(Park, null=True, blank=True)
     sport = models.CharField(max_length=25, choices=SPORT_CHOICES)
     other = models.CharField(max_length=25, null=True, blank=True)

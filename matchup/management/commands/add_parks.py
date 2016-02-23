@@ -12,13 +12,8 @@ class Command(BaseCommand):
             area, and adds the data from those parks to the database as Park
             Objects.
     """
-
-    def add_arguments(self, parser):
-        parser.add_argument('zip_code', nargs='+', type=str)
-
     def handle(self, *args, **options):
         """
-
         :param args: zip_code ex. 89123
         :param options:
         :return: Writes out how many parks added to database

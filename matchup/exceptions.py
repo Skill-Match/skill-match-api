@@ -1,6 +1,6 @@
 from rest_framework.exceptions import APIException
 
-#Status codes need to be updated to be correct codes
+# Exceptions for Improper Use of API
 
 
 class OneFeedbackAllowed(APIException):

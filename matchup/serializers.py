@@ -1,19 +1,14 @@
-import cloudinary
 from django.contrib.auth.models import User
 from matchup.models import Park, Match, Feedback, Court
 from rest_framework import serializers
-from rest_framework.relations import StringRelatedField
 from users.models import Profile, Skill
 
 
-# USER RELATED SERIALIZERS
-#
-#
-#
-#
-#
+###############################################################################
 #
 # USER RELATED SERIALIZERS
+#
+###############################################################################
 
 
 class SkillSerializer(serializers.ModelSerializer):
@@ -41,19 +36,20 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'profile_id', 'username', 'email', 'password', 'profile', 'skill_set')
+        fields = ('id', 'profile_id', 'username', 'email', 'password',
+                  'profile', 'skill_set')
         extra_kwargs = {'password': {'write_only': True}}
         read_only_fields = ('id', 'skill_set')
 
     def create(self, validated_data):
-        """Overwrite to create profile during create process"""
+        # Overwrite to create profile during create process
         user = User.objects.create_user(
             email=validated_data['email'].lower(),
             username=validated_data['username'].lower(),
             password=validated_data['password']
         )
         profile_data = validated_data.pop('profile')
-        profile = Profile.objects.create(
+        Profile.objects.create(
             user=user,
             gender=profile_data.get('gender'),
             age=profile_data.get('age'),
@@ -87,14 +83,11 @@ class SimpleUserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'small_img', 'skill_set')
         read_only_fields = ('id', 'username', 'small_img', 'skill_set')
 
-# """
+###############################################################################
+#
 # MATCH AND FEEDBACK RELATED SERIALIZERS
 #
-#
-#
-#
-#
-# """
+###############################################################################
 
 
 class MatchSerializer(serializers.ModelSerializer):
@@ -103,7 +96,9 @@ class MatchSerializer(serializers.ModelSerializer):
     time = serializers.TimeField(format="%I:%M %p")
     players = SimpleUserSerializer(many=True, read_only=True)
     date = serializers.DateField(format="%A %b, %d")
-    distance = serializers.DecimalField(source='distance.mi', max_digits=10, decimal_places=2, required=False, read_only=True)
+    distance = serializers.DecimalField(source='distance.mi', max_digits=10,
+                                        decimal_places=2, required=False,
+                                        read_only=True)
 
     class Meta:
         model = Match
@@ -156,14 +151,11 @@ class FeedbackSerializer(serializers.ModelSerializer):
                   'sportsmanship', 'punctuality', 'availability')
         read_only_fields = ('id', 'reviewer', 'player',)
 
+###############################################################################
+#
 # PARK AND COURT RELATED SERILAIZERS
 #
-#
-#
-#
-#
-#
-#
+###############################################################################
 
 
 class CourtSerializer(serializers.ModelSerializer):
@@ -198,14 +190,15 @@ class CourtSerializer(serializers.ModelSerializer):
         if num_courts:
             court.num_courts = num_courts
         if lat and long:
-            court.location = 'POINT(' + str(validated_data['long']) + ' ' + str(validated_data['lat']) + ')'
+            court.location = 'POINT(' + str(validated_data['long']) + ' ' \
+                             + str(validated_data['lat']) + ')'
         court.save()
 
         return court
 
 
 class ImageCourtSerializer(serializers.ModelSerializer):
-    # Lighter Serializer for images
+    # Smaller Serializer for images
     class Meta:
         model = Court
         fields = ('sport', 'img_url', 'small_sport_img')
@@ -215,14 +208,18 @@ class ImageCourtSerializer(serializers.ModelSerializer):
 class ParkSerializer(serializers.ModelSerializer):
     match_set = MatchSerializer(many=True, read_only=True)
     court_set = ImageCourtSerializer(many=True, read_only=True)
-    distance = serializers.DecimalField(source='distance.mi', max_digits=10, decimal_places=2, required=False, read_only=True)
+    distance = serializers.DecimalField(source='distance.mi', max_digits=10,
+                                        decimal_places=2, required=False,
+                                        read_only=True)
 
     class Meta:
         model = Park
-        fields = ('id', 'name', 'rating', 'url', 'image_url', 'rating_img_url', 'city', 'state_code',
-                  'display_address1', 'display_address2', 'display_address3',
-                  'postal_code', 'distance', 'latitude', 'longitude', 'court_set', 'match_set',)
-        read_only_fields = ('id', 'name', 'rating', 'url', 'image_url', 'rating_img_url', 'city', 'state_code',
+        fields = ('id', 'name', 'rating', 'url', 'image_url', 'rating_img_url',
+                  'city', 'state_code', 'display_address1', 'display_address2',
+                  'display_address3', 'postal_code', 'distance', 'latitude',
+                  'longitude', 'court_set', 'match_set',)
+        read_only_fields = ('id', 'name', 'rating', 'url', 'image_url',
+                            'rating_img_url', 'city', 'state_code',
                             'display_address1', 'display_address2',
                             'display_address3', 'postal_code')
 
@@ -230,16 +227,20 @@ class ParkSerializer(serializers.ModelSerializer):
 class ListParksSerializer(serializers.ModelSerializer):
     # Separate Serializer to not include match_set
     court_set = ImageCourtSerializer(many=True, read_only=True)
-    distance = serializers.DecimalField(source='distance.mi', max_digits=10, decimal_places=2, required=False, read_only=True)
+    distance = serializers.DecimalField(source='distance.mi', max_digits=10,
+                                        decimal_places=2, required=False,
+                                        read_only=True)
 
     class Meta:
         model = Park
-        fields = ('id', 'name', 'rating', 'url', 'image_url', 'rating_img_url', 'rating_img_url_small', 'city', 'state_code',
+        fields = ('id', 'name', 'rating', 'url', 'image_url', 'rating_img_url',
+                  'rating_img_url_small', 'city', 'state_code',
                   'display_address1', 'display_address2', 'display_address3',
-                  'postal_code', 'distance', 'latitude', 'longitude', 'court_set',
+                  'postal_code', 'distance', 'latitude', 'longitude',
+                  'court_set',
                   )
-        read_only_fields = ('id', 'name', 'rating', 'url', 'image_url', 'rating_img_url', 'rating_img_url_small', 'city', 'state_code',
-                            'display_address1', 'display_address2',
-                            'display_address3', 'postal_code')
-
-
+        read_only_fields = ('id', 'name', 'rating', 'url', 'image_url',
+                            'rating_img_url', 'rating_img_url_small', 'city',
+                            'state_code', 'display_address1',
+                            'display_address2', 'display_address3',
+                            'postal_code')
