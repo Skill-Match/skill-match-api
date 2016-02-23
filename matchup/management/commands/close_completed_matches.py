@@ -1,9 +1,11 @@
-from datetime import date, time, datetime
+from datetime import date, datetime
 from django.core.management import BaseCommand
 from matchup.models import Match
 
 
 class Command(BaseCommand):
+    # Used with Heroku Scheduler to Close Matches where the dates have passed.
+
     def handle(self, *args, **options):
         today = date.today()
         now = datetime.now()

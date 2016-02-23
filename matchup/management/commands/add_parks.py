@@ -1,5 +1,4 @@
 from django.core.management import BaseCommand
-from datetime import date
 from matchup.models import Park
 import oauth2
 import requests
@@ -40,7 +39,8 @@ class Command(BaseCommand):
             }
         )
         token = oauth2.Token(YELP_TOKEN, YELP_TOKEN_SECRET)
-        oauth_request.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, token)
+        oauth_request.sign_request(oauth2.SignatureMethod_HMAC_SHA1(),
+                                   consumer, token)
         signed_url = oauth_request.to_url()
         response = requests.get(signed_url)
         content = response.json()
@@ -82,11 +82,12 @@ class Command(BaseCommand):
                     display_address1=d1,
                     display_address2=d2,
                     display_address3=d3,
-                    location='POINT(' + str(park_longitude) + ' ' + str(park_latitude) + ')',
+                    location='POINT(' + str(park_longitude) + ' ' +
+                             str(park_latitude) + ')',
                     state_code=park_state_code
                 )
                 if park_image_url:
-                    park.image_url=park_image_url
+                    park.image_url = park_image_url
                     park.save()
                 count += 1
 
