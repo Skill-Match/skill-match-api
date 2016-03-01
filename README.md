@@ -13,13 +13,13 @@ http://skill-match.herokuapp.com/docs/
 
 ## Features of the application as a whole:
 
-- Search for parks in your area using name or location. Icons make it easy to see what sports are available at each park.
+- Search for parks in your area using park name or your location. Icons make it easy to see what sports are available at each park.
 
 - Search for Matches in your area. Find a match with a relative skill level, so you can find the perfect match for you.
 
-- Show distance to each park or match using geolocation or zip-code
+- Show distance to each park or match using geolocation or zip-code.
 
-- Filter search results by sport, or coming soon, skill level.
+- Filter search results by sport a specific sport.
 
 - Create a meet-up yourself. You can schedule a Tennis, Basketball, Football, Soccer, ^Pickleball, or Other match.
 
