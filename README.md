@@ -1,17 +1,17 @@
 [![Coverage Status](https://coveralls.io/repos/Skill-Match/skill-match-api/badge.svg?branch=master&service=github)](https://coveralls.io/github/Skill-Match/skill-match-api?branch=master)
 [![Build Status](https://travis-ci.org/Skill-Match/skill-match-api.svg?branch=master)](https://travis-ci.org/Skill-Match/skill-match-api)
 
+## Skill-Match-API
+
 skill-match-api is an API to feed JSON data of Parks and Recreation Centers in the Las Vegas area. Park data and location is stored in a PostGIS database so it can be used to query which parks are closest to you.
 
 It is designed to be used by a front-end team of developers to create web applications for local municipalities.
 
-A description for some of the features and endpoints is coming soon.
-
-For now you can see some of the HTTP Methods (GET, POST, PUT, DELETE) at the following link. It may take up to 30 seconds to load, as it is a free Heroku app.
+A description of the endpoints is coming soon. For now you can see the endpoints and some of the HTTP Methods (GET, POST, PUT, DELETE) at the following link. It may take up to 30 seconds to load, as it is a free Heroku app.
 
 http://skill-match.herokuapp.com/docs/
 
-## Some features of the application as a whole.
+## Features of the application as a whole:
 
 - Search for parks in your area using name or location. Icons make it easy to see what sports are available at each park.
 
